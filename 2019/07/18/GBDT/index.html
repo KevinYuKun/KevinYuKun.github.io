@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="加载不了图片就点有道云笔记 机器学习技法 —— Gradient Boosted Decison Tree==这一章，从第一小节已知延伸到最后的GBDT，其中每一小节都包含了一个不同的aggregation== 1. AdaBoost Decision Tree首先，比对比对上图左右两个，RF和AdaBoost DT,区别就在于base algorithm用的是bagging还是AdaBoost。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GBDT">
+<meta property="og:url" content="http://yoursite.com/2019/07/18/GBDT/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="加载不了图片就点有道云笔记 机器学习技法 —— Gradient Boosted Decison Tree==这一章，从第一小节已知延伸到最后的GBDT，其中每一小节都包含了一个不同的aggregation== 1. AdaBoost Decision Tree首先，比对比对上图左右两个，RF和AdaBoost DT,区别就在于base algorithm用的是bagging还是AdaBoost。">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1168/6990ACD6EF6044BDB73EFE3A6E24F2DF">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1178/E645466D38664FA194F692588C6B9AFC">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1202/C1A5B08770884F459BDCC61AD9B76041">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1214/31EC21B43D8A46CFBF6FBCD392096F70">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1222/5678DE38B5F04A708580B09B4EFDDA2A">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1233/8AF5623FFE1B4479A2A2A946ACDCB85F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1249/3CED7B8570EE4B47B87A52953E8191E2">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1277/546F8984DB6647E0AACD579E964C80E7">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1278/4C29414152F6425782DAA2275D575CA0">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1280/B2C4608035984558AB0A4DE25CBA5791">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1299/D7EAC1379A1E4D2C80C75EB3DA73DA13">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1306/BD0433D51FCB4F4795B059F255E925AE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1310/50984520A08542E78779A8DD9C02C44C">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1314/5EED8BD6866B4967A27FCCEA1644CA5E">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1320/90FA2E62855F4F61822E1BEA18702DC6">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1346/1461EC1CEC6444479A3AC72F543D85EE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1352/AF087026AE5946F28DDA446C3B780896">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1368/38D80C75A3B1459D988AA909FFB108CC">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1380/7E99B7FA781140D19A954AB34D926AA0">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1387/BCD01A06C3554C8EADEC41705162C18E">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1420/8F142015534044E1B50DDF92B8DC4819">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1416/95A5533441F74E4D9E315BA1E5E318B8">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1423/741882FBA4A34B74BDF6D2A4D3FCFBFB">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1444/E0A2B80DE27B41D2A7F4E84ABDEBBABD">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1454/36B0C14E91034CD9805756598E0FA499">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1464/DBC7E7EC112145D38E1491DE44B72734">
+<meta property="og:updated_time" content="2019-07-18T03:31:20.034Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GBDT">
+<meta name="twitter:description" content="加载不了图片就点有道云笔记 机器学习技法 —— Gradient Boosted Decison Tree==这一章，从第一小节已知延伸到最后的GBDT，其中每一小节都包含了一个不同的aggregation== 1. AdaBoost Decision Tree首先，比对比对上图左右两个，RF和AdaBoost DT,区别就在于base algorithm用的是bagging还是AdaBoost。">
+<meta name="twitter:image" content="http://note.youdao.com/yws/res/1168/6990ACD6EF6044BDB73EFE3A6E24F2DF">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/18/GBDT/">
+
+
+
+
+
+  <title>GBDT | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/GBDT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GBDT</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-18T13:26:32+10:00">
+                2019-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>加载不了图片就点<a href="http://note.youdao.com/noteshare?id=f5c5f362ed69fc8881bf7f37ca0b6a59" target="_blank" rel="noopener">有道云笔记</a></p>
+<h1 id="机器学习技法-——-Gradient-Boosted-Decison-Tree"><a href="#机器学习技法-——-Gradient-Boosted-Decison-Tree" class="headerlink" title="机器学习技法 —— Gradient Boosted Decison Tree"></a>机器学习技法 —— Gradient Boosted Decison Tree</h1><p>==这一章，从第一小节已知延伸到最后的GBDT，其中每一小节都包含了一个不同的aggregation==</p>
+<h3 id="1-AdaBoost-Decision-Tree"><a href="#1-AdaBoost-Decision-Tree" class="headerlink" title="1. AdaBoost Decision Tree"></a>1. AdaBoost Decision Tree</h3><p><img src="http://note.youdao.com/yws/res/1168/6990ACD6EF6044BDB73EFE3A6E24F2DF" alt="image"><br>首先，比对比对上图左右两个，RF和AdaBoost DT,区别就在于base algorithm用的是bagging还是AdaBoost。这节，我们来探讨AdaBoost DT及其延伸带来的东西。</p>
+<p>那么，对于AdaBoost-DT，我们不一样的地方就是权重问题。<br><img src="http://note.youdao.com/yws/res/1178/E645466D38664FA194F692588C6B9AFC" alt="image"><br>AdaBoost会对数据进行放大缩小(re-weight操作)，然而CART中并没有和weight有关的东西，那么我们怎么在这情况下，让CART运用这些权重呢？  </p>
+<p>由上图第一个公式可以看到，我们用的是对每个犯错点都乘以权重（想办法最小化根据权重加权过的这个Ein），好了，现在的问题是，怎么让接下来的算法运用这些加权过的Ein呢，一个笨方法就是把接下来的算法中所有关于Ein的都展开然后一个个带进去，显然林老师不会用这种。  </p>
+<p>那么我们可以根据权重来对数据进行sampling，什么意思呢，就是按照权重，有条件的随机抽样，使得最后的抽样结果D’的数据权重比例跟boostrap得来的权重差不多，而与此同时，DT的算法作为黑盒子存在，不改变它的任何东西，最后得到上图下面的那一串，AdaBoost + sampling + DTree 。</p>
+<p><img src="http://note.youdao.com/yws/res/1202/C1A5B08770884F459BDCC61AD9B76041" alt="image"><br>那么，ada-Dtree也有和DTree一样的问题，就是当数据集x都不一样的时候，切割刀最后就是每一个x都各自作为一个结点，那样子Ein肯定为0啦，带权重的Ein也自然为0，错误率为0，然后权重就会趋向于无穷(根据上面错误率公式),那么避免这个方法就是剪枝(pruning或者直接限制树的高度)，还有就是sampling，就是指选取部分的数据集作为样本，而这一操作在ADA-DTree中已经有体现了，也就是说它可以减缓overfit的情况。  </p>
+<p>上面说了，我们可以通过限制树的高度来避免权重过大，==那么如果把树的高度限制为1会出现什么事情==<br><img src="http://note.youdao.com/yws/res/1214/31EC21B43D8A46CFBF6FBCD392096F70" alt="image"><br>树的高度为1，就是只切一刀，分两半，如果这个是binary-classification的话，那么这个就是AdaBoost-Stump，也就是说AdaBoost-Stump是AdaBoost-DTree的一个特例</p>
+<h3 id="2-Optimization-of-AdaBoost"><a href="#2-Optimization-of-AdaBoost" class="headerlink" title="2. Optimization of AdaBoost"></a>2. Optimization of AdaBoost</h3><p><img src="http://note.youdao.com/yws/res/1222/5678DE38B5F04A708580B09B4EFDDA2A" alt="image"><br>接下来我们看看AdaBoost的进一步分析，我们知道u<sup>(t+1)</sup>是根据u<sup>(t)</sup>和方块t进行操作得来的，那么(binary-classification的话)</p>
+<ul>
+<li>incorrect —-&gt; y≠gt ——-&gt; y*gt == -1</li>
+<li>correct —–&gt; y = gt ——&gt; y*gt == 1<br>所以我们可以吧上面的公式总结成：<br><img src="http://note.youdao.com/yws/res/1233/8AF5623FFE1B4479A2A2A946ACDCB85F" alt="image"></li>
+</ul>
+<p>那么u<sup>(T+1)</sup>可以看成是前T个u的乘积，也就是中间那个u<sup>(1)</sup>·∏exp(-yαg)，然后转换为连加就是exp(-y∑αg), 其中u<sup>(1)</sup> = 1/N。  </p>
+<p>时间来到这里，我们recall一下AdaBoost中最后返回的G(x) = sign(∑αg)是不是跟这里的一样（图中橙色部分），这个也是代表着voting score的意思，可以看出这个是有正比的意思的。</p>
+<p><img src="http://note.youdao.com/yws/res/1249/3CED7B8570EE4B47B87A52953E8191E2" alt="image"></p>
+<p>对于这个voting score αg，其实我们可以看成是wϕ(x)，也就是下面写出的SVM中与margin的距离的公式(部分)，那么这个voting score可以看成是没有正规化的margin(少了||w||)。  </p>
+<p> 对于这个类margin的东西，我们啊，当然是希望它又大又正啦，大—–就是离边界远，正—–就是这个分类是正确的，那么就会有exp(-yn(voting score))small，因为voting score要大又要为正，那么可以推出u<sup>(T+1)</sup>会越来越小。这个是可以达到SVM中large margin的效果  </p>
+<p> ==(u<sup>(T+1)</sup>越来越小没问题，但林老师说，∑u也越来越小，我估计是因为那个exp(里面的值)在每一轮都是重新计算的，比如说这次u10，那么下一轮u11里的exp()比上一轮u10的还要小，而∑u的结果是根据最新一轮的exp()来算，所以才会导致越来越小)==</p>
+<p> 然后再T+1轮过后，我们要让所有的u之和最小，这里就得出了Error Function<br> <img src="http://note.youdao.com/yws/res/1277/546F8984DB6647E0AACD579E964C80E7" alt="image"></p>
+<p>这个error function 其实是err0/1的一个上边界。  </p>
+<p>那么如何让<img src="http://note.youdao.com/yws/res/1278/4C29414152F6425782DAA2275D575CA0" alt="image">实现最小呢？</p>
+<p>我们考虑到gradient descent<br><img src="http://note.youdao.com/yws/res/1280/B2C4608035984558AB0A4DE25CBA5791" alt="image"><br>我们仿照gradient descent公式来造一个，如上图下面的，类似的，我们找到方向gt，而这里是用h(x)表示，它是一个函数，并不是向量。  </p>
+<p>接下来我们可以进行化简，就是深红色部分的拉出来成为u<sup>(T+1)</sup><sub>n</sub>, 想要得到一个最好的h，在原点进行泰勒展开后，会得到两部分，==这两部分分别对应Gradient descent的两个部分，前面Ein常数和后面下降方向*每一步长度==，最小化Ein问题就变成了最小化后面那部分的问题了。</p>
+<p><img src="http://note.youdao.com/yws/res/1299/D7EAC1379A1E4D2C80C75EB3DA73DA13" alt="image"><br>找到最好的方向—-&gt;找到最好的g—-&gt;找到最好的h——&gt;最小化那个一长串的  </p>
+<p>好，那么对于binary-classification来书说，h和y的结果就只有{+1,-1}两种，bane公式就可以继续变形：<br><img src="http://note.youdao.com/yws/res/1306/BD0433D51FCB4F4795B059F255E925AE" alt="image"></p>
+<p>后面那一项表示的是权重 乘上 2倍的错误，这个是不是很熟悉，我们回想前几页的ppt</p>
+<p><img src="http://note.youdao.com/yws/res/1310/50984520A08542E78779A8DD9C02C44C" alt="image"></p>
+<p>代入此公式，就可以得到最后的结果</p>
+<p><img src="http://note.youdao.com/yws/res/1314/5EED8BD6866B4967A27FCCEA1644CA5E" alt="image"></p>
+<p>那么谁负责最小化这个第二项呢(第一项是常数)，答案是AdaBoost里面的base algorithm(可以返回去看看)。</p>
+<p><img src="http://note.youdao.com/yws/res/1320/90FA2E62855F4F61822E1BEA18702DC6" alt="image"></p>
+<p>解决了方向h后，接下来就是一次走多长的η了，这里已经找到了h所以用g(x)代替h(x)。因为这个方向h算出来可能需要很多的计算资源，那么我们能不能找到一次能走的最大步呢？——–steepest descent  </p>
+<p>好，那么对于correct和incorrect的情况下，无非exp()里面为+1和-1，所以结果就有了，那么修改上面的最小化方程，再结合+1的时候是(1-ε)，-1的时候是(ε)，就有最后的公式了。  </p>
+<p>那么怎么求最好的η呢，求导，=0的时候最好，算到最后会发现还是等于α。<br>总结一下，AdaBoost让base algorithm找到最好的方向，然后偷偷地也找到了steepest，前进的步数，也就是说AdaBoost的运行已经把Gradient descent所需的方向，步数给搞了出来。  </p>
+<p>综上所述，AdaBoost是沿着近似函数梯度（方向是函数而不是向量），向最优方向做了最大程度的下降</p>
+<p>到目前为止，这个第二节，都是在拓展AdaBoost的含义，以及跟Gradient descent的关系</p>
+<h3 id="3-Gradient-Boosting"><a href="#3-Gradient-Boosting" class="headerlink" title="3. Gradient Boosting"></a>3. Gradient Boosting</h3><p>那么，AdaBoost对于exponential error(就上面那个，我没写)with binary-output的就已经证明出来了，每一步找到一个h，再把这个h写成g，然后再决定在gt上走多远(α—&gt;进行投票)<br>那么这个AdaBoost能不能用于其他类型的err上呢？</p>
+<p><img src="http://note.youdao.com/yws/res/1346/1461EC1CEC6444479A3AC72F543D85EE" alt="image"></p>
+<p>答案是可以的，如上图，摇身一变，用err()代替exp()便可以应用于各种err。只要符合err的曲线是平滑的就ok。</p>
+<p>For example<br><img src="http://note.youdao.com/yws/res/1352/AF087026AE5946F28DDA446C3B780896" alt="image"></p>
+<p>对于regression，我们所熟知的squared error。<br>这里贴出一个泰勒展开时的来源和用途不错的视频。<a href="https://www.youtube.com/watch?v=ViRvw2Hfto4" target="_blank" rel="noopener">https://www.youtube.com/watch?v=ViRvw2Hfto4</a>   </p>
+<p>我们把err()前面一项写为sn，这是个常数，代表的是当前的位置(就是Gradient中的Ein)，如果要在某个方向走一步的话，那么就需要乘上该梯度的方向分量，怎么得到呢，在零点做泰勒展开，然后去s为sn，因为这是当前位置往下走。结合squared error (s-y)^2可以得到最后的公式。  </p>
+<p>那我们要做最小化，就是后面那一项最小化，就是保证他一直为负的，sn-yn &gt;0 ,那么h(x)就让他小于0。但是问题来了，最小化，那如果h(x)是无穷大怎么办，一个方向不可能说无穷大，那么我们就限制他。</p>
+<p><img src="http://note.youdao.com/yws/res/1368/38D80C75A3B1459D988AA909FFB108CC" alt="image">  </p>
+<p>这里有两个方法，一个笨方法就是直接对h做限制，比如说||h|| = 1，但是这样的话有条件的最优化问题不好解。  </p>
+<p>那么就用第二个方法，recall拉格朗日的正则化思想，将这个h作为一个惩罚项加入公式中，如上图，那么公式可以变形，得到第二个公式，从这个公式中我们貌似可以得到点东西。</p>
+<p>h-(y-s)^2为0的时候，那就最优化了，所以这个越小越好，其中(y-s)表示的是residual，距离想要的位置还有多远(y是目的地，s是目前所在)。所以我们有{(xn,yn-sn)}来做一个regression来求得h。</p>
+<p><img src="http://note.youdao.com/yws/res/1380/7E99B7FA781140D19A954AB34D926AA0" alt="image"> </p>
+<p>求得h后，怎么求η呢，同样的squared error嘛，err()里面两项相减再平方，稍微变形下就又有哪个(yn-sn)了，那么接下来就是一个变量的linear regression，通过η来调整gt，使得η*gt 靠近 residual</p>
+<p>合起来 成就GBDT:<br><img src="http://note.youdao.com/yws/res/1387/BCD01A06C3554C8EADEC41705162C18E" alt="image"><br>第一轮，先想办法解一个regression问题，用某一个 regression algorithm来解{(xn,yn-sn)}—base learner, 比如说 DTree，因为DTree可以做regression。</p>
+<p>第二轮，开始在residual上做的好还是不好</p>
+<p>T轮后，会得到一堆的DTree  </p>
+<p>GBDT是AdaBoost-DTree的regression版本</p>
+<p>这一轮就是延伸AdaBoost</p>
+<h3 id="4-summary-of-aggregation"><a href="#4-summary-of-aggregation" class="headerlink" title="4. summary of aggregation"></a>4. summary of aggregation</h3><p>总结一下：  </p>
+<p><img src="http://note.youdao.com/yws/res/1420/8F142015534044E1B50DDF92B8DC4819" alt="image"></p>
+<ul>
+<li><p>blending: 就是先获得gt，后进行aggregate<br><img src="http://note.youdao.com/yws/res/1416/95A5533441F74E4D9E315BA1E5E318B8" alt="image"></p>
+</li>
+<li><p>learning: 边学习g，边aggregate<br>如下图：  </p>
+</li>
+</ul>
+<ol>
+<li>bagging—获得gt后，通过uniform形式进行投票(不需要通过其他东西辅助)  </li>
+<li>AdaBoost —-通过re-weight获得gt，然后通过non-uniform形式(即linear组合)，通过steepest方式做投票，如本章第二小节内容。</li>
+<li>Gradient Boost—–在AdaBoost基础上的延伸，这里以regression为例子，他是通过residual fitting得到gt，然后和AdaBoost一样，non-uniform(linear组合)以及steepest做投票。 </li>
+<li>Decision Tree—–通过data splitting方式(即branch切数据)来获得gt，而后进行有条件的投票(conditional vote)通过每个分支的投票。<br>==一般来讲，linear组合的方式更受人欢迎==<br><img src="http://note.youdao.com/yws/res/1423/741882FBA4A34B74BDF6D2A4D3FCFBFB" alt="image"></li>
+</ol>
+<p>接下来就是总结组合情况：</p>
+<ol>
+<li>Bagging+DTree —&gt;  RF(这里的DTree是比较强的，用到了不同方向的投影，更加diverse，所以强)</li>
+<li>AdaBoost+DTree —-&gt; AdaBoost-DTree(这里的DTree是比较弱的，因为AdaBoost的初衷就是结合弱的做的更好)</li>
+<li>GradientBoost+DTree  —-&gt; GBDT(GradientBoost作为AdaBoost的延伸，自然而然的，需求也是weak的DTree)<br><img src="http://note.youdao.com/yws/res/1444/E0A2B80DE27B41D2A7F4E84ABDEBBABD" alt="image"></li>
+</ol>
+<p>aggregation有两个好处：</p>
+<ol>
+<li>解决underfit问题，因为它是由许多weak g组合而成的strong G，形成跟更复杂模型，这相当于是feature transform</li>
+<li>解决overfit问题，把很多个g合起来后，会得到一个比较moderate的选择，能够阻止overfit，类似SVM的large margin表现，相当于regularization<br><img src="http://note.youdao.com/yws/res/1454/36B0C14E91034CD9805756598E0FA499" alt="image"></li>
+</ol>
+<p><img src="http://note.youdao.com/yws/res/1464/DBC7E7EC112145D38E1491DE44B72734" alt="image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/16/Random Tree/" rel="next" title="Random Tree">
+                <i class="fa fa-chevron-left"></i> Random Tree
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/04/C3 信息增益/" rel="prev" title="C3 信息增益">
+                C3 信息增益 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习技法-——-Gradient-Boosted-Decison-Tree"><span class="nav-number">1.</span> <span class="nav-text">机器学习技法 —— Gradient Boosted Decison Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-AdaBoost-Decision-Tree"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. AdaBoost Decision Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Optimization-of-AdaBoost"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. Optimization of AdaBoost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Gradient-Boosting"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. Gradient Boosting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-summary-of-aggregation"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. summary of aggregation</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

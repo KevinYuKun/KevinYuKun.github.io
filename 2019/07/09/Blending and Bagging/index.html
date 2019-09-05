@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="看不到图片的话点这个有道云笔记 机器学习技法 —- Blending and Bagging1. Motivationaggregation 包括两种：blending和bagging先由炒股票开始：假设有T的朋友g1,g2,g3….gT,预测某只股票g(X)，那么有四种方法可选    选择平常表现最好的—-validation  等比重(uniform)  不等比重(non-uniform)这里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blending and Bagging">
+<meta property="og:url" content="http://yoursite.com/2019/07/09/Blending and Bagging/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="看不到图片的话点这个有道云笔记 机器学习技法 —- Blending and Bagging1. Motivationaggregation 包括两种：blending和bagging先由炒股票开始：假设有T的朋友g1,g2,g3….gT,预测某只股票g(X)，那么有四种方法可选    选择平常表现最好的—-validation  等比重(uniform)  不等比重(non-uniform)这里">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://note.youdao.com/yws/res/542/7220C3DB040D4595A51D14576084210B">
+<meta property="og:image" content="http://note.youdao.com/yws/res/548/F596EC1177C646F8B233D5A3D57BA1EF">
+<meta property="og:image" content="http://note.youdao.com/yws/res/551/D4A4E007A82C49CCA1C5C3A0FCCFDAEB">
+<meta property="og:image" content="http://note.youdao.com/yws/res/555/217D59DCE5164628A50800D699614716">
+<meta property="og:image" content="http://note.youdao.com/yws/res/563/DAFB49E760824824BF8D3DE889D0A59F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/574/2C089CFD1E454111B7C7F5A8E67A02BE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/580/08D31EA53292442A94170DAC6D1AA38F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/594/9E6C4F8E681942B980CD0651DF6B8C8A">
+<meta property="og:image" content="http://note.youdao.com/yws/res/603/46F7006982FF41B3951BE6D570FE8E3B">
+<meta property="og:image" content="http://note.youdao.com/yws/res/618/9CDD1C9473464053B85B06D2EB8D211D">
+<meta property="og:image" content="http://note.youdao.com/yws/res/623/FEA84CE65035416895454BDBC431AC2D">
+<meta property="og:image" content="http://note.youdao.com/yws/res/635/B40AE3E83F9A4F4F98F5C495FD118678">
+<meta property="og:image" content="http://note.youdao.com/yws/res/638/FB3D785B2CC647BDBA88BD23A28EABB8">
+<meta property="og:image" content="http://note.youdao.com/yws/res/644/7C87B726FEBC45ACA06DF729F64E6CEE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/651/DCACF4FE3DFC4457B51F9BF1F82B241F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/659/0032D594FFE740B0AEDC2E78135A71A2">
+<meta property="og:image" content="http://note.youdao.com/yws/res/686/A2D0BC0592C9497D85C7BDFB246EDA13">
+<meta property="og:image" content="http://note.youdao.com/yws/res/685/EAB7D5D4422F4FC68BBB13C90BDB339A">
+<meta property="og:image" content="http://note.youdao.com/yws/res/689/161C8D2907434BAEBFA74A9191F5F4B5">
+<meta property="og:image" content="http://note.youdao.com/yws/res/692/C0AC6686F8CD413498167038F2FC4138">
+<meta property="og:image" content="http://note.youdao.com/yws/res/702/C8A893A86B30464B86CF4C356B23AE9B">
+<meta property="og:image" content="http://note.youdao.com/yws/res/706/E5ED230489574C66B381B74C933FAB46">
+<meta property="og:image" content="http://note.youdao.com/yws/res/724/F0576588FAB04656B62E48B87F2ED995">
+<meta property="og:image" content="http://note.youdao.com/yws/res/726/735B77C854B241868EA10929757B6B7F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/725/1232AE91D4C847C795C45B3C72D8E3BE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/754/90B972E7FD294BFF9B761C37869E4B23">
+<meta property="og:updated_time" content="2019-07-11T06:33:03.882Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Blending and Bagging">
+<meta name="twitter:description" content="看不到图片的话点这个有道云笔记 机器学习技法 —- Blending and Bagging1. Motivationaggregation 包括两种：blending和bagging先由炒股票开始：假设有T的朋友g1,g2,g3….gT,预测某只股票g(X)，那么有四种方法可选    选择平常表现最好的—-validation  等比重(uniform)  不等比重(non-uniform)这里">
+<meta name="twitter:image" content="http://note.youdao.com/yws/res/542/7220C3DB040D4595A51D14576084210B">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/09/Blending and Bagging/">
+
+
+
+
+
+  <title>Blending and Bagging | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/Blending and Bagging/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Blending and Bagging</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-09T18:05:52+10:00">
+                2019-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>看不到图片的话点这个<a href="http://note.youdao.com/noteshare?id=d0e43472dd41318aaac50f4b3e637e6f" target="_blank" rel="noopener">有道云笔记</a></p>
+<h1 id="机器学习技法-—-Blending-and-Bagging"><a href="#机器学习技法-—-Blending-and-Bagging" class="headerlink" title="机器学习技法 —- Blending and Bagging"></a>机器学习技法 —- Blending and Bagging</h1><h3 id="1-Motivation"><a href="#1-Motivation" class="headerlink" title="1. Motivation"></a>1. Motivation</h3><p>aggregation 包括两种：blending和bagging<br>先由炒股票开始：<br>假设有T的朋友g1,g2,g3….gT,预测某只股票g(X)，那么有四种方法可选  </p>
+<ul>
+<li><p>选择平常表现最好的—-validation<br><img src="http://note.youdao.com/yws/res/542/7220C3DB040D4595A51D14576084210B" alt="image"></p>
+</li>
+<li><p>等比重(uniform)<br><img src="http://note.youdao.com/yws/res/548/F596EC1177C646F8B233D5A3D57BA1EF" alt="image"></p>
+</li>
+<li><p>不等比重(non-uniform)<br>这里包含了前面两种情况，validation(给最值得信任的人一票，其他人0票)<br><img src="http://note.youdao.com/yws/res/551/D4A4E007A82C49CCA1C5C3A0FCCFDAEB" alt="image"></p>
+</li>
+<li><p>结合条件考虑<br>这个包含前面三种情况<br><img src="http://note.youdao.com/yws/res/555/217D59DCE5164628A50800D699614716" alt="image"></p>
+</li>
+</ul>
+<p>在这里先分析下selection by validation 的好与坏</p>
+<p><img src="http://note.youdao.com/yws/res/563/DAFB49E760824824BF8D3DE889D0A59F" alt="image"></p>
+<p>g<sup>-</sup>代表的是训练集中得到的g</p>
+<ul>
+<li>首先，validation更加的popular</li>
+<li>如果选择==训练集最小的g而不是验证集最小==的g可能会导致VC-dimension的高昂代价，也有overfit风险</li>
+<li>selection 需要一个strong algorithm来支持选择</li>
+<li>而aggregation可以通过融合多个hypothesis，可能会得到更好的结果。<br>e.g<br><img src="http://note.youdao.com/yws/res/574/2C089CFD1E454111B7C7F5A8E67A02BE" alt="image"></li>
+</ul>
+<h3 id="2-uniform-Blending"><a href="#2-uniform-Blending" class="headerlink" title="2.uniform Blending"></a>2.uniform Blending</h3><h4 id="2-1-uniform-Blending-voting-for-classification"><a href="#2-1-uniform-Blending-voting-for-classification" class="headerlink" title="2.1 uniform Blending(voting) for classification"></a>2.1 uniform Blending(voting) for classification</h4><p><img src="http://note.youdao.com/yws/res/580/08D31EA53292442A94170DAC6D1AA38F" alt="image"></p>
+<p>有公式  </p>
+<ul>
+<li>试想一下，因为每个人的票数一样，如果g<sub>t</sub>也一样，那么大G和小g就没区别了，毫无意义</li>
+<li>但是，如果g<sub>t</sub>都不一样，那就有多样性了，而且结果公式和uniform的公式也一样(其中g(x)=k表示的是每个人有几票)</li>
+</ul>
+<p>分析下右边的图，每条线都会分隔平面，然后分别投票XX还是OO，最后中和票数</p>
+<h4 id="2-2-uniform-Blending-voting-for-regression"><a href="#2-2-uniform-Blending-voting-for-regression" class="headerlink" title="2.2 uniform Blending(voting) for regression"></a>2.2 uniform Blending(voting) for regression</h4><p><img src="http://note.youdao.com/yws/res/594/9E6C4F8E681942B980CD0651DF6B8C8A" alt="image"></p>
+<p>对于小g的多样性来说跟上面一样，如果小g很diverse那么其综合结果很可能会更加正确。<br>even simple uniform blending can be better than any single hypothesis<br>也就是说如果aggregation要想表现的好的话，g<sub>t</sub>必须diverse</p>
+<h4 id="2-3-Uniform-Blending-的理论分析（对regression）"><a href="#2-3-Uniform-Blending-的理论分析（对regression）" class="headerlink" title="2.3 Uniform Blending 的理论分析（对regression）"></a>2.3 Uniform Blending 的理论分析（对regression）</h4><p><img src="http://note.youdao.com/yws/res/603/46F7006982FF41B3951BE6D570FE8E3B" alt="image"></p>
+<p>灰色的可以略去<br>式子起源于g和真实的f的误差的平方的平均.其中,avg(g) = G, avg(f<sup>2</sup>) = 常数 = f<sup>2</sup>。  </p>
+<p>最后可以得到下下面黄色的式子，可以看到表示用G计算的误差平均比用g计算的误差要小(虽然不能保证，G计算出来的结果一定比最好的g要好)</p>
+<p><img src="http://note.youdao.com/yws/res/618/9CDD1C9473464053B85B06D2EB8D211D" alt="image"></p>
+<p>我们考虑虚拟的迭代过程。每一轮学习中，从P<sup>N</sup>中得到N-size的训练集，然后T轮的学习中，每一轮都是使用同一分布的不同资料，那么会有上面的那条公式。  </p>
+<p><img src="http://note.youdao.com/yws/res/623/FEA84CE65035416895454BDBC431AC2D" alt="image"><br>那么最终的公式有：<br>expected performance of A = expected deviation to consensus(每一个g与这个共识的差异，variance方差) + performance of consensus(bias 偏差)<br>而uniform blending的作用(用G而不是g)就是消除variance来达到stable的表现。</p>
+<h3 id="3-Linear-and-any-Blending"><a href="#3-Linear-and-any-Blending" class="headerlink" title="3. Linear and any Blending"></a>3. Linear and any Blending</h3><p><img src="http://note.youdao.com/yws/res/635/B40AE3E83F9A4F4F98F5C495FD118678" alt="image"><br>对于non-uniform来说，其实就是把各个α做线性组合，那么一个好的α，必须是大于等于0的<img src="http://note.youdao.com/yws/res/638/FB3D785B2CC647BDBA88BD23A28EABB8" alt="image"><br>如上图，左边为我们的non-uniform linear blending for regression，那么我们可以将之看成上图右边的公式(SVM中学到的，probabilitic SVM–two level learning),先计算gt后再通过LinReg得到α。<br>那么综合来看就有：<br><img src="http://note.youdao.com/yws/res/644/7C87B726FEBC45ACA06DF729F64E6CEE" alt="image"><br>这里的constraint就是α&gt;=0<br>那么问题来了，与LinReg相比多了个constraint，该如何消除constraint的影响呢？<br><img src="http://note.youdao.com/yws/res/651/DCACF4FE3DFC4457B51F9BF1F82B241F" alt="image"><br>对于α &lt; 0来说，无非就是结果相反，比如错误率达到99%，那么将结果一翻就是error rate 1%(针对classification)，所以constraint的影响也就被消除了  </p>
+<p>那么接下来的问题是，g怎么来，原本的g都是给定的<br><img src="http://note.youdao.com/yws/res/659/0032D594FFE740B0AEDC2E78135A71A2" alt="image"></p>
+<ul>
+<li>如果以Ein为标准，那么容易overfit</li>
+<li>linear blending里面是包含selection作为特殊的情况，就是α满足Eval最小</li>
+<li>如果Ein用来做blending，那就是aggregation of best，就会更加容易overfit。<br>所以，一般用训练集得到g，再根据Eval得到α<br><img src="http://note.youdao.com/yws/res/686/A2D0BC0592C9497D85C7BDFB246EDA13" alt="image"></li>
+</ul>
+<p>g<sup>-</sup>代表又训练集得到  </p>
+<p>从D<sub>train</sub>训练得到g<sup>-</sup><sub>1</sub>,g<sup>-</sup><sub>2</sub>…..g<sup>-</sup><sub>T</sub>，然后再根据这些g<sup>-</sup>和Dval转换为Zn。</p>
+<ul>
+<li>linear Blending：<br>先计算根据上述所得(Zn,yn)来算α, ==注意，这里所使用的数据集是训练集g<sup>-</sup>==，==然后再用整个数据集结合α来进行内积运算==….<img src="http://note.youdao.com/yws/res/685/EAB7D5D4422F4FC68BBB13C90BDB339A" alt="image"></li>
+<li>Any Blending(==Stacking==):<br>差不多，只不过不一定要用linear</li>
+</ul>
+<p><img src="http://note.youdao.com/yws/res/689/161C8D2907434BAEBFA74A9191F5F4B5" alt="image"></p>
+<h3 id="4-Bagging-Bootstrap-Aggregation"><a href="#4-Bagging-Bootstrap-Aggregation" class="headerlink" title="4. Bagging(Bootstrap Aggregation)"></a>4. Bagging(Bootstrap Aggregation)</h3><p><img src="http://note.youdao.com/yws/res/692/C0AC6686F8CD413498167038F2FC4138" alt="image"></p>
+<p>==这些小g到底是怎么来的，我们可不可以一遍学小g，一边决定怎么把他们合起来？==</p>
+<p>怎么得到不一样的小g<br>different model<br>different parameters<br>different algorithm randomness<br>different data randomness</p>
+<p>那我们能不能只用一份资料，但是制作很多小g(bootstrap)<br><img src="http://note.youdao.com/yws/res/702/C8A893A86B30464B86CF4C356B23AE9B" alt="image"><br>回想之前推倒的公式，算法的表现是由方法和偏差共同作用，就是说大家的共识比直接套一个算法往往要更好。  </p>
+<p><img src="http://note.youdao.com/yws/res/706/E5ED230489574C66B381B74C933FAB46" alt="image"></p>
+<p>bootstrap，从D中随机取N笔资料(抓一笔后放回再抓)，不一定是N笔资料，可以是N’笔，那么这样取出来的资料叫做bootstrap sample D~t.<br>在原本的aggregation中，我们要不断的从pN分布中得到新的数据，然后再做平均的动作<br>那么现在就是不断的bootstrap，然后根据这个副本得到数据，再进行平均<br>Bootstrap aggregation —– 也叫Bagging,这是一个meta algorithm 建立于base algorithm上<br>Bootstrap —- base algorithm<br>一个实例  </p>
+<p><img src="http://note.youdao.com/yws/res/724/F0576588FAB04656B62E48B87F2ED995" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/726/735B77C854B241868EA10929757B6B7F" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/725/1232AE91D4C847C795C45B3C72D8E3BE" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/754/90B972E7FD294BFF9B761C37869E4B23" alt="image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/08/AdaBoost/" rel="next" title="AdaBoost">
+                <i class="fa fa-chevron-left"></i> AdaBoost
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/11/Decision Tree/" rel="prev" title="Decision Tree">
+                Decision Tree <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习技法-—-Blending-and-Bagging"><span class="nav-number">1.</span> <span class="nav-text">机器学习技法 —- Blending and Bagging</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Motivation"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. Motivation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-uniform-Blending"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.uniform Blending</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-uniform-Blending-voting-for-classification"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1 uniform Blending(voting) for classification</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-uniform-Blending-voting-for-regression"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.2 uniform Blending(voting) for regression</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-Uniform-Blending-的理论分析（对regression）"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">2.3 Uniform Blending 的理论分析（对regression）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Linear-and-any-Blending"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. Linear and any Blending</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Bagging-Bootstrap-Aggregation"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. Bagging(Bootstrap Aggregation)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

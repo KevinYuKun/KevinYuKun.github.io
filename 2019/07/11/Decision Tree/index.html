@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="看不到图片的话点这个有道云笔记 机器学习技法  —- Decision Tree回顾之前，总结一下aggregation类型有两种，原话（blending是已知小g，learning是未知小g，边学边合)。 感觉就是blending先把所有的小g求出来再合起来，而learning责任是边学边合。   1. Decision Tree Hypothesis1.1 path view 决策树就是按照人">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Decision Tree">
+<meta property="og:url" content="http://yoursite.com/2019/07/11/Decision Tree/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="看不到图片的话点这个有道云笔记 机器学习技法  —- Decision Tree回顾之前，总结一下aggregation类型有两种，原话（blending是已知小g，learning是未知小g，边学边合)。 感觉就是blending先把所有的小g求出来再合起来，而learning责任是边学边合。   1. Decision Tree Hypothesis1.1 path view 决策树就是按照人">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://note.youdao.com/yws/res/762/C02F99BECA33427DA46846D60636FF34">
+<meta property="og:image" content="http://note.youdao.com/yws/res/770/93652B04703B44918D7D44A98B840358">
+<meta property="og:image" content="http://note.youdao.com/yws/res/784/6A0673A4712443B3A115BFB7AE5D3DDE">
+<meta property="og:image" content="http://note.youdao.com/yws/res/798/3256DCA7D1084AD3BD9441CCE54BE09E">
+<meta property="og:image" content="http://note.youdao.com/yws/res/800/BF31C45762D4454AA1DB47D0132C2E03">
+<meta property="og:image" content="http://note.youdao.com/yws/res/825/0A5D1129B83546CDA35CA743148CAF20">
+<meta property="og:image" content="http://note.youdao.com/yws/res/833/8074F3BA3D2A42D3ADE9D88DB8A1F04E">
+<meta property="og:image" content="http://note.youdao.com/yws/res/849/7E53FD45B3E742D59A3AEA56AE762AED">
+<meta property="og:image" content="http://note.youdao.com/yws/res/872/FB5F94F3A49441319D8C18536E7A6D93">
+<meta property="og:image" content="http://note.youdao.com/yws/res/875/B0B1EDAF3B364A15A5C73F36E665FF21">
+<meta property="og:image" content="http://note.youdao.com/yws/res/884/F0BC83A05BEE457EB124E479545F59F6">
+<meta property="og:image" content="http://note.youdao.com/yws/res/897/C8B8B8699FF6414EB9F763A896602669">
+<meta property="og:image" content="http://note.youdao.com/yws/res/901/CE49031D4ECD4C728C09A6E5FCF62FDF">
+<meta property="og:image" content="http://note.youdao.com/yws/res/904/AC9D2AD78C36452F9DB37187DCB74F28">
+<meta property="og:image" content="http://note.youdao.com/yws/res/907/B6326F0ED054445EA33C8E986DE7C54F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/906/4F12A7D349074CDD96F6E4A57C321117">
+<meta property="og:image" content="http://note.youdao.com/yws/res/909/6D9F8D27271D477EB2A52ACB2E32A0CB">
+<meta property="og:image" content="http://note.youdao.com/yws/res/911/1327D26783024E41AB0D69BDECC8C99F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/913/ABEA7E4DCBA345CF875ACA5E5FC9D465">
+<meta property="og:image" content="http://note.youdao.com/yws/res/912/5249DDA73D984B349C1CBF5BEB2E977D">
+<meta property="og:image" content="http://note.youdao.com/yws/res/918/5B9F3A58B8034D238CE3C0B5BDB06D62">
+<meta property="og:image" content="http://note.youdao.com/yws/res/915/EAF099B3E373495DB58AFD1F3CA86949">
+<meta property="og:image" content="http://note.youdao.com/yws/res/916/42DD326D7F7A4189A1B16D14B1ADBD03">
+<meta property="og:image" content="http://note.youdao.com/yws/res/917/61585D57B9E84232A36B04008C099411">
+<meta property="og:image" content="http://note.youdao.com/yws/res/920/AAF8853F347E41BC8FE5269880BB493F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/924/665DF5EE819848C8BF5BFD211207BBF2">
+<meta property="og:updated_time" content="2019-07-11T06:30:40.626Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Decision Tree">
+<meta name="twitter:description" content="看不到图片的话点这个有道云笔记 机器学习技法  —- Decision Tree回顾之前，总结一下aggregation类型有两种，原话（blending是已知小g，learning是未知小g，边学边合)。 感觉就是blending先把所有的小g求出来再合起来，而learning责任是边学边合。   1. Decision Tree Hypothesis1.1 path view 决策树就是按照人">
+<meta name="twitter:image" content="http://note.youdao.com/yws/res/762/C02F99BECA33427DA46846D60636FF34">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/11/Decision Tree/">
+
+
+
+
+
+  <title>Decision Tree | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/11/Decision Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Decision Tree</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-11T16:28:21+10:00">
+                2019-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>看不到图片的话点这个<a href="http://note.youdao.com/noteshare?id=9086b2ed571ea2a0eab04adb1186e72f" target="_blank" rel="noopener">有道云笔记</a></p>
+<h1 id="机器学习技法-—-Decision-Tree"><a href="#机器学习技法-—-Decision-Tree" class="headerlink" title="机器学习技法  —- Decision Tree"></a>机器学习技法  —- Decision Tree</h1><p>回顾之前，总结一下<br><img src="http://note.youdao.com/yws/res/762/C02F99BECA33427DA46846D60636FF34" alt="image"><br>aggregation类型有两种，原话（blending是已知小g，learning是未知小g，边学边合)。 感觉就是blending先把所有的小g求出来再合起来，而learning责任是边学边合。  </p>
+<h3 id="1-Decision-Tree-Hypothesis"><a href="#1-Decision-Tree-Hypothesis" class="headerlink" title="1. Decision Tree Hypothesis"></a>1. Decision Tree Hypothesis</h3><h4 id="1-1-path-view"><a href="#1-1-path-view" class="headerlink" title="1.1 path view"></a>1.1 path view</h4><p><img src="http://note.youdao.com/yws/res/770/93652B04703B44918D7D44A98B840358" alt="image"></p>
+<p>决策树就是按照人类思维去决定某一件事情，如上图，先根据下班时间来判断下一结点。公式中q代表的是箭头判断，t代表的是某条路径path，g代表的是叶子节点(这个gt(x)代表的是base hypothesis，一般用constant常数代替，因为最后要返回共同形成大G)  </p>
+<h4 id="1-2-recursive-view"><a href="#1-2-recursive-view" class="headerlink" title="1.2 recursive view"></a>1.2 recursive view</h4><p><img src="http://note.youdao.com/yws/res/784/6A0673A4712443B3A115BFB7AE5D3DDE" alt="image"><br>接下来介绍了recursive view，这个比较好理解，就是从root结点出发，下面都是子树，只要一步步往下分类子树即可最终得到完整的decision tree。上图公式中，c代表哪个分支，比如说root的哪个分支c={1,2,3}，b(x) = c代表选择的是哪个该父结点下，选择哪个分支。大G<sub>c</sub>表示父结点下第c个子树。</p>
+<p>Decision Tree优点嘛，就是它描述了人做决定的过程，比较simple, efficient，缺点就是缺少理论保证</p>
+<p><img src="http://note.youdao.com/yws/res/798/3256DCA7D1084AD3BD9441CCE54BE09E" alt="image"></p>
+<h3 id="2-Decision-Tree-Algorithm"><a href="#2-Decision-Tree-Algorithm" class="headerlink" title="2. Decision Tree Algorithm"></a>2. Decision Tree Algorithm</h3><p><img src="http://note.youdao.com/yws/res/800/BF31C45762D4454AA1DB47D0132C2E03" alt="image"><br>基本的决策树算法有以上步骤：<br>①  划定分支的条件<br>②  根据划定的分支数量把==当前数据集D==分成c份<br>③  对每个D<sub>c</sub>进行训练得到模型(递归调用方法向下跑)<br>④  把每个Gs<sub>c</sub>合起来称为大G  </p>
+<p>有四个需要选择的参数：  </p>
+<ul>
+<li>number of branches (c)</li>
+<li>branching criteria (b)</li>
+<li>termination criteria (停止条件)</li>
+<li>base hypothesis (gt(x)结点)  </li>
+</ul>
+<h4 id="2-1-Classification-and-Regression-Tree-C-amp-RT-算法"><a href="#2-1-Classification-and-Regression-Tree-C-amp-RT-算法" class="headerlink" title="2.1 Classification and Regression Tree (C&amp;RT)算法"></a>2.1 Classification and Regression Tree (C&amp;RT)算法</h4><p><img src="http://note.youdao.com/yws/res/825/0A5D1129B83546CDA35CA743148CAF20" alt="image"><br>这个算法中c = 2也就是二分树，gt(x)的取值为Ein-optimal 常数，包含两种，对于classification来说选取y最多的一项，对于regression来说，则选取y的平均值。<br>现在已经解决了4个条件中的两个，接下来解决条件b<br> <img src="http://note.youdao.com/yws/res/833/8074F3BA3D2A42D3ADE9D88DB8A1F04E" alt="image"><br> 我们先通过decision stump来进行切割，然后再用purifying来判断选取那种切割。作为上图公式，我们主要观察切开后两边的子树到底纯不纯，纯 == 一边的数据相似或相同。公式的第一项|D<sub>c</sub> with h|表示D<sub>1</sub>, D<sub>2</sub>(加权，数据量越大就更重要)。<br> 那么接下来就是怎么衡量纯度(impurity Function)?  </p>
+<p> <img src="http://note.youdao.com/yws/res/849/7E53FD45B3E742D59A3AEA56AE762AED" alt="image"></p>
+<ul>
+<li>对于regression来说：<br>类比于返回gt的方法，可以取squared error来判断纯不纯</li>
+<li>对于classification：<br>如果类比于gt的话就如上图，不等于该类别的就记录<br>那么，进一步分析classification error(上图右下公式), 1-[后面那个是纯度]，表示的是每一个不同选择里，哪一个选择最多(这种方式只考虑到一种class，对于其他类别的class来说不公平)<br>==这里的k不是分支的意思(google上叫红色石头的人说这个是分支，翻了下西瓜书，是数据集中第k类样本的意思)==<br>所以有了第三种方法，Gini index（右上)，对每一个class都计算平方然后加起来，这就就能涉猎到每个class。<br>一般来说，比较popular的就是用Gini做classification，用regression error做regression。<br>好了，剩下最后一个条件<br><img src="http://note.youdao.com/yws/res/872/FB5F94F3A49441319D8C18536E7A6D93" alt="image"><br>当在这个sub-tree中y全都相等或者x全都相等就结束，就是分无可分了。<br>贴个总的流程<br><img src="http://note.youdao.com/yws/res/875/B0B1EDAF3B364A15A5C73F36E665FF21" alt="image">  </li>
+</ul>
+<h3 id="3-Decision-Tree-Heuristic-in-CART"><a href="#3-Decision-Tree-Heuristic-in-CART" class="headerlink" title="3. Decision Tree Heuristic in CART"></a>3. Decision Tree Heuristic in CART</h3><p>那么，如果每个y都不一样，那么一定可以不断的切下去，到最后每个节点都是一个不同的y，Ein = 0，相对的，VC-Dimension也会很大，也就是容易overfit。这个时候就需要使用regularization了，在Decision Tree中用Pruning(剪枝处理)做regularization。<br><img src="http://note.youdao.com/yws/res/884/F0BC83A05BEE457EB124E479545F59F6" alt="image"><br>观察上面的公式，all possible G，一个树有多少种可能，很多很多。是不太容易做到全部都跑一遍的。那么我们用一种方法代替这个all possible。<br>首先求出G<sup>(0)</sup>作为fully-grown tree，之后，移除该树的一个结点，比如说G<sup>(0)</sup>是10个结点，那么现在我移除了一个，剩下9个(共有10中不同的形式，10个结点每个一次)，在这10个中我们选取Ein最小的作为G<sup>(1)</sup>。然后我们在这G<sup>(1)</sup>的基础下，再移一个结点，再比较，再选出G<sup>(2)</sup>。最终这10个结点的fully-grown tree中，我们会得到10种结点数量不一样的possible ，再将之代入公式，完美。怎么选λ？ validation，完美。  </p>
+<p>当遇到非数字的数据时，既需要分类的时，也可以用决策树<br><img src="http://note.youdao.com/yws/res/897/C8B8B8699FF6414EB9F763A896602669" alt="image">  </p>
+<p>那么如果遇到missing feature怎么办？<br>在Decision tree中用surrogate branch来解决<br><img src="http://note.youdao.com/yws/res/901/CE49031D4ECD4C728C09A6E5FCF62FDF" alt="image"><br>找到替代品，如用身高代替体重<br><img src="http://note.youdao.com/yws/res/904/AC9D2AD78C36452F9DB37187DCB74F28" alt="image"></p>
+<h3 id="4-Decision-Tree-in-Action"><a href="#4-Decision-Tree-in-Action" class="headerlink" title="4. Decision Tree in Action"></a>4. Decision Tree in Action</h3><p><img src="http://note.youdao.com/yws/res/907/B6326F0ED054445EA33C8E986DE7C54F" alt="image"><br>切第一刀，左右两边分别作为一个子树/结点<br><img src="http://note.youdao.com/yws/res/906/4F12A7D349074CDD96F6E4A57C321117" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/909/6D9F8D27271D477EB2A52ACB2E32A0CB" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/911/1327D26783024E41AB0D69BDECC8C99F" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/913/ABEA7E4DCBA345CF875ACA5E5FC9D465" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/912/5249DDA73D984B349C1CBF5BEB2E977D" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/918/5B9F3A58B8034D238CE3C0B5BDB06D62" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/915/EAF099B3E373495DB58AFD1F3CA86949" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/916/42DD326D7F7A4189A1B16D14B1ADBD03" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/917/61585D57B9E84232A36B04008C099411" alt="image"></p>
+<p>与adaBoost比较：<br><img src="http://note.youdao.com/yws/res/920/AAF8853F347E41BC8FE5269880BB493F" alt="image"><br>这里注意，Decision Tree是在当前结点(数据集)中进行切割，比如说下图中，横切一刀只切了一部分而不是整个图形都被切了，而AdaBoost只能一刀切完整个平面。<br><img src="http://note.youdao.com/yws/res/924/665DF5EE819848C8BF5BFD211207BBF2" alt="image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/09/Blending and Bagging/" rel="next" title="Blending and Bagging">
+                <i class="fa fa-chevron-left"></i> Blending and Bagging
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/16/Random Tree/" rel="prev" title="Random Tree">
+                Random Tree <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习技法-—-Decision-Tree"><span class="nav-number">1.</span> <span class="nav-text">机器学习技法  —- Decision Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Decision-Tree-Hypothesis"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. Decision Tree Hypothesis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-path-view"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1.1 path view</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-recursive-view"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">1.2 recursive view</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Decision-Tree-Algorithm"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. Decision Tree Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-Classification-and-Regression-Tree-C-amp-RT-算法"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1 Classification and Regression Tree (C&amp;RT)算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Decision-Tree-Heuristic-in-CART"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. Decision Tree Heuristic in CART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Decision-Tree-in-Action"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. Decision Tree in Action</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

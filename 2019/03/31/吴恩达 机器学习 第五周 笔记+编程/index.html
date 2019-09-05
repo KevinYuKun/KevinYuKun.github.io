@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。  如上图，第一个logistic regression可以用于output unit为一的neural network。而第二个式子适用于multi-class。 k代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴恩达 机器学习 第五周 笔记+编程">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/吴恩达 机器学习 第五周 笔记+编程/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。  如上图，第一个logistic regression可以用于output unit为一的neural network。而第二个式子适用于multi-class。 k代">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331075218925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331075454128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331075754271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331080052309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331083545951.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331083555649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331083650640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331084040343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331084232926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331084402670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331084748557.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331095149197.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019033109535740.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331095514568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331095933441.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019033110015646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331100436879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331102026240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331102711683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331102111863.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331102145613.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331102840682.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331103011305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331103039948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331103429566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331103500869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-09T10:48:22.573Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="吴恩达 机器学习 第五周 笔记+编程">
+<meta name="twitter:description" content="对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。  如上图，第一个logistic regression可以用于output unit为一的neural network。而第二个式子适用于multi-class。 k代">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190331075218925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/吴恩达 机器学习 第五周 笔记+编程/">
+
+
+
+
+
+  <title>吴恩达 机器学习 第五周 笔记+编程 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/吴恩达 机器学习 第五周 笔记+编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">吴恩达 机器学习 第五周 笔记+编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-03-31T10:35:47+11:00">
+                2019-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://img-blog.csdnimg.cn/20190331075218925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-<br>class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331075454128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>如上图，第一个logistic regression可以用于output unit为一的neural network。而第二个式子适用于multi-<br>class。</p>
+<p>k代表output unit的个数。 <img src="https://img-blog.csdnimg.cn/20190331075754271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>，后一项则表明，每一个layer中，所有的θ平方的相加。  这一项又称为权重衰减项(weight decay)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331080052309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>神经网络的最终目的是求得最小的costFunction和θ的变化。</p>
+<p><a href="https://www.jianshu.com/p/964345dddb70" target="_blank" rel="noopener"> https://www.jianshu.com/p/964345dddb70
+</a> 这篇文章解释了反向传播的作用。里面解释了求误差delta的公式来源。</p>
+<p><a href="https://blog.csdn.net/Hearthougan/article/details/55812728" target="_blank" rel="noopener"> https://blog.csdn.net/Hearthougan/article/details/55812728
+</a> 。这篇的图解释了更新权值。</p>
+<p>按照训练一个neural network的过程：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331083545951.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190331083555649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>在进行训练前，得先选择好model</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331083650640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>一般来说hidden越多越好，但多了会造成计算成本。</p>
+<h1 id="1-Random-initialization——–随机初始化theta-Symmetry-break"><a href="#1-Random-initialization——–随机初始化theta-Symmetry-break" class="headerlink" title="1. Random initialization——–随机初始化theta(Symmetry break)"></a>1. Random initialization——–随机初始化theta(Symmetry break)</h1><p><img src="https://img-blog.csdnimg.cn/20190331084040343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>对于图里的initialTheta，如果设置为zeros那么会导致一个后果，就是会把multi-class 变成只有一个结果logistic<br>regression(theta为0 按照式子，结果全都一样)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331084232926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>对此，引用一个随机生成theta值</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331084402670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>如图….</p>
+<h1 id="2-通过FP来获得output的y"><a href="#2-通过FP来获得output的y" class="headerlink" title="2. 通过FP来获得output的y"></a>2. 通过FP来获得output的y</h1><p>FP怎么跑，参考上一周编程。</p>
+<p>这里FP用的costFunction需要是multi-class的，在上面给出的图片中。</p>
+<h1 id="3-这个同2"><a href="#3-这个同2" class="headerlink" title="3.这个同2"></a>3.这个同2</h1><h1 id="4-Implement-backprop-to-compute-partial-derivatives-—通过BP来计算costfunction的导数"><a href="#4-Implement-backprop-to-compute-partial-derivatives-—通过BP来计算costfunction的导数" class="headerlink" title="4.Implement backprop to compute partial derivatives  -—通过BP来计算costfunction的导数"></a>4.Implement backprop to compute partial derivatives <img src="https://img-blog.csdnimg.cn/20190331084748557.png" alt> -—通过BP来计算costfunction的导数</h1><p><img src="https://img-blog.csdnimg.cn/20190331095149197.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>通过循环不断计算出delta误差， <img src="https://img-blog.csdnimg.cn/2019033109535740.png" alt><br>这个三角形是大写的delta，是一个误差矩阵用来记录layer上的误差。循环过后，将得到的大三角形进行正则化得到D <img src="https://img-blog.csdnimg.cn/20190331095514568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>。这个D是误差的累计值而且等于costFunction的导数值。</p>
+<p>类比于losgtic regression，这个D相当于Gradient descent的 <img src="https://img-blog.csdnimg.cn/20190331095933441.png" alt> 后面那一项（不要α）</p>
+<p>在这里误差delta的算法：</p>
+<p><img src="https://img-blog.csdnimg.cn/2019033110015646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>Note：没有delta1</p>
+<p>这里顺面说下非output layer的delta算法</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331100436879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>这个图解释了部分delta求发的由来</p>
+<p><a href="https://www.jianshu.com/p/964345dddb70" target="_blank" rel="noopener"> https://www.jianshu.com/p/964345dddb70
+</a> 这篇文章作为补充。</p>
+<h1 id="5-Gradient-Checking—-梯度验证"><a href="#5-Gradient-Checking—-梯度验证" class="headerlink" title="5. Gradient Checking—-梯度验证"></a>5. Gradient Checking—-梯度验证</h1><p><img src="https://img-blog.csdnimg.cn/20190331102026240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190331102711683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>如上图，两点之间斜率近似等于 <img src="https://img-blog.csdnimg.cn/20190331102111863.png" alt><br>，可以用这个作为标准去衡量 <img src="https://img-blog.csdnimg.cn/20190331102145613.png" alt><br>也就是D，如果这两个值近似相等，那么这些参数是合法的，如果不，就得重新计算并且update θ(重复以上步骤)。</p>
+<p>用完gradient checking后记得关闭掉，因为这个方式很耗费计算资源，这也是为什么不用这种方法来替代反向传播计算。</p>
+<p>并且这其中是两两对应的 <img src="https://img-blog.csdnimg.cn/20190331102840682.png" alt></p>
+<p>6. 用梯度下降或这更高级的优化算法来求得最小的J。</p>
+<h1 id="Unrolling-parameters—展开参数"><a href="#Unrolling-parameters—展开参数" class="headerlink" title="Unrolling parameters—展开参数"></a>Unrolling parameters—展开参数</h1><p><img src="https://img-blog.csdnimg.cn/20190331103011305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190331103039948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>unrolling parameter能够让fminunc跟方便计算。</p>
+<p>在接下来的编程中，在进行FP前要先从展开的数据中，提取，提取方法如上。然后在最后需要将得到的数据unrolling。</p>
+<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><p>这里只贴最难的一部分</p>
+<p>nncostFunction</p>
+<p>没有用forloop</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331103429566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>用了for循环，FP部分依然没用for循环</p>
+<p><img src="https://img-blog.csdnimg.cn/20190331103500869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/29/平衡的二叉查找树 ---- 红黑树/" rel="next" title="平衡的二叉查找树 ---- 红黑树">
+                <i class="fa fa-chevron-left"></i> 平衡的二叉查找树 ---- 红黑树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/02/数据库 动态hash索引/" rel="prev" title="数据库 动态hash索引">
+                数据库 动态hash索引 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Random-initialization——–随机初始化theta-Symmetry-break"><span class="nav-number">1.</span> <span class="nav-text">1. Random initialization——–随机初始化theta(Symmetry break)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-通过FP来获得output的y"><span class="nav-number">2.</span> <span class="nav-text">2. 通过FP来获得output的y</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-这个同2"><span class="nav-number">3.</span> <span class="nav-text">3.这个同2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Implement-backprop-to-compute-partial-derivatives-—通过BP来计算costfunction的导数"><span class="nav-number">4.</span> <span class="nav-text">4.Implement backprop to compute partial derivatives  -—通过BP来计算costfunction的导数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Gradient-Checking—-梯度验证"><span class="nav-number">5.</span> <span class="nav-text">5. Gradient Checking—-梯度验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unrolling-parameters—展开参数"><span class="nav-number">6.</span> <span class="nav-text">Unrolling parameters—展开参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程"><span class="nav-number">7.</span> <span class="nav-text">编程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

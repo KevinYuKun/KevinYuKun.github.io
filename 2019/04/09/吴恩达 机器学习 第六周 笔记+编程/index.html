@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Evaluating a Learning algorithm假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？ 然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。  一般来说，都是先通过训练集求得θ然后再丢到测试集中测试测试误差。 图中，test error 公式跟lin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴恩达 机器学习 第六周 笔记+编程">
+<meta property="og:url" content="http://yoursite.com/2019/04/09/吴恩达 机器学习 第六周 笔记+编程/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="Evaluating a Learning algorithm假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？ 然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。  一般来说，都是先通过训练集求得θ然后再丢到测试集中测试测试误差。 图中，test error 公式跟lin">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408185506404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408202753810.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408202959790.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408203338468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408203431193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408203549958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408203734587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019040820413679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408204203261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408204538856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408204803839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408205916766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408205944412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190408210016675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409081814682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019040907144048.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409071647319.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409072123132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409073220260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409081212311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019040908130536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409081446350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409081549954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409082038570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409082145227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409082257795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409082409253.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409082657711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409083249915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409083919514.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409084124315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409084307220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409084457295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190409084734567.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-09T10:48:22.568Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="吴恩达 机器学习 第六周 笔记+编程">
+<meta name="twitter:description" content="Evaluating a Learning algorithm假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？ 然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。  一般来说，都是先通过训练集求得θ然后再丢到测试集中测试测试误差。 图中，test error 公式跟lin">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190408185506404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/09/吴恩达 机器学习 第六周 笔记+编程/">
+
+
+
+
+
+  <title>吴恩达 机器学习 第六周 笔记+编程 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/吴恩达 机器学习 第六周 笔记+编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">吴恩达 机器学习 第六周 笔记+编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-04-09T08:49:55+10:00">
+                2019-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Evaluating-a-Learning-algorithm"><a href="#Evaluating-a-Learning-algorithm" class="headerlink" title="Evaluating a Learning algorithm"></a>Evaluating a Learning algorithm</h1><p>假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408185506404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408202753810.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>一般来说，都是先通过训练集求得θ然后再丢到测试集中测试测试误差。</p>
+<p>图中，test error 公式跟linear regression的一样，就下标变了。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408202959790.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>、</p>
+<p>为了进一步精确我们的hypothesis我们引入交叉验证Cross validation</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408203338468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>其中，训练集占60%，交叉验证集占20%，测试集占20%</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408203431193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190408203549958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>以上所交代的是关于机器学习模式的选择，考虑该使用哪种多项式，然而regularization正则化中的λ 和 样本数量m也是影响算法性能的重要元素。以下引入<br>偏差(bias)和方差(variance)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408203734587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>前面我们所学习过的overfit和underfit中，underfit(欠拟合)就是典型的高bias，overfit则是典型的高variance</p>
+<p><img src="https://img-blog.csdnimg.cn/2019040820413679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190408204203261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>我们来看这两个图，横坐标是degre表示hypothesis的项数，纵坐标为error 误差数，在这里，底下那条线代表training<br>error，而上面那条则是cross validation error，<br>可以看出，上面那条线是两边高中间低，而当d很小时，容易产生underfit(一条直线)，导致高bias，而当d很大(式子够复杂)则容易导致高variance</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408204538856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>正则化的linear regression，当λ很大时，θ≈0，导致函数趋向于一条直线，那自然是underfit</p>
+<p>而当λ很小，则θ的权重就会很大，容易overfit</p>
+<p>下面讲如何选择λ</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408204803839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>首先设立一个λ集合（吴老师喜欢）= {0, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56,<br>5.12, 10.24]</p>
+<p>更正：建立了λ集合后再建立各种model(各种多项式，以便选出最好的θ)，看下图中，theta =<br>trainLinearReg，这个函数就是在λ的循环下，遍历所有已经产生的多项式model(也就是说用正常的for循环来写，就是lambda乘model个数次循环)，在θ和λ的共同参与下得出最好的θ(仅仅是θ)，然后再用这个θ代入costfunction中计算(这里计算error_train和error_val用于作图，不要带λ)。下图代码到这里就完了，然后正常的后续操作就是找出最小的error_val时所使用的θ和参与计算θ的λ，最后把这一对组合送入测试集中，看看效果。以下为原笔记。</p>
+<p>再补充，为啥计算err_train和err_val时不带λ，但做曲线的时候又用到λ，因为θ使用λ参与运算而来的，如果在err_train和err_val中再来个regularization会导致结果被修正，就是说得不到我们想要看到的学习曲线效果。</p>
+<p>然后对这些λ分别代入计算最小的costFunction, 然后将得到的θ代入计算training error 和 cross validation<br>error (这里图中并没有写training error，但之后的编程中会出现。这里的计算train error 和 cv error<br>都不能代入λ，就是说λ= 0)</p>
+<p>这里先提前贴上点代码帮助理解</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408205916766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>trainLinearReg.m</p>
+<p><img src="https://img-blog.csdnimg.cn/20190408205944412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190408210016675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>图中函数就是刚说的，costfunction用λ, train和cv 不用 ，然后这个坐标图是以λ为横坐标</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409081814682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h1 id="学习曲线-Learning-Curve"><a href="#学习曲线-Learning-Curve" class="headerlink" title="学习曲线(Learning Curve)"></a>学习曲线(Learning Curve)</h1><p><img src="https://img-blog.csdnimg.cn/2019040907144048.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>学习曲线可以很好的帮助我们观察learning algoritm出现的问题，如上图是 <img src="https://img-blog.csdnimg.cn/20190409071647319.png" alt> hypothesis比较简单的情况下 ，可以看到cv error和train<br>error曲线逐渐靠近， <strong>最后趋于直线，</strong> 所以对于high bias的情况，增加样本数量m是没什么帮助的，因为最后是直线。。。。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409072123132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>而对于high variance来说<br>，复杂的hypothesis往往带来overfit，而其对应的学习曲线两条逐渐相交的线，而且可以看到，两条线中是有很大的gap，由此可以看出，增大training<br>example可以带来很大的帮助（线接近。。）</p>
+<p>这里贴上点代码帮助理解</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409073220260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>这里的i代表着横坐标，从少到多的情况</p>
+<p>基于上面两张图，我们可以得出以下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409081212311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>再来看下神经网络：</p>
+<h1 id><a href="#" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/2019040908130536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></h1><p>Prioritizing what to work on: Spam classificaton example</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409081446350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>假设要做一个辣鸡邮件分类的东东。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409081549954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>这里给了一些推荐的方法。其中画重点 error analysis</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409082038570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>过后，就是怎么设计一个 准确度高的学习算法</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409082145227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190409082257795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190409082409253.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>简单来说就是有没有足够的information 来预测y，还有如果让人类专家通过这些数据能不能很自信地预测出y。</p>
+<h1 id="查准率和查全率-precision-and-recall"><a href="#查准率和查全率-precision-and-recall" class="headerlink" title="查准率和查全率(precision and recall)"></a>查准率和查全率(precision and recall)</h1><p><img src="https://img-blog.csdnimg.cn/20190409082657711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>举个栗子，学习算法算出1%的人有cancer，而事实上只有0.5%的人有cancer。如果忽略所有的x，并预测所有的病人都没cancer，那么学习算法的error只有0.5%（很厉害吧），然而这样子根本不可行，在这里这0.5%就是偏斜类(skewed<br>classes)</p>
+<p>显然，只用准确率来平衡算法的好坏是不可行的，。</p>
+<p>因此，我们引入查准率(precision)和查拳率(recall)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409083249915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>画的有点丑。简单说，就是如果预测的结果和事实上的结果一致则为True，如果预测的结果是1则为postive，其他情况就反过来。</p>
+<p>P(precision) = True postive(预测对的且结果为1的数量)/ #predicted postive(预测结果为1的数量) =<br>True postive/ True postive + False postive</p>
+<p>R(recall) = True postive(预测对的且结果为1的数量)/ #actual postive(事实结果为1的数量) = True<br>postive/ True postive + False negative</p>
+<p>简单看图就是true postive/ 第一行就是P, true postive/ 第一列就是R</p>
+<p>这里附上西瓜书上的图</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409083919514.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>然后附上一个例子—-买瓜</p>
+<p>-–希望将好瓜尽可能多的选出来，可以通过增加选瓜的数量来实现。如果全部西瓜都选上，那么好瓜也必然选上，但查准率precision会较低；如果希望选到的瓜中好瓜比例高，则可只挑选最有把握的瓜，但这样会漏掉不少好瓜，使得查全率较低。</p>
+<h1 id="trade-of-P-and-R"><a href="#trade-of-P-and-R" class="headerlink" title="trade of P and R"></a>trade of P and R</h1><h1 id="-1"><a href="#-1" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/20190409084124315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></h1><p><img src="https://img-blog.csdnimg.cn/20190409084307220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>接下来就是怎么权衡P和R了，因为P和R是一对相反的值，如图。如果我们设置阈值(threshold)来判断这个人是否有cancer(if threshold</p>
+<blockquote>
+<p>0.5 , y= 1)之类的，那么这个阈值又该怎么取呢</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190409084457295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>看图，权衡P和R，如果用平均数（Average）来衡量就会导致误差有大，看图看图。</p>
+<p>这里推出一种全新体验，F1score ，公式在上面。</p>
+<p>然后最后的最后，就是说用大量数据的好处ba.labala，对高variance有好处啦（看上面的学习曲线就能理解）</p>
+<p><img src="https://img-blog.csdnimg.cn/20190409084734567.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>编程：</p>
+<p>其他的我上面已经贴出大部分了，理解了就挺简单的。不懂就出门隔壁blog</p>
+<p>optional还没时间做，留个坑以后回来补。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/06/动态规划/" rel="next" title="动态规划">
+                <i class="fa fa-chevron-left"></i> 动态规划
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/20/机器学习 吴恩达 第七周 笔记/" rel="prev" title="机器学习 吴恩达 第七周 笔记">
+                机器学习 吴恩达 第七周 笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Evaluating-a-Learning-algorithm"><span class="nav-number">1.</span> <span class="nav-text">Evaluating a Learning algorithm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习曲线-Learning-Curve"><span class="nav-number">2.</span> <span class="nav-text">学习曲线(Learning Curve)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查准率和查全率-precision-and-recall"><span class="nav-number">4.</span> <span class="nav-text">查准率和查全率(precision and recall)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#trade-of-P-and-R"><span class="nav-number">5.</span> <span class="nav-text">trade of P and R</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">6.</span> <span class="nav-text"></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Anomaly detection —–异常检测 造飞机引擎，然后根据其中的feature构造一个关系图，如上图，很明显，右下角那个点明显是异常 生活中很多东西都是符合高斯分布的，这个飞机引擎也一养  这里主要是介绍了一下高斯分布和其公式 这里展示了高斯分布公式中的两个变量对高斯分布的影响。  这里给出了μ的表达式和σ的表达式  首先，我们是通过算出p(x)是否小于某一阈值来判断他是否异常。而这里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习 吴恩达 第九周 笔记">
+<meta property="og:url" content="http://yoursite.com/2019/04/23/机器学习 吴恩达 第九周 笔记/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="Anomaly detection —–异常检测 造飞机引擎，然后根据其中的feature构造一个关系图，如上图，很明显，右下角那个点明显是异常 生活中很多东西都是符合高斯分布的，这个飞机引擎也一养  这里主要是介绍了一下高斯分布和其公式 这里展示了高斯分布公式中的两个变量对高斯分布的影响。  这里给出了μ的表达式和σ的表达式  首先，我们是通过算出p(x)是否小于某一阈值来判断他是否异常。而这里">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/5.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/6.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/7.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/8.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/9.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/10.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/11.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/12.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/13.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/14.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/15.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/16.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/17.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/18.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/19.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/20.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/21.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/22.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/23.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/24.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/20190423205245546.png">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/25.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/26.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/27.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/28.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/29.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/30.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/31.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/32.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/04/23/机器学习%20吴恩达%20第九周%20笔记/!%5B%5D(/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/33.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/34.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/35.jpg">
+<meta property="og:updated_time" content="2019-06-18T13:09:59.710Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习 吴恩达 第九周 笔记">
+<meta name="twitter:description" content="Anomaly detection —–异常检测 造飞机引擎，然后根据其中的feature构造一个关系图，如上图，很明显，右下角那个点明显是异常 生活中很多东西都是符合高斯分布的，这个飞机引擎也一养  这里主要是介绍了一下高斯分布和其公式 这里展示了高斯分布公式中的两个变量对高斯分布的影响。  这里给出了μ的表达式和σ的表达式  首先，我们是通过算出p(x)是否小于某一阈值来判断他是否异常。而这里">
+<meta name="twitter:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/23/机器学习 吴恩达 第九周 笔记/">
+
+
+
+
+
+  <title>机器学习 吴恩达 第九周 笔记 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/23/机器学习 吴恩达 第九周 笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习 吴恩达 第九周 笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-04-23T21:10:21+10:00">
+                2019-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Anomaly-detection-—–异常检测"><a href="#Anomaly-detection-—–异常检测" class="headerlink" title="Anomaly detection —–异常检测"></a>Anomaly detection —–异常检测</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg" alt></p>
+<p>造飞机引擎，然后根据其中的feature构造一个关系图，如上图，很明显，右下角那个点明显是异常</p>
+<p>生活中很多东西都是符合高斯分布的，这个飞机引擎也一养</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/1.jpg" alt></p>
+<p>这里主要是介绍了一下高斯分布和其公式</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/2.jpg" alt><br>这里展示了高斯分布公式中的两个变量对高斯分布的影响。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/3.jpg" alt></p>
+<p>这里给出了μ的表达式和σ的表达式<br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/4.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/5.jpg" alt></p>
+<p>首先，我们是通过算出p(x)是否小于某一阈值来判断他是否异常。而这里P(x) 等于每个feature的高斯分布乘积</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/6.jpg" alt></p>
+<p>运行步骤，挺简单的</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/7.jpg" alt><br>这里给张例子方便理解。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/8.jpg" alt></p>
+<p>假设这里给定了有标签的数据，包括异常(y=1)和正常(y=0) ,那么怎么分配呢，下图</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/9.jpg" alt></p>
+<p>推荐使用第一种分配方式，如上图，异常一般是远远小于tranining set的数量的。为啥要选第一种，因为cv和test的set一般是不能有相同的</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/10.jpg" alt></p>
+<p>分好了之后，就是要评估这个异常了，根据我们之前所学偏斜误差(在这里只有20个异常，所以说正确率是高的吓人，这导致偏斜误差也是很大)<br>，所以这里要用precision和recall来共同评估。这里要尝试不用的 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/11.jpg" alt> 使得F1-score最大。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/12.jpg" alt></p>
+<p>有没有发现，supervised learning 和这个anomaly detection很像，就是training set大小不一样。</p>
+<p>具体看上面。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/13.jpg" alt></p>
+<p>在代入feature进关系图里后，有时候会发现它并不是高斯分布，这个时候我们就要尽量让他看起来像高斯分布，具体就是上图中的用对数或者幂来转化</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/14.jpg" alt></p>
+<p>我们选择的feature，有时候并不是非常契合。怎么说呢，就是这个点在x1,x2组成的坐标系中是异常，然而用一个新的feature来判断这个点，它又是正常的。所以选择feature非常重要</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/15.jpg" alt></p>
+<p>我们也可以用已有的feature整合成一个新的feature</p>
+<p>接下来是</p>
+<h1 id="Multivariate-Gaussian-distribution—多元高斯分布"><a href="#Multivariate-Gaussian-distribution—多元高斯分布" class="headerlink" title="Multivariate Gaussian distribution—多元高斯分布"></a>Multivariate Gaussian distribution—多元高斯分布</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/16.jpg" alt></p>
+<p>这个看看就好。普通的高斯分布是中间圆圈，而多元高斯分布则是斜着的。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/17.jpg" alt><br>奉上公式。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/18.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/19.jpg" alt></p>
+<p>着六张图展示了不同的μ和cov(那个求和符号是协方差) 对多元高斯分布的影响。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/20.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/21.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/22.jpg" alt><br>好了，终于到这里为啥要选择多元的，因为多元的可以自动获取feature之间的相关性(就是之前说的用已有的feature组合成一个新的来判断)，不过只适用于m&gt;n的情况下，因为如果n&lt;m就会出现cov协方差是不可倒.</p>
+<h1 id="Recommender-system-—-推荐系统"><a href="#Recommender-system-—-推荐系统" class="headerlink" title="Recommender system — 推荐系统"></a>Recommender system — 推荐系统</h1><p>推荐系统是一门很复杂的学问balabala</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/23.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/24.jpg" alt><br>第二张图是一些符号的意思，我们假设要预测人们对电影的评分，图一已经给出了每个人对不同电影的评分(?代表没有评分)。这里的predict其实就是linear<br>regression。</p>
+<p>在这里我们假设feature为action和romance两种，图一中间的用户评分使我们的目标y，现在就是要求θ，因为 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/20190423205245546.png" alt> = y(咱的线性回归公式)。 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/25.jpg" alt><br>看起来差不多是这样，然后用它来预测这个用户对其他电影的评分。来实现给他推荐电影。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/26.jpg" alt></p>
+<p>第一个公式是针对一个用户，而第二个则是针对多用户，当然这些被选中用来训练的电影必须被用户评价过r(i,j) =1</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/27.jpg" alt></p>
+<p>这里是利用梯度下降进行迭代时的公式</p>
+<p>注意，这里是已知feature的数值和真实的y来求θ</p>
+<p>接下来另一种东西就是已知θ求feature(不是协同过滤)</p>
+<h1 id="Collaborative-filtering-—-协同过滤"><a href="#Collaborative-filtering-—-协同过滤" class="headerlink" title="Collaborative filtering —- 协同过滤"></a>Collaborative filtering —- 协同过滤</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/28.jpg" alt></p>
+<p>如上图，要求x</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/29.jpg" alt><br>如之前求θ，这里是求feature</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/30.jpg" alt><br>注意，到目前为止都不是协同过滤，而上图最后一个θ-&gt;x-&gt;θ-&gt;x-&gt;θ。。。。则点明了协同过滤的思想，通过猜测θ来求x，然后通过求得x来求θ，如此反复横跳。</p>
+<p>接下来就是协同过滤：</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/31.jpg" alt></p>
+<p>看起来复杂，其实就是两条linear regression合并到一起，就是已知θ求x和已知x求θ两条合在一起。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/32.jpg" alt><br>以上一样，不过对象换成了合并在一起后的式子。</p>
+<p>求出来该有的东西后，接下来就是如何推荐电影了 <img src="!%5B%5D(/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/33.jpg" alt></p>
+<p>ok，有评价过电影的用户我们知道如何给他推荐电影，那么没评价过的呢？</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/34.jpg" alt></p>
+<p>上图，用户评价哪里全是????，那么就可以用已有的用户评分来给他取个平均值，然后进行归一化。</p>
+<p>然后没有评价的用户评分设为0，然后 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B9%9D%E5%91%A8%E7%AC%94%E8%AE%B0/35.jpg" alt><br>加上平均值，来给他推荐。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/21/机器学习 吴恩达 第八周 笔记/" rel="next" title="机器学习 吴恩达 第八周 笔记">
+                <i class="fa fa-chevron-left"></i> 机器学习 吴恩达 第八周 笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/08/AdaBoost/" rel="prev" title="AdaBoost">
+                AdaBoost <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Anomaly-detection-—–异常检测"><span class="nav-number">1.</span> <span class="nav-text">Anomaly detection —–异常检测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Multivariate-Gaussian-distribution—多元高斯分布"><span class="nav-number">2.</span> <span class="nav-text">Multivariate Gaussian distribution—多元高斯分布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Recommender-system-—-推荐系统"><span class="nav-number">3.</span> <span class="nav-text">Recommender system — 推荐系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Collaborative-filtering-—-协同过滤"><span class="nav-number">4.</span> <span class="nav-text">Collaborative filtering —- 协同过滤</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

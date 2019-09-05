@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上图为逻辑回归，当  ，y = 1由此引入了一种alternative view of logistic regression（不懂怎么翻译） 就是另一种表达方式，也由此引入了SVM。如下图  原本logstic regression的costFunction化为两部分然后分别作曲线图，然后根据曲线生成一段段直线，作为SVM的新costFunction。  就底下这个，这里后面一项的i=1写错了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习 吴恩达 第七周 笔记">
+<meta property="og:url" content="http://yoursite.com/2019/04/20/机器学习 吴恩达 第七周 笔记/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="上图为逻辑回归，当  ，y = 1由此引入了一种alternative view of logistic regression（不懂怎么翻译） 就是另一种表达方式，也由此引入了SVM。如下图  原本logstic regression的costFunction化为两部分然后分别作曲线图，然后根据曲线生成一段段直线，作为SVM的新costFunction。  就底下这个，这里后面一项的i=1写错了">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/5.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/6.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/7.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/8.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/9.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/10.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/11.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/12.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/13.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/14.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/15.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/16.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/17.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/18.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/19.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/20.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/21.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/22.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/23.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/24.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/25.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/26.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/27.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/28.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/29.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/30.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/31.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/32.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/33.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/34.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/35.jpg">
+<meta property="og:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/36.jpg">
+<meta property="og:updated_time" content="2019-06-18T12:58:08.288Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习 吴恩达 第七周 笔记">
+<meta name="twitter:description" content="上图为逻辑回归，当  ，y = 1由此引入了一种alternative view of logistic regression（不懂怎么翻译） 就是另一种表达方式，也由此引入了SVM。如下图  原本logstic regression的costFunction化为两部分然后分别作曲线图，然后根据曲线生成一段段直线，作为SVM的新costFunction。  就底下这个，这里后面一项的i=1写错了">
+<meta name="twitter:image" content="http://yoursite.com/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/20/机器学习 吴恩达 第七周 笔记/">
+
+
+
+
+
+  <title>机器学习 吴恩达 第七周 笔记 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/20/机器学习 吴恩达 第七周 笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习 吴恩达 第七周 笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-04-20T13:13:53+10:00">
+                2019-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg" alt></p>
+<p>上图为逻辑回归，当 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/1.jpg" alt> ，y = 1<br>由此引入了一种alternative view of logistic regression（不懂怎么翻译）</p>
+<p>就是另一种表达方式，也由此引入了SVM。如下图</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/2.jpg" alt></p>
+<p>原本logstic regression的costFunction<br>化为两部分然后分别作曲线图，然后根据曲线生成一段段直线，作为SVM的新costFunction。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/3.jpg" alt></p>
+<p>就底下这个，这里后面一项的i=1写错了，应该是j=1<br>。这里我们去掉λ，改用C代替，（C=1/λ），然后m去掉，（左边哪里的min为我们解释了为什么能去掉m而不影响函数）</p>
+<h1 id="Large-Margin-intuition"><a href="#Large-Margin-intuition" class="headerlink" title="Large Margin intuition"></a>Large Margin intuition</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/4.jpg" alt></p>
+<p>如果C很大，我们希望第一项≈0，即 costFunction = <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/5.jpg" alt></p>
+<h1 id="SVM-Decision-Boundary"><a href="#SVM-Decision-Boundary" class="headerlink" title="SVM Decision Boundary"></a>SVM Decision Boundary</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/6.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/7.jpg" alt><br>如上图，decision boundary有很多种，如何选合适的?这里可以这么想，C大，那么λ自然小，在旧的costfunction中，<br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/8.jpg" alt></p>
+<p>正则化的影响自然变小，决策边界受到training set的影响自然会大（这里的costFunction只不过用C代替了原来的λ）</p>
+<h1 id="The-mathematics-behind-large-margin-classification-optional"><a href="#The-mathematics-behind-large-margin-classification-optional" class="headerlink" title="The mathematics behind large margin classification (optional)"></a>The mathematics behind large margin classification (optional)</h1><p>这里不多说，上图</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/9.jpg" alt></p>
+<p>向量的内积可以用这玩意表示 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/10.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/11.jpg" alt><br>p是v在u上的投影，所以 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/12.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/13.jpg" alt></p>
+<p>然后这里 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/14.jpg" alt> 再根据第一张图，可以得出<br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/15.jpg" alt><br>用来替换原本的θ转置乘x</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/16.jpg" alt><br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/17.jpg" alt><br>上面一切推倒都是基于large C的情况。然后我们的目标是minθ，根据 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/18.jpg" alt><br>我们知道，&gt;=1的情况下，p越大，θ越小，同理&lt;=-1下，p越大，θ越小。SVM就根据这个来决定决策边界的方向，位置。</p>
+<h1 id="Kernel-Function"><a href="#Kernel-Function" class="headerlink" title="Kernel Function"></a>Kernel Function</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/19.jpg" alt></p>
+<p>我们用f1,f2。。。。来代替多项式里面的项 ，多项式那么多，那么如何找到最合适的多项式呢？这里引入核函数。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/20.jpg" alt><br>先讲原理,假设坐标系里有三个landmark，给定一个x求这个x与这三个L的相似度（就是距离） <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/21.jpg" alt> ，这个也叫高斯核函数(RBF Kernel<br>Function)（更清晰的公式在后面。）</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/22.jpg" alt></p>
+<p>对于 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/23.jpg" alt><br>如果x与landmark约近，那么这整个公式约等于1(exp(0)=1)，否则约等于0，这里用了一个x得出了f1,f2,f3三个新的feature。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/24.jpg" alt></p>
+<p>再来看看σ对高斯核函数的影响 ，σ越大越平缓（下降速度越慢），反之则越快</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/25.jpg" alt></p>
+<p>一个例子</p>
+<p>好了， 知道了怎么选f，那么接下来就是如何选landmark了。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/26.jpg" alt></p>
+<p>在这里，我们用training example直接一对一转化为landmark 。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/27.jpg" alt></p>
+<p>每个x与每个landmark对比，如上图中，碰到sim(x,l)==1，就是与自身作对比了（这个是similarity的简写）</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/28.jpg" alt></p>
+<p>再替代原先的costFunction就等于这货</p>
+<p>下面是C和σ对costfunction的影响</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/29.jpg" alt></p>
+<h1 id="SVM咋用"><a href="#SVM咋用" class="headerlink" title="SVM咋用"></a>SVM咋用</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/30.jpg" alt></p>
+<p>首先咱的目的是用SVM来求得θ。</p>
+<p>那么就需要选择C和kernel函数。比方说 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/31.jpg" alt><br>linear kernel就是没有用kernel的意思，看上图，对于feature n很大，而样本量m很小的情况下有用。</p>
+<p>另一种就是高斯函数，就上面提到的。不过这个需要选择σ。</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/32.jpg" alt></p>
+<p>这里要考虑一个问题，就是范围的问题，如图，第一个feature是尺寸，e.g 1000 feat<br>，而第二个是房间数，很明显，代表尺寸一项的影响肯定比房间数的影响要大，那么这里就需要feature scaling来平衡。</p>
+<p>介绍其他kernel</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/33.jpg" alt></p>
+<p>很多SVM包里都已经建好了multi-class function，当然也可以用one to all来算</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/34.jpg" alt></p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/35.jpg" alt><br>啥时选用logstic regression, SVM, neural network</p>
+<p>代码：</p>
+<p>dataset3param.m</p>
+<p>这里只贴这个</p>
+<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/36.jpg" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/09/吴恩达 机器学习 第六周 笔记+编程/" rel="next" title="吴恩达 机器学习 第六周 笔记+编程">
+                <i class="fa fa-chevron-left"></i> 吴恩达 机器学习 第六周 笔记+编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/21/机器学习 吴恩达 第八周 笔记/" rel="prev" title="机器学习 吴恩达 第八周 笔记">
+                机器学习 吴恩达 第八周 笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Large-Margin-intuition"><span class="nav-number">1.</span> <span class="nav-text">Large Margin intuition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM-Decision-Boundary"><span class="nav-number">2.</span> <span class="nav-text">SVM Decision Boundary</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-mathematics-behind-large-margin-classification-optional"><span class="nav-number">3.</span> <span class="nav-text">The mathematics behind large margin classification (optional)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kernel-Function"><span class="nav-number">4.</span> <span class="nav-text">Kernel Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM咋用"><span class="nav-number">5.</span> <span class="nav-text">SVM咋用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

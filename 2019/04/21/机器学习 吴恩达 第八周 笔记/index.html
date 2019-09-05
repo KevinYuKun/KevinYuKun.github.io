@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="K均值聚类—K-mean对无监督学习对象进行分类的常用方法之一。 因为比较简单，所以就简单说下   一开始先输入K(就是cluster的个数)还有training set。  从training set中随机选取K的点作为初始的cluster centroid。 然后for loop： ① min(每个training set的点到cluster centroid的距离)，因为是根据这个点到clu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习 吴恩达 第八周 笔记">
+<meta property="og:url" content="http://yoursite.com/2019/04/21/机器学习 吴恩达 第八周 笔记/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="K均值聚类—K-mean对无监督学习对象进行分类的常用方法之一。 因为比较简单，所以就简单说下   一开始先输入K(就是cluster的个数)还有training set。  从training set中随机选取K的点作为初始的cluster centroid。 然后for loop： ① min(每个training set的点到cluster centroid的距离)，因为是根据这个点到clu">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421134914227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421134931760.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421134949709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421135832303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421140009370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421140030613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019042114020297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421140532677.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019042114070073.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/201904211410358.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421141551213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421141242493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421141236785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019042114124156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421142143961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421142050639.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421142456235.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421142729518.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421142821459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421143025389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421143249764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421143557761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421143824104.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421143903278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144039571.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144321898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144310477.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144320260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144558123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421144609946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-09T10:48:22.571Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习 吴恩达 第八周 笔记">
+<meta name="twitter:description" content="K均值聚类—K-mean对无监督学习对象进行分类的常用方法之一。 因为比较简单，所以就简单说下   一开始先输入K(就是cluster的个数)还有training set。  从training set中随机选取K的点作为初始的cluster centroid。 然后for loop： ① min(每个training set的点到cluster centroid的距离)，因为是根据这个点到clu">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190421134914227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/21/机器学习 吴恩达 第八周 笔记/">
+
+
+
+
+
+  <title>机器学习 吴恩达 第八周 笔记 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/机器学习 吴恩达 第八周 笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习 吴恩达 第八周 笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-04-21T14:46:42+10:00">
+                2019-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="K均值聚类—K-mean"><a href="#K均值聚类—K-mean" class="headerlink" title="K均值聚类—K-mean"></a>K均值聚类—K-mean</h1><p>对无监督学习对象进行分类的常用方法之一。</p>
+<p>因为比较简单，所以就简单说下</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421134914227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421134931760.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>一开始先输入K(就是cluster的个数)还有training set。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421134949709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>从training set中随机选取K的点作为初始的cluster centroid。</p>
+<p>然后for loop：</p>
+<p>① min(每个training set的点到cluster centroid的距离)，因为是根据这个点到cluster<br>centroid的距离来判断，这个点是否属于这个cluster centroid。E.g c(5) = 4 代表 第五个样本点是属于第四个cluster<br>centroid。</p>
+<p>② 等到所有点都找到了自己的cluster<br>centroid后，再找出每个cluster新的中心点，具体就是将属于同一个cluster的所有点加起来，再取平均值，得到的就是新的cluster<br>centroid的坐标。E.g c(76) = 4, c(24) = 4,c(5) = 4，就是将这三个的横纵坐标加起来然后除以3得出新点坐标。</p>
+<p>在将所有新的cluster centroid算出来后，如果新点跟旧点相比，差距不大，则可以结束，否则就继续循环①②(带着新点循环)。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421135832303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>如图，K-mean的目的是让costFunction J达到最小，就是training set中每个点到其cluster centroid的距离的和最小。</p>
+<p>然而，随机初始化centroid可能会带来不好的影响，看图</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421140009370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>如上图，如果运气差的话，初始点的位置不好，会出现以上现象。明显的3个cluster可能最后结果只有2个cluster。</p>
+<p>解决方法：多次循环K-mean，然后去J的最小值时的K</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421140030613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br><img src="https://img-blog.csdnimg.cn/2019042114020297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>循环算K-mean后，会有这么两种结果第一种称为Elbow method，就是斜率问题。如图选择K=3，因为斜率在这里骤变。</p>
+<p>然后对于图二，很难选</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421140532677.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>这里post上一题目。K=5时&gt;K=3</p>
+<p>有时候，对于K-mean要根据需求了来选择K，如下图，不同衣服size</p>
+<p><img src="https://img-blog.csdnimg.cn/2019042114070073.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h1 id="Dimensionality-Reduction—维度约简"><a href="#Dimensionality-Reduction—维度约简" class="headerlink" title="Dimensionality Reduction—维度约简"></a>Dimensionality Reduction—维度约简</h1><p>两个motivation ： 1. Data compression 数据压缩，可以提高运算速度和减少存储空间。</p>
+<p>2. Data Visualization 更直观的视图</p>
+<h3 id="Data-Compression"><a href="#Data-Compression" class="headerlink" title="Data Compression"></a>Data Compression</h3><p>从2D-&gt;1D</p>
+<p>在这个例子里，2D坐标系中所有点可以由一条大概的直线贯穿，点到直线上的映射  (注意，这里是点到直线的距离，并不是点的纵坐标到直线的距离)<br>如下图那一条线就是点的映射，那么整个2D数据就可以由原来的(x,y)—&gt;z用z来表达</p>
+<p><img src="https://img-blog.csdnimg.cn/201904211410358.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>3D-&gt;2D同理，只不过用（z1,z2)来代替原本的(x,y,z)</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421141551213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h3 id="Data-Visualization"><a href="#Data-Visualization" class="headerlink" title="Data Visualization"></a>Data Visualization</h3><p><img src="https://img-blog.csdnimg.cn/20190421141242493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421141236785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/2019042114124156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>上面三图所表达的东西可以最终由GDP和人均GDP或类似的东西来表达。从原本的好多D降到了2D</p>
+<h1 id="Principal-Component-Analysis-Problem-Formulation-PCA"><a href="#Principal-Component-Analysis-Problem-Formulation-PCA" class="headerlink" title="Principal Component Analysis Problem Formulation(PCA)"></a>Principal Component Analysis Problem Formulation(PCA)</h1><p>PCA的目的就是降维，具体怎么做呢，就是找到一个向量(就是那条线)，使得所有training 点映射在这向量上面的projection<br>error最小。啥是projection error，就是下图，点到直线的距离（  是距离，不是纵坐标距离）</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421142143961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421142050639.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>这就是上面所说的距离。左图是linear regression，其目的是预测y和原本真实的y的差距，所以用的是纵坐标上的距离。</p>
+<p>而右图则是PCA，求得是降维过程中的最佳向量。</p>
+<p>那咋用呢</p>
+<h3 id="第一步：处理数据，feature-scaling啊-mean"><a href="#第一步：处理数据，feature-scaling啊-mean" class="headerlink" title="第一步：处理数据，feature scaling啊 mean"></a>第一步：处理数据，feature scaling啊 mean</h3><p>normalization啊什么的保证取值范围在一个合理的范围内，不然容易因为某一个的取值范围过大或过小而影响了最终结果（参考那个房子面积和房间数）</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421142456235.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h3 id="第二步：计算协方差矩阵-和特征向量"><a href="#第二步：计算协方差矩阵-和特征向量" class="headerlink" title="第二步：计算协方差矩阵 和特征向量"></a>第二步：计算协方差矩阵 和特征向量</h3><p><img src="https://img-blog.csdnimg.cn/20190421142729518.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421142821459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>这个协方差(covariance matrix)符号和求和符号很像，然后这里用sigma表示协方差矩阵</p>
+<p>接下来就是算特征向量</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421143025389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>svd()唤作single value decomposition奇异值分解。这里U,S,V我们只取U来玩。</p>
+<p>具体原理，咱不知道，咱也不敢问。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421143249764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>看到上面的U没有，我们取前K个(这里的K就是降维后的维数)，作为K个向量μ，(啥意思呢，就是如果2D-&gt;1D,<br>就只用一条向量能表达嘛，这个μ就等于那条直线，同理 3D-&gt;2D，μ1，μ2)。。然后z就是我们降维后用来代替原本维度东东。z = Ureduce *<br>X，这个Ureduce就是取了前K个后的U。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421143557761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h1 id="Reconstruction"><a href="#Reconstruction" class="headerlink" title="Reconstruction"></a>Reconstruction</h1><p>有降维肯定就有还原啦。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421143824104.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>这是第一种方法，projection error 的平均值误差 / 那个总变量得到的结果小于某个数，这里是小于0.01，换句话说，99%的变量都被保留了</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421143903278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>第二种方法就简单的多， 咱取U,S,V中的S，这是一个对角线有元素，其他为0的矩阵，然后按照公式，要多少k取多少k然后除总数，搞定</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421144039571.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<h1 id="最后补充："><a href="#最后补充：" class="headerlink" title="最后补充："></a>最后补充：</h1><p><img src="https://img-blog.csdnimg.cn/20190421144321898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421144310477.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>PCA只是用来降维，不能用来解决over’fit</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421144320260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p>PCA不应该是作为首先考虑的手段，应该用别的方法算过后不行才用。</p>
+<p>这里只放两段代码</p>
+<p><img src="https://img-blog.csdnimg.cn/20190421144558123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20190421144609946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/20/机器学习 吴恩达 第七周 笔记/" rel="next" title="机器学习 吴恩达 第七周 笔记">
+                <i class="fa fa-chevron-left"></i> 机器学习 吴恩达 第七周 笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/23/机器学习 吴恩达 第九周 笔记/" rel="prev" title="机器学习 吴恩达 第九周 笔记">
+                机器学习 吴恩达 第九周 笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#K均值聚类—K-mean"><span class="nav-number">1.</span> <span class="nav-text">K均值聚类—K-mean</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dimensionality-Reduction—维度约简"><span class="nav-number">2.</span> <span class="nav-text">Dimensionality Reduction—维度约简</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Compression"><span class="nav-number">2.0.1.</span> <span class="nav-text">Data Compression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Visualization"><span class="nav-number">2.0.2.</span> <span class="nav-text">Data Visualization</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Principal-Component-Analysis-Problem-Formulation-PCA"><span class="nav-number">3.</span> <span class="nav-text">Principal Component Analysis Problem Formulation(PCA)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：处理数据，feature-scaling啊-mean"><span class="nav-number">3.0.1.</span> <span class="nav-text">第一步：处理数据，feature scaling啊 mean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：计算协方差矩阵-和特征向量"><span class="nav-number">3.0.2.</span> <span class="nav-text">第二步：计算协方差矩阵 和特征向量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reconstruction"><span class="nav-number">4.</span> <span class="nav-text">Reconstruction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最后补充："><span class="nav-number">5.</span> <span class="nav-text">最后补充：</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

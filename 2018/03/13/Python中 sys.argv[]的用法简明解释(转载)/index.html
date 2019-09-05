@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转自https://www.cnblogs.com/aland-1415/p/6613449.html 作者：  覆手为云p  Python中 sys.argv[]的用法简明解释 因为是看书自学的python,开始后不久就遇到了这个引入的模块函数，且一直在IDLE上编辑了后运行，试图从结果发现它的用途，然而结果一直都是没结果，也在网上查了许多，但发现这个问题的比较详细的解释只有一个版本，大部分都是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中 sys.argv[]的用法简明解释(转载)">
+<meta property="og:url" content="http://yoursite.com/2018/03/13/Python中 sys.argv[]的用法简明解释(转载)/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="转自https://www.cnblogs.com/aland-1415/p/6613449.html 作者：  覆手为云p  Python中 sys.argv[]的用法简明解释 因为是看书自学的python,开始后不久就遇到了这个引入的模块函数，且一直在IDLE上编辑了后运行，试图从结果发现它的用途，然而结果一直都是没结果，也在网上查了许多，但发现这个问题的比较详细的解释只有一个版本，大部分都是">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211214361-638728496.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211227690-1096721685.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211300346-1171068647.png">
+<meta property="og:updated_time" content="2019-06-09T10:48:22.570Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python中 sys.argv[]的用法简明解释(转载)">
+<meta name="twitter:description" content="转自https://www.cnblogs.com/aland-1415/p/6613449.html 作者：  覆手为云p  Python中 sys.argv[]的用法简明解释 因为是看书自学的python,开始后不久就遇到了这个引入的模块函数，且一直在IDLE上编辑了后运行，试图从结果发现它的用途，然而结果一直都是没结果，也在网上查了许多，但发现这个问题的比较详细的解释只有一个版本，大部分都是">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211214361-638728496.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/13/Python中 sys.argv[]的用法简明解释(转载)/">
+
+
+
+
+
+  <title>Python中 sys.argv[]的用法简明解释(转载) | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/Python中 sys.argv[]的用法简明解释(转载)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python中 sys.argv[]的用法简明解释(转载)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-03-13T11:38:47+11:00">
+                2018-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>转自<a href="https://www.cnblogs.com/aland-1415/p/6613449.html" target="_blank" rel="noopener">https://www.cnblogs.com/aland-1415/p/6613449.html</a> 作者： <a href="https://home.cnblogs.com/u/aland-1415/" target="_blank" rel="noopener"> 覆手为云p
+</a></p>
+<p>Python中 sys.argv[]的用法简明解释</p>
+<p>因为是看书自学的python,开始后不久就遇到了这个引入的模块函数，且一直在IDLE上编辑了后运行，试图从结果发现它的用途，然而结果一直都是没结果，也在网上查了许多，但发现这个问题的比较详细的解释只有一个版本，大部分都是转裁和复制的。给的都是简明python教程上那个一长串代码的例子，说看了就明白了，可我看得晕头转向的还是没真正明白，只知道“sys.argv[0]表示代码本身文件路径”这点，其实还是不明其意。后来经过大量努力，多方求教才真正明悟了，谨以记录和分享，希望能从另一个角度给同在求索过程中的同学一点启发。</p>
+<p>sys.argv[]说白了就是一个从程序外部获取参数的桥梁，这个“外部”很关键，所以那些试图从代码来说明它作用的解释一直没看明白。因为我们从外部取得的参数可以是多个，所以获得的是一个列表（list)，也就是说sys.argv其实可以看作是一个列表，所以才能用[]提取其中的元素。其第一个元素是程序本身，随后才依次是外部给予的参数。</p>
+<p>下面我们通过一个极简单的test.py程序的运行结果来说明它的用法。</p>
+<pre><code>1 #test.py
+2 
+3 import sys
+4 a=sys.argv[0]
+5 print(a)</code></pre><p>将test.py保存在c盘的根目录下。</p>
+<p>在程序中找到 ‘运行’-&gt;点击-&gt;输入”cmd”-&gt;回车键 进入控制台命令窗口（如下图），先输入cd c:<br>(作用是将命令路径改到c盘根目录)，然后输入test.py运行我们刚刚写的程序：</p>
+<p><img src="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211214361-638728496.png" alt></p>
+<p>得到的结果是C:\test.py，这就是0指代码（即此.py程序）本身的意思。</p>
+<p>然后我们将代码中0改为1 :</p>
+<p>a=sys.argv[1]</p>
+<p>保存后，再从控制台窗口运行，这次我们加上一个参数，输入：test.py what</p>
+<p><img src="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211227690-1096721685.png" alt></p>
+<p>得到的结果就是我们输入的参数what，看到这里你是不是开始明白了呢。</p>
+<p>那我们再把代码修改一下：</p>
+<p>a=sys.argv[2：]</p>
+<p>保存后，再从控制台窗台运行程序，这次多加几个参数，以空格隔开:</p>
+<p>test.py a b c d e f</p>
+<p><img src="https://images2015.cnblogs.com/blog/1122011/201703/1122011-20170324211300346-1171068647.png" alt></p>
+<p>得到的结果为[‘b’, ’c’, ’d’, ’e’, ’f’]</p>
+<p>应该大彻大悟了吧。Sys.argv[<br>]其实就是一个列表，里边的项为用户输入的参数，关键就是要明白这参数是从程序外部输入的，而非代码本身的什么地方，要想看到它的效果就应该将程序保存了，从外部来运行程序并给出参数。</p>
+<p>转自<a href="https://www.cnblogs.com/aland-1415/p/6613449.html" target="_blank" rel="noopener">https://www.cnblogs.com/aland-1415/p/6613449.html</a> 作者： <a href="https://home.cnblogs.com/u/aland-1415/" target="_blank" rel="noopener"> 覆手为云p
+</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/submit text中python的input函数没用/" rel="next" title="submit text中python的input函数没用">
+                <i class="fa fa-chevron-left"></i> submit text中python的input函数没用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/python import变量会运行被引用文件的主程序/" rel="prev" title="python import变量会运行被引用文件的主程序">
+                python import变量会运行被引用文件的主程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

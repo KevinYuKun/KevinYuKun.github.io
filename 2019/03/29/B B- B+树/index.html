@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转自  https://www.jianshu.com/p/332caf8bed3a  B树即二叉搜索树：1.所有非叶子结点至多拥有两个儿子（Left和Right）；2.所有结点存储一个关键字；3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；如：  image.png B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中； 否则，如果查询关键字比结点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="B B- B+树">
+<meta property="og:url" content="http://yoursite.com/2019/03/29/B B- B+树/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="转自  https://www.jianshu.com/p/332caf8bed3a  B树即二叉搜索树：1.所有非叶子结点至多拥有两个儿子（Left和Right）；2.所有结点存储一个关键字；3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；如：  image.png B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中； 否则，如果查询关键字比结点">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-2c8a3d3caf000935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/247/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-7fced8418455cf9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/523/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-092996b57cac718e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/485/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-fbde56e36d21b229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/624/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-a9ab21a6e2e4aaff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/328/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-93703fd7f20d7355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4594052-99b493dd836c7d05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp">
+<meta property="og:updated_time" content="2019-06-09T10:48:22.573Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="B B- B+树">
+<meta name="twitter:description" content="转自  https://www.jianshu.com/p/332caf8bed3a  B树即二叉搜索树：1.所有非叶子结点至多拥有两个儿子（Left和Right）；2.所有结点存储一个关键字；3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；如：  image.png B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中； 否则，如果查询关键字比结点">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4594052-2c8a3d3caf000935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/247/format/webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/29/B B- B+树/">
+
+
+
+
+
+  <title>B B- B+树 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/B B- B+树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">B B- B+树</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-03-29T17:28:43+11:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>转自 <a href="https://www.jianshu.com/p/332caf8bed3a" target="_blank" rel="noopener"> https://www.jianshu.com/p/332caf8bed3a
+</a></p>
+<p><strong>B树</strong><br>即二叉搜索树：<br>1.所有非叶子结点至多拥有两个儿子（Left和Right）；<br>2.所有结点存储一个关键字；<br>3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；<br>如：</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-2c8a3d3caf000935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/247/format/webp" alt></p>
+<p>image.png</p>
+<p>B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中；</p>
+<p>否则，如果查询关键字比结点关键字小，就进入左儿子；如果比结点关键字大，就进入</p>
+<p>右儿子；如果左儿子或右儿子的指针为空，则报告找不到相应的关键字；<br>如果B树的所有非叶子结点的左右子树的结点数目均保持差不多（平衡），那么B树</p>
+<p>的搜索性能逼近二分查找；但它比连续内存空间的二分查找的优点是，改变B树结构</p>
+<p>（插入与删除结点）不需要移动大段的内存数据，甚至通常是常数开销；<br>如：</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-7fced8418455cf9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/523/format/webp" alt></p>
+<p>image.png</p>
+<p>但B树在经过多次插入与删除后，有可能导致不同的结构：</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-092996b57cac718e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/485/format/webp" alt></p>
+<p>image.png</p>
+<p>右边也是一个B树，但它的搜索性能已经是线性的了；同样的关键字集合有可能导致不同的</p>
+<p>树结构索引；所以，使用B树还要考虑尽可能让B树保持左图的结构，和避免右图的结构，也就</p>
+<p>是所谓的“平衡”问题；<br>实际使用的B树都是在原B树的基础上加上平衡算法，即“平衡二叉树”；如何保持B树</p>
+<p>结点分布均匀的平衡算法是平衡二叉树的关键；平衡算法是一种在B树中插入和删除结点的</p>
+<p>策略；</p>
+<p><strong>B-树</strong><br>是一种多路搜索树（并不是二叉的）：<br>1.定义任意非叶子结点最多只有M个儿子；且M &gt;2；<br>2.根结点的儿子数为[2, M]；<br>3.除根结点以外的非叶子结点的儿子数为[M/2, M]；<br>4.每个结点存放至少M/2-1（取上整）和至多M-1个关键字；（至少2个关键字）<br>5.非叶子结点的关键字个数=指向儿子的指针个数-1；<br>6.非叶子结点的关键字：K[1], K[2], …, K[M-1]；且K[i] &lt; K[i+1]；<br>7.非叶子结点的指针：P[1], P[2], …, P[M]；其中P[1]指向关键字小于K[1]的<br>子树，P[M]指向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；<br>8.所有叶子结点位于同一层；<br>如：（M=3）</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-fbde56e36d21b229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/624/format/webp" alt></p>
+<p>image.png</p>
+<p>B-树的搜索，从根结点开始，对结点内的关键字（有序）序列进行二分查找，如果</p>
+<p>命中则结束，否则进入查询关键字所属范围的儿子结点；重复，直到所对应的儿子指针为</p>
+<p>空，或已经是叶子结点；</p>
+<p>B-树的特性：<br>1.关键字集合分布在整颗树中；<br>2.任何一个关键字出现且只出现在一个结点中；<br>3.搜索有可能在非叶子结点结束；<br>4.其搜索性能等价于在关键字全集内做一次二分查找；<br>5.自动层次控制；<br>由于限制了除根结点以外的非叶子结点，至少含有M/2个儿子，确保了结点的至少<br>利用率，其最底搜索性能为：</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-a9ab21a6e2e4aaff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/328/format/webp" alt></p>
+<p>image.png</p>
+<p>其中，M为设定的非叶子结点最多子树个数，N为关键字总数；<br>所以B-树的性能总是等价于二分查找（与M值无关），也就没有B树平衡的问题；<br>由于M/2的限制，在插入结点时，如果结点已满，需要将结点分裂为两个各占<br>M/2的结点；删除结点时，需将两个不足M/2的兄弟结点合并；</p>
+<p><strong>B+树</strong><br>B+树是B-树的变体，也是一种多路搜索树：<br>1.其定义基本与B-树同，除了：<br>2.非叶子结点的子树指针与关键字个数相同；<br>3.非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树<br>（B-树是开区间）；<br>5.为所有叶子结点增加一个链指针；<br>6.所有关键字都在叶子结点出现；<br>如：（M=3）</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-93703fd7f20d7355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp" alt></p>
+<p>image.png</p>
+<p>B+的搜索与B-树也基本相同，区别是B+树只有达到叶子结点才命中（B-树可以在<br>非叶子结点命中），其性能也等价于在关键字全集做一次二分查找；<br>B+的特性：<br>1.所有关键字都出现在叶子结点的链表中（稠密索引），且链表中的关键字恰好<br>是有序的；<br>2.不可能在非叶子结点命中；<br>3.非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储<br>（关键字）数据的数据层；<br>4.更适合文件索引系统；</p>
+<p><em>_B</em> 树 _ *<br>是B+树的变体，在B+树的非根和非叶子结点再增加指向兄弟的指针；</p>
+<p><img src="//upload-images.jianshu.io/upload_images/4594052-99b493dd836c7d05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp" alt></p>
+<p>image.png</p>
+<p>B <em>树定义了非叶子结点关键字个数至少为(2/3)</em> M，即块的最低使用率为2/3</p>
+<p>（代替B+树的1/2）；<br>B+树的分裂：当一个结点满时，分配一个新的结点，并将原结点中1/2的数据</p>
+<p>复制到新结点，最后在父结点中增加新结点的指针；B+树的分裂只影响原结点和父</p>
+<p>结点，而不会影响兄弟结点，所以它不需要指向兄弟的指针；<br>B*树的分裂：当一个结点满时，如果它的下一个兄弟结点未满，那么将一部分</p>
+<p>数据移到兄弟结点中，再在原结点插入关键字，最后修改父结点中兄弟结点的关键字</p>
+<p>（因为兄弟结点的关键字范围改变了）；如果兄弟也满了，则在原结点与兄弟结点之</p>
+<p>间增加新结点，并各复制1/3的数据到新结点，最后在父结点增加新结点的指针；<br>所以，B*树分配新结点的概率比B+树要低，空间使用率更高；</p>
+<p><strong>小结</strong><br>B树：二叉树，每个结点只存储一个关键字，等于则命中，小于走左结点，大于<br>走右结点；<br>B-树：多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键<br>字范围的子结点；<br>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；<br>B+树：在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点<br>中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；<br>B*树：在B+树基础上，为非叶子结点也增加链表指针，将结点的最低利用率</p>
+<p>从1/2提高到2/3；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/29/B+树/" rel="next" title="B+树">
+                <i class="fa fa-chevron-left"></i> B+树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/29/二叉平衡树/" rel="prev" title="二叉平衡树">
+                二叉平衡树 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

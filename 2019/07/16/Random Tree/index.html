@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="加载不了图片就点有道云笔记 机器学习技法 —— Random Forest基分类器gt 1. Random  Forest Alogorithm回想Bagging, 其可以减少variance，而Decision Tree则是具有很大的variance，那么如果把他们结合起来就有Random Forest同时，这种方法具有相对多的好处，能够并行运算不同的决策树再合起来，RF集成了CART的优点，还">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Random Tree">
+<meta property="og:url" content="http://yoursite.com/2019/07/16/Random Tree/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="加载不了图片就点有道云笔记 机器学习技法 —— Random Forest基分类器gt 1. Random  Forest Alogorithm回想Bagging, 其可以减少variance，而Decision Tree则是具有很大的variance，那么如果把他们结合起来就有Random Forest同时，这种方法具有相对多的好处，能够并行运算不同的决策树再合起来，RF集成了CART的优点，还">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="http://note.youdao.com/yws/res/953/5520C7C70C074694B4439808C07ACED2">
+<meta property="og:image" content="http://note.youdao.com/yws/res/958/031637B1F3B942DD97042BC9A44DD8ED">
+<meta property="og:image" content="http://note.youdao.com/yws/res/964/DD1242E791394D26A22816FC1D1EEE03">
+<meta property="og:image" content="http://note.youdao.com/yws/res/977/DD474018DBBC4E36BBE8104DDCD18592">
+<meta property="og:image" content="http://note.youdao.com/yws/res/945/WEBRESOURCE307d208bb889754095078416257fd58f">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1037/F5B5E32D0E4247E7917D0E25A88BD833">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1038/9923491A7B104913BCB89647168176E2">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1042/4DE964CB63D34C1C9A765906B1315A52">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1058/2956F993BE7349109EE2E877069BF809">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1064/7BF82E52F8D94D51A6F5998B6C6DA0D3">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1076/7E6CF98292704736B3F351986AF1A2A1">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1079/59201C61A67F4556ABA3607FBC05C486">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1089/F34A608374024ED89439A21066B4EDE4">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1100/AED91432E67A430D801AA116BEAD7881">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1116/FD49B2AF2BB146AFA57EB780AA72E14C">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1119/E67DA59CC6834B3D96EAB28BC9B4E3E1">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1122/78F703E42C904EE1B1F91B81767DF861">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1124/5B428A3EF9414AF28643495DDD33C017">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1126/F231868177A445069B142416010EBC9C">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1125/D772B42531EC44E98DD3FA221AF7066A">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1128/4884B9DB37FF43B3A23F1A0FF3E7854F">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1137/FD480310724A4A47B3FB8421E44B3824">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1135/20BCC3260BD8479EAB2AA2A7156476E6">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1138/9BB6466F42994ED88A0239F53C6EB6A0">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1136/54E56FAA87BD4DC38E00BA55EC6EB2A6">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1139/2B84B3CE144D4796B691A110FA563BB3">
+<meta property="og:image" content="http://note.youdao.com/yws/res/1134/E9C9428D450A4D86B045BFED31121D9A">
+<meta property="og:updated_time" content="2019-07-18T03:32:11.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Random Tree">
+<meta name="twitter:description" content="加载不了图片就点有道云笔记 机器学习技法 —— Random Forest基分类器gt 1. Random  Forest Alogorithm回想Bagging, 其可以减少variance，而Decision Tree则是具有很大的variance，那么如果把他们结合起来就有Random Forest同时，这种方法具有相对多的好处，能够并行运算不同的决策树再合起来，RF集成了CART的优点，还">
+<meta name="twitter:image" content="http://note.youdao.com/yws/res/953/5520C7C70C074694B4439808C07ACED2">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/16/Random Tree/">
+
+
+
+
+
+  <title>Random Tree | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/16/Random Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Random Tree</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-16T12:40:40+10:00">
+                2019-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>加载不了图片就点<a href="http://note.youdao.com/noteshare?id=948ef68b8ab9ec6b040a4e38ae9676b8" target="_blank" rel="noopener">有道云笔记</a></p>
+<h1 id="机器学习技法-——-Random-Forest"><a href="#机器学习技法-——-Random-Forest" class="headerlink" title="机器学习技法 —— Random Forest"></a>机器学习技法 —— Random Forest</h1><p>基分类器gt</p>
+<h3 id="1-Random-Forest-Alogorithm"><a href="#1-Random-Forest-Alogorithm" class="headerlink" title="1. Random  Forest Alogorithm"></a>1. Random  Forest Alogorithm</h3><p><img src="http://note.youdao.com/yws/res/953/5520C7C70C074694B4439808C07ACED2" alt="image"><br>回想Bagging, 其可以减少variance，而Decision Tree则是具有很大的variance，那么如果把他们结合起来就有Random Forest<br><img src="http://note.youdao.com/yws/res/958/031637B1F3B942DD97042BC9A44DD8ED" alt="image"><br>同时，这种方法具有相对多的好处，能够并行运算不同的决策树再合起来，RF集成了CART的优点，还有就是多个决策树共同抉择避免了overfit。<br>此时的RF = bagging + CART<br>我们知道bagging是通过对数据集有放回的采集从而做到randomness，那么现在，我们考虑在这基础上对feature动手脚。<br><img src="http://note.youdao.com/yws/res/964/DD1242E791394D26A22816FC1D1EEE03" alt="image"><br>在每一次做CART的b(x)时都重新re-sampie feature，例如每次都只从100个feature中选取10个建树，这样的话，decision tree的diversity会很大，能够更好的拟合数据。  </p>
+<p><img src="http://note.youdao.com/yws/res/977/DD474018DBBC4E36BBE8104DDCD18592" alt="image"><br>说到这里，其实对于原本的特征x，我们可以把subspace看成是φ(x) = P · x，这里的P是投影矩阵的意思。<br>当这个P里面的内容保持原本各自的方向时就叫做natural basis  </p>
+<table>
+<thead>
+<tr>
+<th>d’’/feature</th>
+<th>f1</th>
+<th>f2</th>
+<th>f3</th>
+<th>f4</th>
+<th>…</th>
+<th>fT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>f2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>f3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>f4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>…</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>fT</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>那么我们能不能将x投影到任意方向呢？(就是上面表格中，不再是单位矩阵，而是各种不同的数值在矩阵中，从而形成不同方向的投影矩阵)  </p>
+<p>row Pi 考虑的是随机的方向，把若干个原始的feature合起来，使得一个维度上可能有不同的feature组合而成。  </p>
+<table>
+<thead>
+<tr>
+<th>d’’/feature</th>
+<th>f1</th>
+<th>f2</th>
+<th>f3</th>
+<th>f4</th>
+<th>…</th>
+<th>fT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f1</td>
+<td>0.2</td>
+<td>0</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>f2</td>
+<td>0</td>
+<td>0.9</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.32</td>
+</tr>
+<tr>
+<td>f3</td>
+<td>0</td>
+<td>0</td>
+<td>0.14</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>f4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.255</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>…</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.466</td>
+<td>0</td>
+</tr>
+<tr>
+<td>fT</td>
+<td>0</td>
+<td>0</td>
+<td>0.24</td>
+<td>0</td>
+<td>0</td>
+<td>0.234</td>
+</tr>
+</tbody></table>
+<p>每一行，都只选取d’’个非0项做组合，而当d’’=1时也就是natural basis了，原作者推荐，每次做CART的b(x)时，都做一次都用P变化x。<br>那么就有RF = bagggjng + random-combination CART —— randomness everywhere</p>
+<p>==来源<a href="https://my.oschina.net/hblt147/blog/1535250==" target="_blank" rel="noopener">https://my.oschina.net/hblt147/blog/1535250==</a><br><img src="http://note.youdao.com/yws/res/945/WEBRESOURCE307d208bb889754095078416257fd58f" alt="wechatimg173.png"></p>
+<h3 id="2-out-of-Bag-Estimate"><a href="#2-out-of-Bag-Estimate" class="headerlink" title="2. out-of-Bag Estimate"></a>2. out-of-Bag Estimate</h3><p>out of bag(OOB)就是过N’轮选择后依然没被bootstrap选中的数据。<br><img src="http://note.youdao.com/yws/res/1037/F5B5E32D0E4247E7917D0E25A88BD833" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1038/9923491A7B104913BCB89647168176E2" alt="image"><br>当N’= N， N足够大时，无限趋近于1/e，大概1/3左右，也就是说大概有1/3的数据是完全没有选到的，所以说这是不是跟validation很像。<br><img src="http://note.youdao.com/yws/res/1042/4DE964CB63D34C1C9A765906B1315A52" alt="image"></p>
+<p>上面两个图，对比，很类似，直观的看，OOB可以作为小g的验证集，然而，我们在乎的是大G，那么能不能用OOB来验证大G呢？  </p>
+<p>按照上图，先对每一行操作：  (要**的 )<br>for(x1,y1) —-&gt; G<sup>-</sup><sub>1</sub> = average(g2)<br>for(x2,y2) —-&gt; G<sup>-</sup><sub>2</sub> = average(g1,g2)<br>for(x3,y3) —-&gt; G<sup>-</sup><sub>3</sub> = average(g1,g3)<br>for(xN,yN) —-&gt; G<sup>-</sup><sub>N</sub> = average(g2,g3,gT)<br>对于每一行都能得出一个子模型G<sup>-</sup><sub>N</sub>，用来验证对应的某个点，那么对于整体数据集来说，就可以用以下公式来表达：<br><img src="http://note.youdao.com/yws/res/1058/2956F993BE7349109EE2E877069BF809" alt="image"></p>
+<p>好了，接下来看看validation和OOB的差别：<br><img src="http://note.youdao.com/yws/res/1064/7BF82E52F8D94D51A6F5998B6C6DA0D3" alt="image"><br>可以明显看出：</p>
+<ul>
+<li>validation的过程相对繁琐，先切割训练集，再用不同的hypothesis做训练然后用验证集验证，选出最好的结果以及算法再用全部数据集做训练。</li>
+<li>而OOB来说只需正常进行RF即可，到最后得到了G就可以顺带得到E<sub>oob</sub>，那么这个叫做self-validation，优点是不需要重新训练</li>
+</ul>
+<h3 id="3-Feature-selection"><a href="#3-Feature-selection" class="headerlink" title="3. Feature selection"></a>3. Feature selection</h3><p><img src="http://note.youdao.com/yws/res/1076/7E6CF98292704736B3F351986AF1A2A1" alt="image"><br>很多时候，不是所有的feature都是必要的，比如说一些冗余的或者不相关的feature，这个时候我们就要做feature selection。<br>feature selection后可以降低计算复杂度，更容易泛化模型。但是缺点也是明显的，feature selection是一个组合问题，那么就很容易计算爆炸的情况，其次，如果做不好，容易overfit。</p>
+<p>那么，该如何做feature selection？<br><img src="http://note.youdao.com/yws/res/1079/59201C61A67F4556ABA3607FBC05C486" alt="image"><br>对于 linear model来说，很简单，建模即选择，其中w就是每个feature的重要程度</p>
+<p>然而对于non-linear来说就很复杂。然而对于RF来说，有较为简单的方法来做：<br><img src="http://note.youdao.com/yws/res/1089/F34A608374024ED89439A21066B4EDE4" alt="image"><br>核心思想就是random test，什么意思呢，就是如果一个feature确实是很必要的，那么往这个feature上塞点noise，结果肯定会很不同，这里我们用random value来作为噪音。  </p>
+<p>那么如何选择random value？</p>
+<ul>
+<li>高斯分布等一类服从均匀分布的，不行，因为可能改变原本分布</li>
+<li>那么我们利用bootstrap的思想，在这里叫permutation test:就是重新打乱第i个特征的数据</li>
+</ul>
+<p><img src="http://note.youdao.com/yws/res/1100/AED91432E67A430D801AA116BEAD7881" alt="image"><br>就上面的公式，那么问题来了，如果要计算performance(D<sup>(p)</sup>)的话就得重新训练一遍，麻烦，那么这里可以用OOB来代替表现：<br>performance(D) —–&gt; E<sub>oob</sub>(G)<br>performance(D<sup>(p)</sup>) —–&gt; E<sub>oob</sub><sup>(p)</sup>(G)<br>意思是不在训练的时候做permutate，而是在验证时做，用第i个feature下的OOB来做permutate，而后验证表现咋样。</p>
+<h3 id="4-in-action"><a href="#4-in-action" class="headerlink" title="4. in action"></a>4. in action</h3><p>左边的是CART，中间的是CART+bagging，右边的是RF，t=1<br><img src="http://note.youdao.com/yws/res/1116/FD49B2AF2BB146AFA57EB780AA72E14C" alt="image"></p>
+<p>t=100时，中间表示的是第100棵decision tree，注意是一颗，而右边的表示100棵decision tree共同投票组成的RF<br><img src="http://note.youdao.com/yws/res/1119/E67DA59CC6834B3D96EAB28BC9B4E3E1" alt="image"><br><img src="http://note.youdao.com/yws/res/1122/78F703E42C904EE1B1F91B81767DF861" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1124/5B428A3EF9414AF28643495DDD33C017" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1126/F231868177A445069B142416010EBC9C" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1125/D772B42531EC44E98DD3FA221AF7066A" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1128/4884B9DB37FF43B3A23F1A0FF3E7854F" alt="image"><br>可以看到RF的线越来越平滑，而且有点像SVM</p>
+<p>对于一个有噪音的数据, RF也可以尽量减少噪音的影响：<br><img src="http://note.youdao.com/yws/res/1137/FD480310724A4A47B3FB8421E44B3824" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1135/20BCC3260BD8479EAB2AA2A7156476E6" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1138/9BB6466F42994ED88A0239F53C6EB6A0" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1136/54E56FAA87BD4DC38E00BA55EC6EB2A6" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1139/2B84B3CE144D4796B691A110FA563BB3" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/res/1134/E9C9428D450A4D86B045BFED31121D9A" alt="image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/11/Decision Tree/" rel="next" title="Decision Tree">
+                <i class="fa fa-chevron-left"></i> Decision Tree
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/18/GBDT/" rel="prev" title="GBDT">
+                GBDT <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习技法-——-Random-Forest"><span class="nav-number">1.</span> <span class="nav-text">机器学习技法 —— Random Forest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Random-Forest-Alogorithm"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. Random  Forest Alogorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-out-of-Bag-Estimate"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. out-of-Bag Estimate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Feature-selection"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. Feature selection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-in-action"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. in action</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
