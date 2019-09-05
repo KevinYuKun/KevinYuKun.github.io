@@ -300,60 +300,19 @@
       
         
           
-            <p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/0.jpg" alt></p>
-<p>上图为逻辑回归，当 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/1.jpg" alt> ，y = 1<br>由此引入了一种alternative view of logistic regression（不懂怎么翻译）</p>
-<p>就是另一种表达方式，也由此引入了SVM。如下图</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/2.jpg" alt></p>
-<p>原本logstic regression的costFunction<br>化为两部分然后分别作曲线图，然后根据曲线生成一段段直线，作为SVM的新costFunction。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/3.jpg" alt></p>
-<p>就底下这个，这里后面一项的i=1写错了，应该是j=1<br>。这里我们去掉λ，改用C代替，（C=1/λ），然后m去掉，（左边哪里的min为我们解释了为什么能去掉m而不影响函数）</p>
-<h1 id="Large-Margin-intuition"><a href="#Large-Margin-intuition" class="headerlink" title="Large Margin intuition"></a>Large Margin intuition</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/4.jpg" alt></p>
-<p>如果C很大，我们希望第一项≈0，即 costFunction = <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/5.jpg" alt></p>
-<h1 id="SVM-Decision-Boundary"><a href="#SVM-Decision-Boundary" class="headerlink" title="SVM Decision Boundary"></a>SVM Decision Boundary</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/6.jpg" alt></p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/7.jpg" alt><br>如上图，decision boundary有很多种，如何选合适的?这里可以这么想，C大，那么λ自然小，在旧的costfunction中，<br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/8.jpg" alt></p>
-<p>正则化的影响自然变小，决策边界受到training set的影响自然会大（这里的costFunction只不过用C代替了原来的λ）</p>
-<h1 id="The-mathematics-behind-large-margin-classification-optional"><a href="#The-mathematics-behind-large-margin-classification-optional" class="headerlink" title="The mathematics behind large margin classification (optional)"></a>The mathematics behind large margin classification (optional)</h1><p>这里不多说，上图</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/9.jpg" alt></p>
-<p>向量的内积可以用这玩意表示 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/10.jpg" alt></p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/11.jpg" alt><br>p是v在u上的投影，所以 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/12.jpg" alt></p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/13.jpg" alt></p>
-<p>然后这里 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/14.jpg" alt> 再根据第一张图，可以得出<br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/15.jpg" alt><br>用来替换原本的θ转置乘x</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/16.jpg" alt><br><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/17.jpg" alt><br>上面一切推倒都是基于large C的情况。然后我们的目标是minθ，根据 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/18.jpg" alt><br>我们知道，&gt;=1的情况下，p越大，θ越小，同理&lt;=-1下，p越大，θ越小。SVM就根据这个来决定决策边界的方向，位置。</p>
-<h1 id="Kernel-Function"><a href="#Kernel-Function" class="headerlink" title="Kernel Function"></a>Kernel Function</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/19.jpg" alt></p>
-<p>我们用f1,f2。。。。来代替多项式里面的项 ，多项式那么多，那么如何找到最合适的多项式呢？这里引入核函数。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/20.jpg" alt><br>先讲原理,假设坐标系里有三个landmark，给定一个x求这个x与这三个L的相似度（就是距离） <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/21.jpg" alt> ，这个也叫高斯核函数(RBF Kernel<br>Function)（更清晰的公式在后面。）</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/22.jpg" alt></p>
-<p>对于 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/23.jpg" alt><br>如果x与landmark约近，那么这整个公式约等于1(exp(0)=1)，否则约等于0，这里用了一个x得出了f1,f2,f3三个新的feature。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/24.jpg" alt></p>
-<p>再来看看σ对高斯核函数的影响 ，σ越大越平缓（下降速度越慢），反之则越快</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/25.jpg" alt></p>
-<p>一个例子</p>
-<p>好了， 知道了怎么选f，那么接下来就是如何选landmark了。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/26.jpg" alt></p>
-<p>在这里，我们用training example直接一对一转化为landmark 。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/27.jpg" alt></p>
-<p>每个x与每个landmark对比，如上图中，碰到sim(x,l)==1，就是与自身作对比了（这个是similarity的简写）</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/28.jpg" alt></p>
-<p>再替代原先的costFunction就等于这货</p>
-<p>下面是C和σ对costfunction的影响</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/29.jpg" alt></p>
-<h1 id="SVM咋用"><a href="#SVM咋用" class="headerlink" title="SVM咋用"></a>SVM咋用</h1><p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/30.jpg" alt></p>
-<p>首先咱的目的是用SVM来求得θ。</p>
-<p>那么就需要选择C和kernel函数。比方说 <img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/31.jpg" alt><br>linear kernel就是没有用kernel的意思，看上图，对于feature n很大，而样本量m很小的情况下有用。</p>
-<p>另一种就是高斯函数，就上面提到的。不过这个需要选择σ。</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/32.jpg" alt></p>
-<p>这里要考虑一个问题，就是范围的问题，如图，第一个feature是尺寸，e.g 1000 feat<br>，而第二个是房间数，很明显，代表尺寸一项的影响肯定比房间数的影响要大，那么这里就需要feature scaling来平衡。</p>
-<p>介绍其他kernel</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/33.jpg" alt></p>
-<p>很多SVM包里都已经建好了multi-class function，当然也可以用one to all来算</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/34.jpg" alt></p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/35.jpg" alt><br>啥时选用logstic regression, SVM, neural network</p>
-<p>代码：</p>
-<p>dataset3param.m</p>
-<p>这里只贴这个</p>
-<p><img src="/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%90%B4%E6%81%A9%E8%BE%BE%E7%AC%AC%E4%B8%83%E5%91%A8%E7%AC%94%E8%AE%B0/36.jpg" alt></p>
-
           
+上图为逻辑回归，当  ，y = 1由此引入了一种alternative view of logistic regression（不懂怎么翻译）
+就是另一种表达方式，也由此引入了SVM。如下图
+
+原本logstic regression的costFunction化为两部分然后分别作曲线图，然后根据曲
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/20/机器学习 吴恩达 第七周 笔记/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -471,85 +430,18 @@
       
         
           
-            <h1 id="Evaluating-a-Learning-algorithm"><a href="#Evaluating-a-Learning-algorithm" class="headerlink" title="Evaluating a Learning algorithm"></a>Evaluating a Learning algorithm</h1><p>假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408185506404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408202753810.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>一般来说，都是先通过训练集求得θ然后再丢到测试集中测试测试误差。</p>
-<p>图中，test error 公式跟linear regression的一样，就下标变了。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408202959790.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>、</p>
-<p>为了进一步精确我们的hypothesis我们引入交叉验证Cross validation</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408203338468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>其中，训练集占60%，交叉验证集占20%，测试集占20%</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408203431193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190408203549958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>以上所交代的是关于机器学习模式的选择，考虑该使用哪种多项式，然而regularization正则化中的λ 和 样本数量m也是影响算法性能的重要元素。以下引入<br>偏差(bias)和方差(variance)</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408203734587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>前面我们所学习过的overfit和underfit中，underfit(欠拟合)就是典型的高bias，overfit则是典型的高variance</p>
-<p><img src="https://img-blog.csdnimg.cn/2019040820413679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190408204203261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>我们来看这两个图，横坐标是degre表示hypothesis的项数，纵坐标为error 误差数，在这里，底下那条线代表training<br>error，而上面那条则是cross validation error，<br>可以看出，上面那条线是两边高中间低，而当d很小时，容易产生underfit(一条直线)，导致高bias，而当d很大(式子够复杂)则容易导致高variance</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408204538856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>正则化的linear regression，当λ很大时，θ≈0，导致函数趋向于一条直线，那自然是underfit</p>
-<p>而当λ很小，则θ的权重就会很大，容易overfit</p>
-<p>下面讲如何选择λ</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408204803839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>首先设立一个λ集合（吴老师喜欢）= {0, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.64, 1.28, 2.56,<br>5.12, 10.24]</p>
-<p>更正：建立了λ集合后再建立各种model(各种多项式，以便选出最好的θ)，看下图中，theta =<br>trainLinearReg，这个函数就是在λ的循环下，遍历所有已经产生的多项式model(也就是说用正常的for循环来写，就是lambda乘model个数次循环)，在θ和λ的共同参与下得出最好的θ(仅仅是θ)，然后再用这个θ代入costfunction中计算(这里计算error_train和error_val用于作图，不要带λ)。下图代码到这里就完了，然后正常的后续操作就是找出最小的error_val时所使用的θ和参与计算θ的λ，最后把这一对组合送入测试集中，看看效果。以下为原笔记。</p>
-<p>再补充，为啥计算err_train和err_val时不带λ，但做曲线的时候又用到λ，因为θ使用λ参与运算而来的，如果在err_train和err_val中再来个regularization会导致结果被修正，就是说得不到我们想要看到的学习曲线效果。</p>
-<p>然后对这些λ分别代入计算最小的costFunction, 然后将得到的θ代入计算training error 和 cross validation<br>error (这里图中并没有写training error，但之后的编程中会出现。这里的计算train error 和 cv error<br>都不能代入λ，就是说λ= 0)</p>
-<p>这里先提前贴上点代码帮助理解</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408205916766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>trainLinearReg.m</p>
-<p><img src="https://img-blog.csdnimg.cn/20190408205944412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190408210016675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>图中函数就是刚说的，costfunction用λ, train和cv 不用 ，然后这个坐标图是以λ为横坐标</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409081814682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<h1 id="学习曲线-Learning-Curve"><a href="#学习曲线-Learning-Curve" class="headerlink" title="学习曲线(Learning Curve)"></a>学习曲线(Learning Curve)</h1><p><img src="https://img-blog.csdnimg.cn/2019040907144048.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>学习曲线可以很好的帮助我们观察learning algoritm出现的问题，如上图是 <img src="https://img-blog.csdnimg.cn/20190409071647319.png" alt> hypothesis比较简单的情况下 ，可以看到cv error和train<br>error曲线逐渐靠近， <strong>最后趋于直线，</strong> 所以对于high bias的情况，增加样本数量m是没什么帮助的，因为最后是直线。。。。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409072123132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>而对于high variance来说<br>，复杂的hypothesis往往带来overfit，而其对应的学习曲线两条逐渐相交的线，而且可以看到，两条线中是有很大的gap，由此可以看出，增大training<br>example可以带来很大的帮助（线接近。。）</p>
-<p>这里贴上点代码帮助理解</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409073220260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>这里的i代表着横坐标，从少到多的情况</p>
-<p>基于上面两张图，我们可以得出以下：</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409081212311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>再来看下神经网络：</p>
-<h1 id><a href="#" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/2019040908130536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></h1><p>Prioritizing what to work on: Spam classificaton example</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409081446350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>假设要做一个辣鸡邮件分类的东东。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409081549954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>这里给了一些推荐的方法。其中画重点 error analysis</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409082038570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>过后，就是怎么设计一个 准确度高的学习算法</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409082145227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190409082257795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190409082409253.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>简单来说就是有没有足够的information 来预测y，还有如果让人类专家通过这些数据能不能很自信地预测出y。</p>
-<h1 id="查准率和查全率-precision-and-recall"><a href="#查准率和查全率-precision-and-recall" class="headerlink" title="查准率和查全率(precision and recall)"></a>查准率和查全率(precision and recall)</h1><p><img src="https://img-blog.csdnimg.cn/20190409082657711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>举个栗子，学习算法算出1%的人有cancer，而事实上只有0.5%的人有cancer。如果忽略所有的x，并预测所有的病人都没cancer，那么学习算法的error只有0.5%（很厉害吧），然而这样子根本不可行，在这里这0.5%就是偏斜类(skewed<br>classes)</p>
-<p>显然，只用准确率来平衡算法的好坏是不可行的，。</p>
-<p>因此，我们引入查准率(precision)和查拳率(recall)</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409083249915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>画的有点丑。简单说，就是如果预测的结果和事实上的结果一致则为True，如果预测的结果是1则为postive，其他情况就反过来。</p>
-<p>P(precision) = True postive(预测对的且结果为1的数量)/ #predicted postive(预测结果为1的数量) =<br>True postive/ True postive + False postive</p>
-<p>R(recall) = True postive(预测对的且结果为1的数量)/ #actual postive(事实结果为1的数量) = True<br>postive/ True postive + False negative</p>
-<p>简单看图就是true postive/ 第一行就是P, true postive/ 第一列就是R</p>
-<p>这里附上西瓜书上的图</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409083919514.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>然后附上一个例子—-买瓜</p>
-<p>-–希望将好瓜尽可能多的选出来，可以通过增加选瓜的数量来实现。如果全部西瓜都选上，那么好瓜也必然选上，但查准率precision会较低；如果希望选到的瓜中好瓜比例高，则可只挑选最有把握的瓜，但这样会漏掉不少好瓜，使得查全率较低。</p>
-<h1 id="trade-of-P-and-R"><a href="#trade-of-P-and-R" class="headerlink" title="trade of P and R"></a>trade of P and R</h1><h1 id="-1"><a href="#-1" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/20190409084124315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></h1><p><img src="https://img-blog.csdnimg.cn/20190409084307220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>接下来就是怎么权衡P和R了，因为P和R是一对相反的值，如图。如果我们设置阈值(threshold)来判断这个人是否有cancer(if threshold</p>
-<blockquote>
-<p>0.5 , y= 1)之类的，那么这个阈值又该怎么取呢</p>
-</blockquote>
-<p><img src="https://img-blog.csdnimg.cn/20190409084457295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>看图，权衡P和R，如果用平均数（Average）来衡量就会导致误差有大，看图看图。</p>
-<p>这里推出一种全新体验，F1score ，公式在上面。</p>
-<p>然后最后的最后，就是说用大量数据的好处ba.labala，对高variance有好处啦（看上面的学习曲线就能理解）</p>
-<p><img src="https://img-blog.csdnimg.cn/20190409084734567.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>编程：</p>
-<p>其他的我上面已经贴出大部分了，理解了就挺简单的。不懂就出门隔壁blog</p>
-<p>optional还没时间做，留个坑以后回来补。。</p>
+          Evaluating a Learning algorithm假设在用linear regression 预测房价，然后你发现预测结果与实际结果偏差甚远。what should you try next？
+然后 这里 引入两个概念，训练集和测试集。一般来说，训练集占70%，测试集占30%。
 
-          
+一般来
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/09/吴恩达 机器学习 第六周 笔记+编程/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -667,213 +559,26 @@
       
         
           
-            <h1 id="漫画：什么是动态规划？（整合版）"><a href="#漫画：什么是动态规划？（整合版）" class="headerlink" title="漫画：什么是动态规划？（整合版）"></a>漫画：什么是动态规划？（整合版）</h1><h1 id="转自-http-www-sohu-com-a-149075950-684445"><a href="#转自-http-www-sohu-com-a-149075950-684445" class="headerlink" title="转自 [ http://www.sohu.com/a/149075950_684445"></a>转自 [ <a href="http://www.sohu.com/a/149075950_684445" target="_blank" rel="noopener">http://www.sohu.com/a/149075950_684445</a></h1><p>](<a href="http://www.sohu.com/a/149075950_684445" target="_blank" rel="noopener">http://www.sohu.com/a/149075950_684445</a>)</p>
-<p>2017-06-15 12:01</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c05772fd0c0e4df1a930113a997251e2_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/03f20d940df74ba7b7ea2846504b45e1_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/6792e5b73ca44e95a5fa851662c96858_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/81f446dcc9764ae88028e72d7d357512_th.png" alt></p>
-<p>————————————</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/14c5eaa0496744d683dd9c13f280c435_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/dc7c56dd9d354a9c9d0496f46ec15e6e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/65708a8e8def4aecbae880bad9d2b415_th.png" alt></p>
-<p><strong>题目：</strong></p>
-<p>有一座高度是 <strong>10</strong> 级台阶的楼梯，从下往上走，每跨一步只能向上 <strong>1</strong> 级或者 <strong>2</strong> 级台阶。要求用程序来求出一共有多少种走法。</p>
-<p>比如，每次走1级台阶，一共走10步，这是其中一种走法。我们可以简写成 1,1,1,1,1,1,1,1,1,1。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/7d9de43070c647aca5b6e8f740a58612_th.png" alt></p>
-<p>再比如，每次走2级台阶，一共走5步，这是另一种走法。我们可以简写成 2,2,2,2,2。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/8e30eb84719d4f818283b8c00410e572_th.png" alt></p>
-<p>当然，除此之外，还有很多很多种走法。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b0c3d089a4454f519b87a82c4052c21c_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/08aac95d1c8c448b8373710c4d8e0e7e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d09a53c65cd04141b79b0334dfc24a04_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/f26d3802a6cc42699187fa880584e044_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/61b74077d39f4095b6265d6380986e4d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d3e83f6ef8c748f4990c9fffb6d0cda2_th.png" alt></p>
-<p>————————————</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/e171f9a54c0f4cedbc742eec05313a6e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/cd03c30b3bbd425cbe90dcf3670c2388_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0c9fbed182184bf0afe641e5755da96e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/09d6306e589743a19b42a508e7348b2e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b88f96ff28844ab1b44e40fce7d8b5ee_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3c9e3dae84b246eca0cf938db9e1e80f_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/cc4aba077e404e51a6187c9aeae82d98_th.png" alt></p>
-<p><strong>第一种情况：</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/16e778357cbf4de8a9ffd8c0f0ef49d5_th.png" alt></p>
-<p><strong>第二种情况：</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b238835005964ce79b73c342f2b5773f_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/1e7b334f3b7c424c90802897ba607b36_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c80b1568ce1c409eb1a78e07d918ba1a_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5ff78a6e71dc42d895dc562e5cabf8f3_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/774486604ff4471c89b8c613654b7973_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/a82b90ebe88e4cc19b5d74c42da50e3d_th.png" alt></p>
-<p><strong>把思路画出来，就是这样子：</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/eafdee05595640dba21e3db622fdba12_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c7fa84459cab41e19c821ed667db0cc6_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/99977a1f7ff54530808b193a51b20805_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/8a6c873b67c44cc69860c967e8766f1b_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/57111bc6c0ac4512844a24a99804a90c_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/6fe08f5371cb4bcd99763ed0a35cbaf8_th.png" alt></p>
-<p><strong>F(1) = 1;</strong></p>
-<p><strong>F(2) = 2;</strong></p>
-<p>*<em>F(n) = F(n-1)+F(n-2)（n &gt;=3） *</em></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ffa00a695be249e997fee0f337386ac1_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/562b05e425024938a3b02067a5195e0a_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c6cfea598c684c6b9a0acb3785e42b26_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/092d1b3a48ab44bda3c4ac9a43306d0e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/9b933d76f652406e97da9e5fb8477c0a_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/131773cf148347e09989e0b3d19cb1f4_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/8577984e7237489f94140235a9c63cac_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/918980070ba44334811fb9e3481ac5a5_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/eec7e34cdcb746a2a8a909d5c5888ad0_th.png" alt></p>
-<p><strong>方法一：递归求解</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c18ce4039fa64e64bcc50497f9cbb897_th.png" alt></p>
-<p>由于代码比较简单，这里就不做过多解释了。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/544216da569e4443a12242cb97f1feef_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/aa1ff1e243644598b704c12f44f7ef0b_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b2430497a03647d38de9be004d5af7b4_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/be92e472a0294e1e8aa2b22d49d0c94e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b7e345f802274db1adff60dc1f616600_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/7a4110d09a6b4c8a99cb28d0cb8f8332_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/67a07aa0fcec40e095f481e7b964cb59_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/914f8879fc3e412e90011edd2276c4cd_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/68ce6910b2d64e9c9519ea04e7a793ee_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/88b7ebcd8d96444bae4fddf7f86ba401_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d9876dd567a24939b3be3e4a63938735_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/7f27f368e36c495b920027c83a586fec_th.png" alt></p>
-<p>如图所示，相同的颜色代表了方法被传入相同的参数。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ee519e90a4f44f7791ceaad8eaeebae5_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0c685c8dce414177979a8a63f5a0034d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/23ecff8d0a884cd7803f14f38903b8f3_th.png" alt></p>
-<p><strong>方法二：备忘录算法</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/4ba659168d834525a01b12a116ac4372_th.png" alt></p>
-<p>在以上代码中，集合map是一个备忘录。当每次需要计算F(N)的时候，会首先从map中寻找匹配元素。如果map中存在，就直接返回结果，如果map中不存在，就计算出结果，存入备忘录中。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b6bd007d43274c698772efb02206d004_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c5fac1deaa484271a56a890b3d90f67c_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/4ba7bb4b176141328ec6a4d9b4f1f136_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c79bfbffacbf4547ad70c38e4989c766_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/24a6b33d5a16405fa54a47b115d28bcf_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/951ce986c3a04e059ba24f89ef82c469_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/fe936d1753f644b4866417f299415b85_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ca7362bbe3094325a2174a372267ff12_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d184212b14f043e2b6f3c1fa8eb0b88c_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/2ddaebea2d5e4782b048932c91f45080_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/e9b1d6996a4c473ebe384621a43dbc4f_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/934b6cbd47244b4598b5e21f5e6441b1_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/747aaa6fe73e4a20b071a13e989a01b5.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d43155ea474045398d4a2673abf29455_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5d32a82ac82d462480e01df4745ec7f5.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3777772723084501b08c1b929bde2b40_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/67c543cecea847029d45a69b1cb470dd.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/32a2abf417e84bf38016e88fbf1282a1_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/39e5e7d89862406cbb56b3ed4e7a3446.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/a4634754627041eb8e545de9917fd626_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/cf570c4399c746998ac2d689c2489e46_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c55739ea57194baf8193f749ddca498d_th.png" alt></p>
-<p><strong>方法三：动态规划求解</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/070c24191bc1460c9960c0dbe88ebc1c_th.png" alt></p>
-<p>程序从 i=3 开始迭代，一直到 i=n<br>结束。每一次迭代，都会计算出多一级台阶的走法数量。迭代过程中只需保留两个临时变量a和b，分别代表了上一次和上上次迭代的结果。<br>为了便于理解，我引入了temp变量。temp代表了当前迭代的结果值。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b4c8dc93922044c4abd90fe3e90ce4d3_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/f48a787913694e90ace066009e8a788d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3d83ce59d2da4eb1b76dc15865d73f64_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/79ccc79cccf84517ad7f703d0bbbfe3e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0938d1f983f84a1ea4f0dc8767fa5ccb_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/9fd087ef91d84e56a0acefe2bb731f68_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/690bfb3220b04ff48b58ddf8ca720298_th.png" alt></p>
-<p><strong>题目二： 国王和金矿</strong></p>
-<p>有一个国家发现了5座金矿，每座金矿的黄金储量不同，需要参与挖掘的工人数也不同。参与挖矿工人的总数是10人。每座金矿要么全挖，要么不挖，不能派出一半人挖取一半金矿。要求用程序求解出，要想得到尽可能多的黄金，应该选择挖取哪几座金矿？</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0b7038e3466c41c69b5cd7b1cef8df28_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b55277c4b954412e953a4c68299c6112_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/95c47d146d9c4d61a360bdf46847d6d7_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c8fbab55bc4c4b14a1cfaf96446cb032_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/4a38150676604662acf1ff4f5e5724a2_th.png" alt></p>
-<p><strong>方法一：排列组合</strong></p>
-<p>每一座金矿都有挖与不挖两种选择，如果有N座金矿，排列组合起来就有2^N种选择。对所有可能性做遍历，排除那些使用工人数超过10的选择，在剩下的选择里找出获得金币数最多的选择。</p>
-<p>代码比较简单就不展示了，时间复杂度也很明显，就是O(2^N)。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/eebb0308b19448a8bf2fe4264b8e41b4_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/017a7761c76748e4a7ae99a5eba94ac6_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/4af06ecce7dc4a48b47d08c5c9ca89cc_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/da7da992c82f4301b6eb81d74e1d88c9_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/73f7faf80ff84be2b34af1bb18d02d33_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/de1daef881f847cabebafad1d9e0fedb_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/43f07a54e6a943c4b17168e7c742369e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/90045bdc215b43d39aae82eb34d5dc13_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/12af700b993e43c4b15d0af016b550c1_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/db7ccb90197440e6b57140997b08743e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/cb06d699e55a42e3add44dae5afe4c98_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/13fec140ca484ac788fb4f432ff351df_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b44253823c344e15b1303a97e402021d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b910906ac1524c4b8158db7fa979c6ac_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0be85db158264642ac85ed13177f75ad_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ff7e1ad5828f4f1b9345bf783fc61129_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/75629d68d3bf457ea724b925c8cd00f8_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ace900ac78aa442683794d8551b6e929_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/01f395f169d7468c8f26caa4ae704828_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/fb26996cb7b74617837a39601aa45cf0_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/eae9c0a92c8f47358beaafe51ac0ddb7_th.png" alt></p>
-<p>***<em>F(n,w) = 0 (n &lt;=1, w&lt;p[0]); *</em> **</p>
-<p>*<em>F(n,w) = g[0] (n==1, w &gt;=p[0]); *</em></p>
-<p>***<em>F(n,w) = *</em>F(n-1,w) (n &gt;1, w&lt;p[n-1]) ** ** **</p>
-<p>*<em>F(n,w) = max( *</em>F(n-1,w), F(n-1,w-p[n-1])+g[n-1]) (n &gt;1, w&gt;=p[n-1]) ** **</p>
-<p>其中第三条是补充上去的，原因不难理解。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/2a08665da2e3491e9bf1966f60126cca_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5e3f442ad1584975b811a0e4c6867afa_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/6de9d2f83b4041f7abc6abf859b4f411_th.png" alt></p>
-<p><strong>方法二：简单递归</strong></p>
-<p>把状态转移方程式翻译成递归程序，递归的结束的条件就是方程式当中的边界。因为每个状态有两个最优子结构，所以递归的执行流程类似于一颗高度为N的二叉树。</p>
-<p>方法的时间复杂度是O(2^N)。</p>
-<p><strong>方法三：备忘录算法</strong></p>
-<p>在简单递归的基础上增加一个HashMap备忘录，用来存储中间结果。HashMap的Key是一个包含金矿数N和工人数W的对象，Value是最优选择获得的黄金数。</p>
-<p>方法的时间复杂度和空间复杂度相同，都等同于备忘录中不同Key的数量。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d645ca80ec024bf0a9d2def0109993b5_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ea5ca9c3eacd407e9569ce0a8d4be77e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/9fb0c10b7d204d3f826cc1165ac807ef.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/1dd77f8c9ec44dd799212cd4f72a1d50_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/b346146f7f514408ac25e9cb9803ab68_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0a0b5287726b40cb800ce2c1786ccb53_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/24784567ce364f9ca370cfe60e41e321.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/e5721916753a47c485b7022a07dd773d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/53ece4f3ffbf4d349d35b160e27c1184_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/bf2cdb581b9c4930a67fbe00e5e9e6ec.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/cd180fa60e9b4d2189dad77c15a649d7_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/617e9e6f9c0c4c5e86c3a7f163cee522.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/e0125e50fe834acaa808347d22cb55ca_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/30b587e055754aafa65ff49a157c015f.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/c350e924cc5847baae5843c5a170f936_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/8226727ca86f4526ad6bd76127ef3c26.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/24162b5833c64e8db167ba11a0a43c69_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/a70e30d677f043ee85fe575cd6fb0f2b.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/04f34e9fe6e8413090cf15e0e55b8c33.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3fdc717ad68140009ff26375aaf0f7ab_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/db6fa92bdfb34bf882fdc03399984f5f_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/41a0ad154f074255a0bb9ded2287e789_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/dd74032f2d284f0db60c5052ddeada30.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/1538f86607c141eb8c9f8baa9219e070_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/dc3b1fbb89014e1da9bc4c6f0b0c59f5.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/1e58dc8c46b34d31b8d02e84801417a7_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/1675abb81adc49599e83e0529d3235d6_th.png" alt></p>
-<p><strong>方法四：动态规划</strong></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/85203f7a48fe4428b64a89fbb6e82bc0_th.png" alt></p>
-<p>方法利用两层迭代，来逐步推导出最终结果。在外层的每一次迭代，也就是对表格每一行的迭代过程中，都会保留上一行的结果数组<br>preResults，并循环计算当前行的结果数组results。</p>
-<p>方法的时间复杂度是 O(n *<br>w)，空间复杂度是(w)。需要注意的是，当金矿只有5座的时候，动态规划的性能优势还没有体现出来。当金矿有10座，甚至更多的时候，动态规划就明显具备了优势。</p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3970e8736c8848cb86d01320a545cc96_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/d3f8a073287b4c32a04e361fa97b78cb_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5e6f251a5f0d4b6f9ddb21b9e35303a5_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/e7ed22ff9dc74720a93ad1912f18cac2_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/0cf0d2693cab47b98fb2b7b644839e88_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5b0740f8e580429684c5646e2b8e8b2e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/458eb16866a6446886a3f39a36fe2f9d_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/5c67e70c0f0a49068544de3ff3227cc8_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/3c5d6848d945491cb8319fa8377b630e_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ef84c30a1ef045c48b2afee74a4ad578_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/00f8bbfc8c02495a92737a271adb7065_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/733ef74c4f3f42c598ab01441875e958_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/aa381653e2fc4394a3bfc3253eeb2db4_th.png" alt></p>
-<p><img src="http://img.mp.sohu.com/upload/20170615/ed53d1c3830a42afb909099d45fb6aab_th.png" alt></p>
-<p>—————END—————</p>
-<p><strong>梦见</strong> ，收看更多精彩内容</p>
+          漫画：什么是动态规划？（整合版）转自 [ http://www.sohu.com/a/149075950_684445](http://www.sohu.com/a/149075950_684445)
+2017-06-15 12:01
 
-          
+
+
+
+————————————
+
+
+
+题目：
+有一座高度是 1
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/06/动态规划/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -991,38 +696,21 @@
       
         
           
-            <p><img src="https://img-blog.csdnimg.cn/2019040609185872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>Serial schedule(串行化调度): 简答来说就如下图</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406092012247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>equivalent schedule: 执行T1的结果和执行T2的结果一样</p>
-<p>serializable schedule(可串行化调度): 结果与serial schedule 的结果一样 如下图d</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406092236759.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<h3 id="冲突可串行化-conflict-serializable-schedule"><a href="#冲突可串行化-conflict-serializable-schedule" class="headerlink" title="冲突可串行化(conflict serializable schedule)"></a>冲突可串行化(conflict serializable schedule)</h3><p><img src="https://img-blog.csdnimg.cn/2019040609261330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>Conflict equivalent(冲突相等？) — 需要满足两个条件，① T1和T2的所有action都一样 ② 两边每一对conflict<br>operatio的顺序一样</p>
-<p>conflict operation 包括 (RW,WR,WW) 上例子</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406093454756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>上面哪一个的conflict operation : W1(Y)W2(Y), W2(X)W1(X),W1(X)W3(X)</p>
-<p>下面哪一个的conflict operation : W1(Y)W2(Y), W1(X)W2(X), W2(X)W3(X)</p>
-<p>明显不满足，所以不是conflict equivalent</p>
-<p>另外一种判断就是画图</p>
-<p><a href="https://www.youtube.com/watch?v=U3SHusK80q0" target="_blank" rel="noopener"> https://www.youtube.com/watch?v=U3SHusK80q0
-</a> 这里贴一个网址，很详细说明了咋画 （因为有圆，所以是non-<br>conflict serializable）</p>
-<p><img src="https://img-blog.csdnimg.cn/201904060938234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/2019040609383354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>时间戳理解(  Timestamp ordering  )</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406093934834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>实际例子</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406094018939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>这个初始状态，TS全部设为0</p>
-<p><img src="https://img-blog.csdnimg.cn/201904060941290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>按顺序实行，T1是R(x) 又因为TSR(X)–代表R 为0 而1&gt;0<br>，所以修改TSR(X)为1（这里的1和接下来的2，3都是指第几个transaction的）</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406094338457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>同理，执行完T2后如上</p>
-<p><img src="https://img-blog.csdnimg.cn/20190406094418675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>执行完T3</p>
-<p>然后接下来要执行T1的R(Y)，因为1&lt;3 所以无法执行，transaction 终止</p>
-
           
+Serial schedule(串行化调度): 简答来说就如下图
+
+equivalent schedule: 执行T1的结果和执行T2的结果一样
+serializable schedule(可串行化调度): 结果与serial schedule 的结果一样 如下图d
+
+冲突可串行化(conflic
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/06/数据库 串行化 时间戳笔记/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1140,66 +828,18 @@
       
         
           
-            <p>转自 <a href="https://www.cnblogs.com/kegeyang/archive/2012/04/05/2432608.html" target="_blank" rel="noopener"> https://www.cnblogs.com/kegeyang/archive/2012/04/05/2432608.html
-</a></p>
-<p>本文将介绍三种动态hash方法。</p>
-<p>散列是一个非常有用的、非常基础的数据结构，在数据的查找方面尤其重要，应用的非常广泛。然而，任何事物都有两面性，散列也存在缺点，即数据的局部集中性会使散列的性能急剧下降，且越集中，性能越低。</p>
-<p>数据集中，即搜索键在通过hash函数运算后，得到同一个结果，指向同一个桶，这时便产生了数据冲突。</p>
-<p>通常解决数据冲突的方法有：拉链法(open hashing)和开地址法(open<br>addressing)。拉链法我们用的非常多，即存在冲突时，简单的将元素链在当前桶的最后元素的尾部。开放地址法有线性探测再散列、二次线性探测再散列、再hash等方法。</p>
-<p>以上介绍的解决冲突的方法，存在一个前提：hash表(又称散列表)的桶的数目保持不变，即hash表在初始化时指定一个数，以后在使用的过程中，只允许在其中添加、删除、查找元素等操作，而不允许改变桶的数目。</p>
-<p>在实际的应用中，当hash表较小，元素个数不多时，采用以上方法完全可以应付。但是，一旦元素较多，或数据存在一定的偏斜性(数据集中分布在某个桶上)时，以上方法不足以解决这一问题。我们引入一种称之为动态散列的方法：在hash表的元素增长的同时，动态的调整hash桶的数目。</p>
-<p>动态hash不需要对hash表中所有元素进行再次插入操作(重组)，而是在原来基础上，进行动态的桶扩展。有多种方法可以实现： <strong>多</strong> <strong>hash</strong><br><strong>表、可扩展的动态散列和线性散列</strong> ，下面分别介绍之，方法由简单到复杂。</p>
-<p><strong>多</strong> <strong>hash</strong> <strong>表：</strong> 顾名思义，即采用多个hash表的方式扩展原hash表。这种方式不复杂，且理解起来也较简单，是三者中最简单的一种。</p>
-<p>通常，当一个hash表冲突较多时，需要考虑采用动态hash方式，来减小后续操作继续在该桶上的冲突，减轻该桶负担，最简单且最容易想到的就是采用多hash表的方式。如下图，有一个简单的hash结构：</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/a52d1c447712594acdfca377.jpg" alt></p>
-<p>简单起见，假定(1)hash函数采用模5，即hash(i)=i%5；(2)每个桶中最多只可放4个元素。</p>
-<p>在以上基础上，向hash表中插入5，由于桶a存在空闲，直接存入。接着向hash表插入值3，由于d桶中已满，无空闲位置，此时在建立一个hash表，结果如下图</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/ffdc98fb64547d72aad31153.jpg" alt></p>
-<p>通过图示，一目了然，原来的一个hash表，变为现在的两个hash表。如需要，该“分裂”可继续进行。</p>
-<p>需要注意的是：采用这种方式，多个hash表公用一个hash函数，且目录项的个数也随之增多，分别指向对应的桶。实际上，这时存在两个不同的目录项，分别指向各自的桶。</p>
-<p>执行插入、查找、删除操作时，均需先求得hash值x。插入时，得到当前的hash表的个数，并分别取得各个目录项的x位置上的目录项，若其中某个项指向的桶存在空闲位置，则插入之。同时，在插入时，可保持多个hash表在某个目录项上桶中元素的个数近似相等。若不存在空闲位置，则简单的进行“分裂”，新建一个hash表，如上图所示。</p>
-<p>查找时，由于某个记录值可能存在当前hash结构的多个表中，因此需同时在多个目录项的同一位置上进行查找操作，等待所有的查找结束后，方可判定该元素是否存在。由于该种结构需进行多次查找，当表元素非常多时，为提高效率，在多处理器上可采用多线程，并发执行查找操作。</p>
-<p>删除操作，与上述过程基本类似，不赘述。需要注意的是，若删除操作导致某个hash表元素为空，这时可将该表从结构中剔除。</p>
-<p>这种解决hash冲突的方法，优点是：思想简单，实现起来也不复杂。由于一存在桶满的情况就另分配一个hash表，因此占用内存空间较大；当数据较集中时，桶利用率会很低。</p>
-<p><strong>可扩展的动态散列</strong><br>：引入一个仅存储桶指针的目录数组，用翻倍的目录项数来取代翻倍的桶的数目，且每次只分裂有溢出的桶，从而减小翻倍的代价。这里需要几个参数：H表示hash函数、D表示全局位深度、L表示桶的局部深度。还是来看个例子，参照这个图，你会更明了。</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/d3ff56fb698f28b2b68f3152.jpg" alt></p>
-<p>图中，每个目录项有一个指向桶的指针，为介绍方便，我们假定(1)每个桶只可存放4个元素；(2)每个桶中存放的元素j*表示H(i)=j，为方便起见，只图示了j的值，并以’<br>*’标注。当前有4个目录项，目录项的编号从00~11，用两个位即可表示所有的目录项，因此全局位深度D=2；所有的桶目前最多只可放4个元素，因此所有桶的局部位深度为L=2。</p>
-<p>在上图的基础上，我们插入数据d1和d2，且假定，经过hash函数求值后分别得到H(d1)=13；H(d2)=20。因为13=1101，因全局位深度为2，故选用最后两位01，找到编号为01的目录项，从而找到其指向的桶b，由于该桶还有空间，可直接存入数据。因20=10100，全局位深度为2，选用最后两位00，选定第一个目录项，这时我们发现其指向的桶a中已经放满了数据，于是该桶进行分裂，分裂的桶的局部位深度从2变为3，若这个数据比全局位深度还大，则全局位深度也等于该数，并进行目录项的翻倍操作。分裂的桶中的所有数据，需进行局部的重组。下图列出了分裂后的hash表的情况。</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/7bc36d5d87dc882ff9f2c058.jpg" alt></p>
-<p>对a桶进行分裂后，得到两个桶a1和a2，其局部深度加1。由于局部深度大于全局位深度，因此目录数组进行翻倍，从4变为8，且目录编号扩展一位(如图)。桶a分裂为a1桶和a2桶，分别设置指针。对原来a桶中的所有元素进行重组操作，32和16的后三位均为000，于是放入a1桶，4和12的后三位均为100，于是放入a2桶。对目录项数组中其它未赋值的目录项，进行赋值，使指针指向对应的桶。至此，插入操作完毕。可以看到，有多个目录指向同一个桶。</p>
-<p>对于查找操作，步骤如下：</p>
-<p>1、对于需要查找的x，hash(x) = y</p>
-<p>2、根据当前hash表的全局位深度，决定对y取其后D位，位数不够用0填充</p>
-<p>3、找到对应的目录项，从而找到对应的桶，在桶中逐一进行比较。</p>
-<p>对于删除操作，和查找操作类似，先定位元素，删除之。若删除时发现桶为空，则可以考虑将该桶与其兄弟桶进行合并，并使局部位深度减1。</p>
-<p>可扩展散列的好处在于可动态进行桶的增长，且增长的同时，用目录项的翻倍的较小的代价换取桶数翻倍的传统做法，效率得到提升。然而，它也存在一定问题：(1)当散列的数据分布不均或偏斜较大时，会使得目录项的数目很大，数据桶的利用率很低；(2)目录的增长速度，是指数级增长，扩展较快。</p>
-<p><strong>线性散列：</strong><br>动态hash常用的另一种方法为线性散列，它能随数据的插入和删除，适当的对hash桶数进行调整，与可扩展散列相比，线性散列不需要存放数据桶指针的专门目录项，且能更自然的处理数据桶已满的情况，允许更灵活的选择桶分裂的时机，因此实现起来相比前两种方法要复杂。</p>
-<p>理解线性散列，需要引入“轮转分裂进化”的概念，各个桶轮流进行分裂，当一轮分裂完成之后，进入下一轮分裂，于是分裂将从头开始。用Level表示当前的“轮数”，其值从0开始。假定hash表初始桶数为N(要求N是2的幂次方)，则值logN(以2为底)是指用于表示N个数需要的最少二进制位数，用d0表示，即d0=logN。</p>
-<p>以上提到，用Level表示当前轮数，则每轮的初始桶数为N<em>2^Level个(2^Level表示2的Level次方)。例如当进行第0轮时，level值为0，则初始桶数为N</em>2^0=N。桶将按桶编号从小到大的顺序，依次发生分裂，一次分裂一个桶，这里我们使用Next指向下次将被分裂的桶。</p>
-<p>每次桶分裂的条件可灵活选择，例如，可设置一个桶的填充因子r(r &lt;1)，当桶中记录数达到该值时进行分裂；也可选择当桶满时才进行分裂。</p>
-<p>需要注意的时，每次发生分裂的桶总是由Next决定，与当前值被插入的桶已满或溢出无关。为处理溢出情况，可引入溢出页解决。话不多说，先来看一个图示：</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/19c5badef60b517f6127985b.jpg" alt></p>
-<p>假定初始时，数据分布如上，hash函数为h(x)。桶数N=4，轮数Level为0，Next处于0位置；采用“发生溢出分裂”作为触发分裂的条件。此时d=logN=2，即使用两个二进位可表示桶的全部编号。</p>
-<p>简单解释一下，为什么32<em>、25</em>、18*分别位于第一、二、三个桶中。因为h(x)=32=100000，取最后两个二进制位00，对应桶编号00；h(y)=25=11001,取最后两个二进制位01，对应桶编号01；h(z)=18=10010，最后两位对应桶编号10。</p>
-<p>接下来，向以上hash表中插入两个新项h(x1)=43和h(x2)=37，插入结果如下图所示：</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/8703becfb93b0e55b400c824.jpg" alt></p>
-<p>我们来分析一下。当插入h(x1)=43=101011时，d值为2，因此取末尾两个二进制位，应插入11桶。由于该桶已满，故应增加溢出页，并将43*插入该溢出页内。由于触发了桶分裂，因此在Next=0位置上(注意不是在11桶上)，进行桶分裂，产生00桶的映像桶，映像桶的编号计算方式为N+Next=4+0=100，且将原来桶内的所有元素进行重新分配，Next值移向下一个桶。</p>
-<p>当插入h(x2)=37=100101时，d值仍为2，取末尾两个二进制位，应插入01桶，该桶中有空余空间，直接插入。</p>
-<p>分析到这里，读者应该基本了解了线性散列的分裂方式。我们发现，桶分裂是依次进行的，且后续产生的映像桶一定位于上一次产生的映像桶之后。</p>
-<p>读者不妨继续尝试插入h(x)=29,22,66,34,50，情况如下图所示，这里不再详细分析。</p>
-<p><img src="http://hiphotos.baidu.com/calrincalrin/pic/item/687ef2ef54678997b3fb9506.jpg" alt></p>
-<p>线性散列的查找操作，例如要查询h(x)=18,32,44。假定查询时，hash表状态为N=4，Level=0,Next=1，因此d值为2。</p>
-<p>(1) 查找h(x)=18=10010，取末两位10，由于10位于Next=1和N=4之间，对用桶还未进行分裂，直接取10作为桶编号，在该桶中进行查找。</p>
-<p>(2)<br>查找h(x)=32=10000，取末两位00，由于00不在Next=1和N=4之间，表示该桶已经分裂，再向前取一位，因此桶编号为000，在该桶中进行查找。</p>
-<p>(3)<br>查找h(x)=44=101100，取末两位00，由于00不在Next=1和N=4之间，表示该桶已经分裂，再向前取一位，因此桶编号为100，在该桶中进行查找。</p>
-<p>线性散列的删除操作是插入操作的逆操作，若溢出块为空，则可释放。若删除导致某个桶元素变空，则Next指向上一个桶。当Next减少到0，且最后一个桶也是空时，则Next指向N/2<br>-1的位置，同时Level值减1。</p>
-<p>线性散列比可扩展动态散列更灵活，且不需要存放数据桶指针的专门目录项，节省了空间；但如果数据散列后分布不均匀，导致的问题可能会比可扩展散列还严重。</p>
-<p>至此，三种动态散列方式介绍完毕。</p>
-<p><strong>附</strong><br>：对于多hash表和可扩展的动态散列，桶内部的组织，可采用(1)链式方法，一个元素一个元素的链接起来，则上例中的4表示最多只能链接4个这样的元素；也可采用(2)块方式，每个块中可放若干个元素，块与块之间链接起来，则上例中的4表示最多只能链接4个这样的块。</p>
-<p>转载请注明原处： <a href="http://hi.baidu.com/calrincalrin/blog/item/b51b1910c7629265cb80c413.html" target="_blank" rel="noopener"><br>http://hi.baidu.com/calrincalrin/blog/item/b51b1910c7629265cb80c413.html
-</a></p>
+          转自  https://www.cnblogs.com/kegeyang/archive/2012/04/05/2432608.html
 
-          
+本文将介绍三种动态hash方法。
+散列是一个非常有用的、非常基础的数据结构，在数据的查找方面尤其重要，应用的非常广泛。然而，任何事物都有两面性，散列也存在缺点，
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/02/数据库 动态hash索引/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1317,59 +957,18 @@
       
         
           
-            <p><img src="https://img-blog.csdnimg.cn/20190331075218925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-<br>class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331075454128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>如上图，第一个logistic regression可以用于output unit为一的neural network。而第二个式子适用于multi-<br>class。</p>
-<p>k代表output unit的个数。 <img src="https://img-blog.csdnimg.cn/20190331075754271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>，后一项则表明，每一个layer中，所有的θ平方的相加。  这一项又称为权重衰减项(weight decay)</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331080052309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>神经网络的最终目的是求得最小的costFunction和θ的变化。</p>
-<p><a href="https://www.jianshu.com/p/964345dddb70" target="_blank" rel="noopener"> https://www.jianshu.com/p/964345dddb70
-</a> 这篇文章解释了反向传播的作用。里面解释了求误差delta的公式来源。</p>
-<p><a href="https://blog.csdn.net/Hearthougan/article/details/55812728" target="_blank" rel="noopener"> https://blog.csdn.net/Hearthougan/article/details/55812728
-</a> 。这篇的图解释了更新权值。</p>
-<p>按照训练一个neural network的过程：</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331083545951.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190331083555649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>在进行训练前，得先选择好model</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331083650640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>一般来说hidden越多越好，但多了会造成计算成本。</p>
-<h1 id="1-Random-initialization——–随机初始化theta-Symmetry-break"><a href="#1-Random-initialization——–随机初始化theta-Symmetry-break" class="headerlink" title="1. Random initialization——–随机初始化theta(Symmetry break)"></a>1. Random initialization——–随机初始化theta(Symmetry break)</h1><p><img src="https://img-blog.csdnimg.cn/20190331084040343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>对于图里的initialTheta，如果设置为zeros那么会导致一个后果，就是会把multi-class 变成只有一个结果logistic<br>regression(theta为0 按照式子，结果全都一样)</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331084232926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>对此，引用一个随机生成theta值</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331084402670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>如图….</p>
-<h1 id="2-通过FP来获得output的y"><a href="#2-通过FP来获得output的y" class="headerlink" title="2. 通过FP来获得output的y"></a>2. 通过FP来获得output的y</h1><p>FP怎么跑，参考上一周编程。</p>
-<p>这里FP用的costFunction需要是multi-class的，在上面给出的图片中。</p>
-<h1 id="3-这个同2"><a href="#3-这个同2" class="headerlink" title="3.这个同2"></a>3.这个同2</h1><h1 id="4-Implement-backprop-to-compute-partial-derivatives-—通过BP来计算costfunction的导数"><a href="#4-Implement-backprop-to-compute-partial-derivatives-—通过BP来计算costfunction的导数" class="headerlink" title="4.Implement backprop to compute partial derivatives  -—通过BP来计算costfunction的导数"></a>4.Implement backprop to compute partial derivatives <img src="https://img-blog.csdnimg.cn/20190331084748557.png" alt> -—通过BP来计算costfunction的导数</h1><p><img src="https://img-blog.csdnimg.cn/20190331095149197.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>通过循环不断计算出delta误差， <img src="https://img-blog.csdnimg.cn/2019033109535740.png" alt><br>这个三角形是大写的delta，是一个误差矩阵用来记录layer上的误差。循环过后，将得到的大三角形进行正则化得到D <img src="https://img-blog.csdnimg.cn/20190331095514568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt><br>。这个D是误差的累计值而且等于costFunction的导数值。</p>
-<p>类比于losgtic regression，这个D相当于Gradient descent的 <img src="https://img-blog.csdnimg.cn/20190331095933441.png" alt> 后面那一项（不要α）</p>
-<p>在这里误差delta的算法：</p>
-<p><img src="https://img-blog.csdnimg.cn/2019033110015646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>Note：没有delta1</p>
-<p>这里顺面说下非output layer的delta算法</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331100436879.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>这个图解释了部分delta求发的由来</p>
-<p><a href="https://www.jianshu.com/p/964345dddb70" target="_blank" rel="noopener"> https://www.jianshu.com/p/964345dddb70
-</a> 这篇文章作为补充。</p>
-<h1 id="5-Gradient-Checking—-梯度验证"><a href="#5-Gradient-Checking—-梯度验证" class="headerlink" title="5. Gradient Checking—-梯度验证"></a>5. Gradient Checking—-梯度验证</h1><p><img src="https://img-blog.csdnimg.cn/20190331102026240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190331102711683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>如上图，两点之间斜率近似等于 <img src="https://img-blog.csdnimg.cn/20190331102111863.png" alt><br>，可以用这个作为标准去衡量 <img src="https://img-blog.csdnimg.cn/20190331102145613.png" alt><br>也就是D，如果这两个值近似相等，那么这些参数是合法的，如果不，就得重新计算并且update θ(重复以上步骤)。</p>
-<p>用完gradient checking后记得关闭掉，因为这个方式很耗费计算资源，这也是为什么不用这种方法来替代反向传播计算。</p>
-<p>并且这其中是两两对应的 <img src="https://img-blog.csdnimg.cn/20190331102840682.png" alt></p>
-<p>6. 用梯度下降或这更高级的优化算法来求得最小的J。</p>
-<h1 id="Unrolling-parameters—展开参数"><a href="#Unrolling-parameters—展开参数" class="headerlink" title="Unrolling parameters—展开参数"></a>Unrolling parameters—展开参数</h1><p><img src="https://img-blog.csdnimg.cn/20190331103011305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20190331103039948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>unrolling parameter能够让fminunc跟方便计算。</p>
-<p>在接下来的编程中，在进行FP前要先从展开的数据中，提取，提取方法如上。然后在最后需要将得到的数据unrolling。</p>
-<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><p>这里只贴最难的一部分</p>
-<p>nncostFunction</p>
-<p>没有用forloop</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331103429566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-<p>用了for循环，FP部分依然没用for循环</p>
-<p><img src="https://img-blog.csdnimg.cn/20190331103500869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1l6YXJySw==,size_16,color_FFFFFF,t_70" alt></p>
-
           
+对于output layer来说，如果是一个output unit的话，costFunction之类的式子就比较容易写，而对于multi-class的分类问题来说，往往有多个output unit，这个时候就需要对公式进行修改。
+
+如上图，第一个logistic regression可以用于out
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/31/吴恩达 机器学习 第五周 笔记+编程/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1487,83 +1086,17 @@
       
         
           
-            <p>转自 <a href="http://www.360doc.com/content/18/0904/19/25944647_783893127.shtml" target="_blank" rel="noopener"> http://www.360doc.com/content/18/0904/19/25944647_783893127.shtml
-</a></p>
-<h1 id="前戏"><a href="#前戏" class="headerlink" title="前戏"></a>前戏</h1><p>红黑树，对很多童鞋来说，是既熟悉又陌生。熟悉是因为在校学习期间，准备面试时，这是重点。然后经过多年的荒废，如今已经忘记的差不多了。如果正在看文章的你，马上快要毕业，面临着找工作的压力；又或者你觉得需要将这块知识重新复习一遍；又或者只是看看，那么恭喜你，赚到了。那么我将带领大家重新认识下红黑树，用简单的语言，搞懂红黑树。</p>
-<p>在学习红黑树之前，咱们需要先来理解下二叉查找树（BST）。</p>
-<h1 id="二叉查找树"><a href="#二叉查找树" class="headerlink" title="二叉查找树"></a>二叉查找树</h1><p>要想了解二叉查找树，我们首先看下二叉查找树有哪些特性呢？</p>
-<p>1， 左子树上所有的节点的值均小于或等于他的根节点的值</p>
-<p>2， 右子数上所有的节点的值均大于或等于他的根节点的值</p>
-<p>3， 左右子树也一定分别为二叉排序树</p>
-<p>我们来看下图的这棵树，他就是典型的二叉查找树</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/0.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>那问题来了，为什么一定要这种结构呢？换句话说这样的结构有什么好处呢？我们就来查找下值为10的节点。它怎么一步步的找到这个节点的？步骤是怎样的？接着往下看。</p>
-<p>1， 查找到根节点9，看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/1.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>2， 由于10大于9的，所以查找到右孩子13，看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/2.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>3， 又因为10是小与13的，所以查找到左孩子11，看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/3.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>4， 这一步相比不用说了大家也都知道了，找到了左孩子，然后发现正好是10 。恰好是正要寻找的值。</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/4.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>可能又有童鞋会问，这不是二分查找的思想吗？确实，查找所需的最大次数等同于二叉查找树的高度。当然在插入节点的时候，也是这种思想，一层一层的找到合适的位置插入。但是二叉查找树有个比较大的缺陷，而且这个缺陷会影响到他的性能。我们先来看下有一种情况的插入操作：</p>
-<p>如果初始的二叉查找树只有三个节点，如下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/5.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>我们依次插入5个节点：7，6,5,4,3,。看下图插入之后的图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/6.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>看出来了吗？有没有觉得很别扭，如果根节点足够大，那是不是“左腿”会变的特别长，也就是说查找的性能大打折扣，几乎就是线性查找了。</p>
-<p>那有没有好的办法解决这个问题呢？解决这种多次插入新节点而导致的不平衡？这个时候红黑树就登场了。</p>
-<h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><p>红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：</p>
-<p>1. 节点是红色或者黑色</p>
-<p>2. 根节点是黑色</p>
-<p>3. 每个叶子的节点都是黑色的空节点（NULL）</p>
-<p>4. 每个红色节点的两个子节点都是黑色的。</p>
-<p>5. 从任意节点到其每个叶子的所有路径都包含相同的黑色节点。</p>
-<p>看下图就是一个典型的红黑树：<br><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/7.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>很多童鞋又会惊讶了，天啊这个条条框框也太多了吧。没错，正式因为这些规则，才能保证红黑树的自平衡。最长路径不超过最短路径的2倍。</p>
-<p>当插入和删除节点，就会对平衡造成破坏，这时候需要对树进行调整，从而重新达到平衡。那什么情况下会破坏红黑树的规则呢？</p>
-<p>1，我们看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/8.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>向原来的红黑树插入值为14的新节点，由于父节点15是黑色节点，所以这种情况没有破坏结构，不需要做任何的改变。</p>
-<p>2，向原树插入21呢？，看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/9.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>由于父节点22是红色节点，因此这种情况打破了红黑树的规则4，必须作出调整。那么究竟该怎么调整呢？有两种方式【变色】和【旋转】分为【左旋转】和【右旋转】。</p>
-<p><strong>【变色】：</strong></p>
-<p>为了符合红黑树的规则，会把节点红变黑或者黑变红。下图展示的是红黑树的部分，需要注意节点25并非根节点。因为21和22链接出现红色，不符合规则4，所以把22红变黑：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/10.jpg6" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>但这样还是不符合规则5，所以需要把25黑变红，看下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/11.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>你以为现在结束了？天真，因为25和27又是两个连续的红色节点(规则4)，所以需要将27红变黑。</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/12.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>终于结束了，都满足规则了，舒服多了。</p>
-<p>【左旋转】</p>
-<p>也就是逆时针旋转两个节点，使父节点被自己的右孩子取代，而自己成为自己的左孩子，听起来吓死人，直接看图吧：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/13.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>【右旋转】</p>
-<p>顺时针旋转两个节点，使得自己的父节点被左孩子取代，而自己成为自己的右孩子，看不懂直接看图吧：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/14.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>看起来这么复杂，到底怎么用呢？确实很复杂，我们讲下典型的例子，大家参考下：</p>
-<p>以刚才插入21节点的例子：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/15.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>首先我们需要做的是变色，把节点25以及下方的节点变色：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/16.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>由于17和25是连续的两个红色节点，那么吧节点17变黑吗？这样是不行的，你想这样一来不就打破了规则4了吗，而且根据规则2，也不可能吧13变成红色。变色已经无法解决问题了，所以只能进行旋转了。13当成X，17当成Y，左旋转试试看：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/17.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/18.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"><br><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/19.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>由于根节点必须是黑色，所以需要变色，结果如下图：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/20.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>继续，其中有两条路径（17-）8- &gt;6-&gt;NULL）的黑色节点个数不是3，是4不符合规则。</p>
-<p>这个时候需要把13当做X，8当做Y，进行右旋转：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/21.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"><br><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/22.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"><br><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/23.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>最后根据规则变色：</p>
-<p><img src="/images/%E5%B9%B3%E8%A1%A1%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91/24.jpg" alt="五分钟搞懂什么是红黑树（全程图解）"></p>
-<p>这样一来，我们终于结束了，经过调整之后符合规则。</p>
-<p>那我们费这么大力气，这么复杂，这东西用在哪里，有哪些应用呢？</p>
-<p>其实STL中的map就是用的红黑树。</p>
-<p>总结：</p>
-<p>红黑色的大体思想就是上面描述的那样，里面还有很多情况要考虑，本文只是简单的讲述思想，大家有兴趣可以去百度上看各种情况的考虑。谢谢大家的支持！</p>
+          转自  http://www.360doc.com/content/18/0904/19/25944647_783893127.shtml
 
-          
+前戏红黑树，对很多童鞋来说，是既熟悉又陌生。熟悉是因为在校学习期间，准备面试时，这是重点。然后经过多年的荒废，如今已经忘记的差不多了。如果正在看文章的你，马上
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/平衡的二叉查找树 ---- 红黑树/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1681,49 +1214,17 @@
       
         
           
-            <p>转自 <a href="https://www.cnblogs.com/zhangbaochong/p/5164994.html" target="_blank" rel="noopener"> https://www.cnblogs.com/zhangbaochong/p/5164994.html
-</a></p>
-<p><strong>平衡二叉树</strong> （Balanced Binary Tree）又被称为AVL树（有别于AVL算法），且具有以下性质：它是一<br>棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。这个方案很好的解决了二叉查找树退化成链表的问题，把插入，查找，删除的时间复杂度最好情况和最坏情况都维持在O(logN)。但是频繁旋转会使插入和删除牺牲掉O(logN)左右的时间，不过相对二叉查找树来说，时间上稳定了很多。</p>
-<p><img src="https://images2015.cnblogs.com/blog/805461/201601/805461-20160127214903223-1113949071.jpg" alt></p>
-<p>平衡二叉树大部分操作和二叉查找树类似，主要不同在于插入删除的时候平衡二叉树的平衡可能被改变，并且只有从那些插入点到根结点的路径上的结点的平衡性可能被改变，因为只有这些结点的子树可能变化。</p>
-<p><strong>平衡二叉树不平衡的情形：</strong></p>
-<p>把需要重新平衡的结点叫做α，由于任意两个结点最多只有两个儿子，因此高度不平衡时，α结点的两颗子树的高度相差2.容易看出，这种不平衡可能出现在下面4中情况中：</p>
-<p>1.对α的左儿子的左子树进行一次插入</p>
-<p>2.对α的左儿子的右子树进行一次插入</p>
-<p>3.对α的右儿子的左子树进行一次插入</p>
-<p>4.对α的右儿子的右子树进行一次插入</p>
-<p><img src="/images/%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/1.jpg" alt></p>
-<p>情形1和情形4是关于α的镜像对称，二情形2和情形3也是关于α的镜像对称，因此理论上看只有两种情况，但编程的角度看还是四种情形。</p>
-<p>第一种情况是插入发生在“外边”的情形（左左或右右），该情况可以通过一次单旋转完成调整；第二种情况是插入发生在“内部”的情形（左右或右左），这种情况比较复杂，需要通过双旋转来调整。</p>
-<p><strong>调整措施：</strong></p>
-<p><strong>一、单旋转</strong></p>
-<p>*<em><img src="/images/%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/2.jpg" alt><br>*</em></p>
-<p>上图是左左的情况，k2结点不满足平衡性，它的左子树k1比右子树z深两层，k1子树中更深的是k1的左子树x，因此属于左左情况。</p>
-<p>为了恢复平衡，我们把x上移一层，并把z下移一层，但此时实际已经超出了AVL树的性质要求。为此，重新安排结点以形成一颗等价的树。为使树恢复平衡，我们把k2变成这棵树的根节点，因为k2大于k1，把k2置于k1的右子树上，而原本在k1右子树的Y大于k1，小于k2，就把Y置于k2的左子树上，这样既满足了二叉查找树的性质，又满足了平衡二叉树的性质。</p>
-<p>这种情况称为单旋转。</p>
-<p><strong>二、双旋转</strong></p>
-<p>对于左右和右左两种情况，单旋转不能解决问题，要经过两次旋转。</p>
-<p><img src="/images/%E4%BA%8C%E5%8F%89%E5%B9%B3%E8%A1%A1%E6%A0%91/3.jpg" alt></p>
-<p>对于上图情况，为使树恢复平衡，我们需要进行两步，第一步，把k1作为根，进行一次右右旋转，旋转之后就变成了左左情况，所以第二步再进行一次左左旋转，最后得到了一棵以k2为根的平衡二叉树。</p>
-<p><strong>AVL树的删除操作：</strong></p>
-<p>同插入操作一样，删除结点时也有可能破坏平衡性，这就要求我们删除的时候要进行平衡性调整。</p>
-<p>删除分为以下几种情况：</p>
-<p>首先在整个二叉树中搜索要删除的结点，如果没搜索到直接返回不作处理，否则执行以下操作：</p>
-<p>1.要删除的节点是当前根节点T。</p>
-<p>如果左右子树都非空。在高度较大的子树中实施删除操作。</p>
-<p>分两种情况：</p>
-<p>(1)、左子树高度大于右子树高度，将左子树中最大的那个元素赋给当前根节点，然后删除左子树中元素值最大的那个节点。</p>
-<p>(1)、左子树高度小于右子树高度，将右子树中最小的那个元素赋给当前根节点，然后删除右子树中元素值最小的那个节点。</p>
-<p>如果左右子树中有一个为空，那么直接用那个非空子树或者是NULL替换当前根节点即可。</p>
-<p>2、要删除的节点元素值小于当前根节点T值，在左子树中进行删除。</p>
-<p>递归调用，在左子树中实施删除。</p>
-<p>这个是需要判断当前根节点是否仍然满足平衡条件，</p>
-<p>如果满足平衡条件，只需要更新当前根节点T的高度信息。</p>
-<p>否则，需要进行旋转调整：</p>
-<p>如果T的左子节点的左子树的高度大于T的左子节点的右子树的高度，进行相应的单旋转。否则进行双旋转。</p>
-<p>3、要删除的节点元素值大于当前根节点T值，在右子树中进行删除。</p>
+          转自  https://www.cnblogs.com/zhangbaochong/p/5164994.html
 
-          
+平衡二叉树 （Balanced Binary Tree）又被称为AVL树（有别于AVL算法），且具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/二叉平衡树/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1841,54 +1342,20 @@
       
         
           
-            <p>转自 <a href="https://www.jianshu.com/p/332caf8bed3a" target="_blank" rel="noopener"> https://www.jianshu.com/p/332caf8bed3a
-</a></p>
-<p><strong>B树</strong><br>即二叉搜索树：<br>1.所有非叶子结点至多拥有两个儿子（Left和Right）；<br>2.所有结点存储一个关键字；<br>3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；<br>如：</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-2c8a3d3caf000935.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/247/format/webp" alt></p>
-<p>image.png</p>
-<p>B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中；</p>
-<p>否则，如果查询关键字比结点关键字小，就进入左儿子；如果比结点关键字大，就进入</p>
-<p>右儿子；如果左儿子或右儿子的指针为空，则报告找不到相应的关键字；<br>如果B树的所有非叶子结点的左右子树的结点数目均保持差不多（平衡），那么B树</p>
-<p>的搜索性能逼近二分查找；但它比连续内存空间的二分查找的优点是，改变B树结构</p>
-<p>（插入与删除结点）不需要移动大段的内存数据，甚至通常是常数开销；<br>如：</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-7fced8418455cf9e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/523/format/webp" alt></p>
-<p>image.png</p>
-<p>但B树在经过多次插入与删除后，有可能导致不同的结构：</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-092996b57cac718e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/485/format/webp" alt></p>
-<p>image.png</p>
-<p>右边也是一个B树，但它的搜索性能已经是线性的了；同样的关键字集合有可能导致不同的</p>
-<p>树结构索引；所以，使用B树还要考虑尽可能让B树保持左图的结构，和避免右图的结构，也就</p>
-<p>是所谓的“平衡”问题；<br>实际使用的B树都是在原B树的基础上加上平衡算法，即“平衡二叉树”；如何保持B树</p>
-<p>结点分布均匀的平衡算法是平衡二叉树的关键；平衡算法是一种在B树中插入和删除结点的</p>
-<p>策略；</p>
-<p><strong>B-树</strong><br>是一种多路搜索树（并不是二叉的）：<br>1.定义任意非叶子结点最多只有M个儿子；且M &gt;2；<br>2.根结点的儿子数为[2, M]；<br>3.除根结点以外的非叶子结点的儿子数为[M/2, M]；<br>4.每个结点存放至少M/2-1（取上整）和至多M-1个关键字；（至少2个关键字）<br>5.非叶子结点的关键字个数=指向儿子的指针个数-1；<br>6.非叶子结点的关键字：K[1], K[2], …, K[M-1]；且K[i] &lt; K[i+1]；<br>7.非叶子结点的指针：P[1], P[2], …, P[M]；其中P[1]指向关键字小于K[1]的<br>子树，P[M]指向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；<br>8.所有叶子结点位于同一层；<br>如：（M=3）</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-fbde56e36d21b229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/624/format/webp" alt></p>
-<p>image.png</p>
-<p>B-树的搜索，从根结点开始，对结点内的关键字（有序）序列进行二分查找，如果</p>
-<p>命中则结束，否则进入查询关键字所属范围的儿子结点；重复，直到所对应的儿子指针为</p>
-<p>空，或已经是叶子结点；</p>
-<p>B-树的特性：<br>1.关键字集合分布在整颗树中；<br>2.任何一个关键字出现且只出现在一个结点中；<br>3.搜索有可能在非叶子结点结束；<br>4.其搜索性能等价于在关键字全集内做一次二分查找；<br>5.自动层次控制；<br>由于限制了除根结点以外的非叶子结点，至少含有M/2个儿子，确保了结点的至少<br>利用率，其最底搜索性能为：</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-a9ab21a6e2e4aaff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/328/format/webp" alt></p>
-<p>image.png</p>
-<p>其中，M为设定的非叶子结点最多子树个数，N为关键字总数；<br>所以B-树的性能总是等价于二分查找（与M值无关），也就没有B树平衡的问题；<br>由于M/2的限制，在插入结点时，如果结点已满，需要将结点分裂为两个各占<br>M/2的结点；删除结点时，需将两个不足M/2的兄弟结点合并；</p>
-<p><strong>B+树</strong><br>B+树是B-树的变体，也是一种多路搜索树：<br>1.其定义基本与B-树同，除了：<br>2.非叶子结点的子树指针与关键字个数相同；<br>3.非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树<br>（B-树是开区间）；<br>5.为所有叶子结点增加一个链指针；<br>6.所有关键字都在叶子结点出现；<br>如：（M=3）</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-93703fd7f20d7355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp" alt></p>
-<p>image.png</p>
-<p>B+的搜索与B-树也基本相同，区别是B+树只有达到叶子结点才命中（B-树可以在<br>非叶子结点命中），其性能也等价于在关键字全集做一次二分查找；<br>B+的特性：<br>1.所有关键字都出现在叶子结点的链表中（稠密索引），且链表中的关键字恰好<br>是有序的；<br>2.不可能在非叶子结点命中；<br>3.非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储<br>（关键字）数据的数据层；<br>4.更适合文件索引系统；</p>
-<p><em>_B</em> 树 _ *<br>是B+树的变体，在B+树的非根和非叶子结点再增加指向兄弟的指针；</p>
-<p><img src="//upload-images.jianshu.io/upload_images/4594052-99b493dd836c7d05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/569/format/webp" alt></p>
-<p>image.png</p>
-<p>B <em>树定义了非叶子结点关键字个数至少为(2/3)</em> M，即块的最低使用率为2/3</p>
-<p>（代替B+树的1/2）；<br>B+树的分裂：当一个结点满时，分配一个新的结点，并将原结点中1/2的数据</p>
-<p>复制到新结点，最后在父结点中增加新结点的指针；B+树的分裂只影响原结点和父</p>
-<p>结点，而不会影响兄弟结点，所以它不需要指向兄弟的指针；<br>B*树的分裂：当一个结点满时，如果它的下一个兄弟结点未满，那么将一部分</p>
-<p>数据移到兄弟结点中，再在原结点插入关键字，最后修改父结点中兄弟结点的关键字</p>
-<p>（因为兄弟结点的关键字范围改变了）；如果兄弟也满了，则在原结点与兄弟结点之</p>
-<p>间增加新结点，并各复制1/3的数据到新结点，最后在父结点增加新结点的指针；<br>所以，B*树分配新结点的概率比B+树要低，空间使用率更高；</p>
-<p><strong>小结</strong><br>B树：二叉树，每个结点只存储一个关键字，等于则命中，小于走左结点，大于<br>走右结点；<br>B-树：多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键<br>字范围的子结点；<br>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；<br>B+树：在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点<br>中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；<br>B*树：在B+树基础上，为非叶子结点也增加链表指针，将结点的最低利用率</p>
-<p>从1/2提高到2/3；</p>
+          转自  https://www.jianshu.com/p/332caf8bed3a
 
-          
+B树即二叉搜索树：1.所有非叶子结点至多拥有两个儿子（Left和Right）；2.所有结点存储一个关键字；3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；如：
+
+image.png
+B
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/B B- B+树/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2006,83 +1473,17 @@
       
         
           
-            <p>转自 <a href="https://yq.aliyun.com/articles/9280" target="_blank" rel="noopener"> https://yq.aliyun.com/articles/9280
-</a></p>
-<p><em>摘要：</em> 一， M阶B+树的定义(M阶是指一个节点最多能拥有的孩子数,M &gt;2): 图1.1 3阶B+树 (1)根结点只有1个，分支数量范围[2,m]。<br>(2)除根以外的非叶子结点，每个结点包含分支数范围[[m/2],m]，其中[m/2]表示取大于m/2的最小整数。</p>
-<p>*<em>一， M阶B+树的定义(M阶是指一个节点最多能拥有的孩子数,M &gt;2): *</em></p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>图1.1 3阶B+树</p>
-<p>(1)根结点只有1个，分支数量范围[2,m]。</p>
-<p>(2)除根以外的非叶子结点，每个结点包含分支数范围[[m/2],m]，其中[m/2]表示取大于m/2的最小整数。</p>
-<p>(3)所有非叶子节点的关键字数目等于它的分支数量。</p>
-<p>(4) 所有叶子节点都在同一层，且关键字数目范围是[[m/2],m]，其中[m/2]表示取大于m/2的最小整数。</p>
-<p>(5)所有非叶子节点的关键字可以看成是索引部分，这些索引等于其子树（根结点）中的最大（或最小）关键字。例如一个非叶子节点包含信息: (n，A0,K0,<br>A1,K1,……,Kn,An)，其中Ki为关键字，Ai为指向子树根结点的 <a href="http://baike.baidu.com/view/159417.htm" target="_blank" rel="noopener"> 指针
-</a><br>，n表示关键字个数。即Ai所指子树中的关键字均小于或等于Ki，而Ai+1所指的关键字均大于Ki（i=1，2，……，n）。</p>
-<p>(6)叶子节点包含全部关键字的信息(非叶子节点只包含索引)，且叶子结点中的所有关键字依照大小顺序链接(所以一个B+树通常有两个头指针，一个是指向根节点的root，另一个是指向最小关键字的sqt)。</p>
-<p><strong>二， 3阶B+树的插入举例：</strong></p>
-<p>l <strong>例1：</strong></p>
-<p>往下图的3阶B+树中插入关键字9</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先查找9应插入的叶节点(最左下角的那一个),插入发现没有破坏B+树的性质,完毕。插完如下图所示:</p>
-<p><img src="http://a.hiphotos.baidu.com/album/pic/item/c8ea15ce36d3d539ae1b78273a87e950352ab02b.jpg" alt></p>
-<p>l <strong>例2：</strong></p>
-<p>往下图的3阶B+树插入20</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先查找20应插入的叶节点(第二个叶子节点),插入，如下图</p>
-<p><img src="http://f.hiphotos.baidu.com/album/pic/item/a08b87d6277f9e2fd2726aec1f30e924b999f38b.jpg" alt></p>
-<p>发现第二个叶子节点已经破坏了B+树的性质,则把之分解成[20 21], [37 44]两个,并把21往父节点移，如下图</p>
-<p><img src="http://e.hiphotos.baidu.com/album/pic/item/9358d109b3de9c82b57a8f6b6c81800a19d84332.jpg" alt></p>
-<p>发现父节点也破坏了B+树的性质,则把之再分解成[15 21], [44 59]两个,并把21往其父节点移，如下图</p>
-<p><img src="http://f.hiphotos.baidu.com/album/pic/item/9f510fb30f2442a77c768b41d143ad4bd01302dd.jpg" alt></p>
-<p>这次没有破坏B+树的性质(如果还是不满足B+树的性质,可以递归上去,直到满足为至),插入完毕。</p>
-<p>l <strong>例3：</strong></p>
-<p>往下图的3阶B+树插入100</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先查找100应插入的叶节点(最后一个节点), 插入，如下图</p>
-<p><img src="http://a.hiphotos.baidu.com/album/pic/item/50da81cb39dbb6fdca2993c20924ab18962b37e7.jpg" alt></p>
-<p>修改其所有父辈节点的键值为100(只有插入比当前树的最大数大的数时要做此步),如下图</p>
-<p><img src="http://b.hiphotos.baidu.com/album/pic/item/a71ea8d3fd1f4134e65d739a251f95cad0c85eef.jpg" alt></p>
-<p>然后重复Eg.2的方法拆分节点,最后得</p>
-<p><img src="http://e.hiphotos.baidu.com/album/pic/item/359b033b5bb5c9ea01487507d539b6003bf3b39e.jpg" alt></p>
-<p><strong>三， 3阶B+树的删除举例：</strong></p>
-<p>l <strong>例1：</strong></p>
-<p>删除下图3阶B+树的关键字91</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先找到91所在叶节点(最后一个节点),删除之，如下图</p>
-<p><img src="http://b.hiphotos.baidu.com/album/pic/item/a50f4bfbfbedab64b2d93b24f736afc378311eae.jpg" alt></p>
-<p>没有破坏B+树的性质,删除完毕</p>
-<p>l <strong>例2：</strong></p>
-<p>删除下图3阶B+树的关键字97</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先找到97所在叶节点(最后一个节点),删除之，然后修改该节点的父辈的键字为91(只有删除树中最大数时要做此步)，如下图</p>
-<p><img src="http://a.hiphotos.baidu.com/album/pic/item/242dd42a2834349b132c1f61c9ea15ce36d3be2f.jpg" alt></p>
-<p>l <strong>例3：</strong></p>
-<p>删除下图3阶B+树的关键字51</p>
-<p><img src="http://h.hiphotos.baidu.com/album/pic/item/960a304e251f95caa608e652c9177f3e66095250.jpg" alt></p>
-<p>首先找到51所在节点(第三个节点),删除之，如下图</p>
-<p><img src="http://e.hiphotos.baidu.com/album/pic/item/91529822720e0cf32b8e3f1f0a46f21fbf09aadd.jpg" alt></p>
-<p>破坏了B+树的性质,从该节点的兄弟节点(左边或右边)借节点44，并修改相应键值,判断没有破坏B+树,完毕，如下图</p>
-<p><img src="http://b.hiphotos.baidu.com/album/pic/item/8b82b9014a90f603b2bceda33912b31bb151edc2.jpg" alt></p>
-<p>l <strong>例4：</strong></p>
-<p>删除下图3阶B+树的关键字59</p>
-<p><img src="http://g.hiphotos.baidu.com/album/pic/item/4610b912c8fcc3ce4565b8d79245d688d53f20a8.jpg" alt></p>
-<p>首先找到59所在叶节点(第三个节点),删除之，如下图</p>
-<p><img src="http://a.hiphotos.baidu.com/album/pic/item/11385343fbf2b211b39ef4aaca8065380dd78ea5.jpg" alt></p>
-<p>破坏B+树性质,尝试借节点,无效(因为左兄弟节点被借也会破坏B+树性质),合并第二第三叶节点并调整键值，如下图</p>
-<p><img src="http://f.hiphotos.baidu.com/album/pic/item/267f9e2f07082838ca97adf0b899a9014d08f1b8.jpg" alt></p>
-<p>完毕。</p>
-<p>l <strong>例5：</strong></p>
-<p>删除下图3阶B+树的关键字63</p>
-<p><img src="http://d.hiphotos.baidu.com/album/pic/item/aa64034f78f0f7361c723de50a55b319eac41341.jpg" alt></p>
-<p>首先找到63所在叶节点(第四个节点),删除之，如下图</p>
-<p><img src="http://c.hiphotos.baidu.com/album/pic/item/7a899e510fb30f24e0c29ce7c895d143ac4b03fd.jpg" alt></p>
-<p>合并第四五叶节点并调整键值，如下图</p>
-<p><img src="http://b.hiphotos.baidu.com/album/pic/item/d043ad4bd11373f02b841f7ba40f4bfbfaed049e.jpg" alt></p>
-<p>发现第二层的第二个节点不满足B+树性质,从第二层的第一个节点借59,并调整键值，如下图</p>
-<p><img src="http://f.hiphotos.baidu.com/album/pic/item/d53f8794a4c27d1e5fe24b201bd5ad6edcc43809.jpg" alt></p>
-<p>完毕</p>
+          转自  https://yq.aliyun.com/articles/9280
 
-          
+摘要： 一， M阶B+树的定义(M阶是指一个节点最多能拥有的孩子数,M &gt;2): 图1.1 3阶B+树 (1)根结点只有1个，分支数量范围[2,m]。(2)除根以外的非叶子结点，每个结点包含分支数范围[[m/2]
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/29/B+树/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
