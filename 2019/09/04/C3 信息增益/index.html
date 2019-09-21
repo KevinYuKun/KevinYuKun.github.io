@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://note.youdao.com/yws/res/1575/01943F701C8647AC8E36861D0A37E5D0">
 <meta property="og:image" content="http://note.youdao.com/yws/res/1580/8DFD21C350874396965354D589A39FB1">
 <meta property="og:image" content="http://note.youdao.com/yws/res/1604/E2D8EBC6E15A416DB664B01C3E42B8DE">
-<meta property="og:updated_time" content="2019-09-04T05:15:24.898Z">
+<meta property="og:updated_time" content="2019-09-06T00:06:03.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C3 信息增益">
 <meta name="twitter:description" content="看不到图片就点有道云笔记 ==为了对信息(特征？)进行量化处理，然后再选定以什么作为标准，期望(纯度越来越高)信息增益越大== [TOC] 决策树 特征选择“信息熵”是度量样本集合不确定度（纯度）的最常用的指标熵—-&amp;gt;不确定性的量度熵越高，不确定性越大越随机，概率低，熵越大熵越大，信息量越大 1. 信息熵信息熵公式: 其中p(xi)代表随机事件X为xi的概率 信息量：(时间发生概率越大，信息">
@@ -319,7 +319,7 @@
 <h2 id="2-条件熵"><a href="#2-条件熵" class="headerlink" title="2. 条件熵"></a>2. 条件熵</h2><p>条件熵定义： X给定条件下，Y的条件概率分布的熵对X的数学期望  </p>
 <p>这个条件熵，是指在给定某个数（某个变量为某个值）的情况下，另一个变量的熵是多少，变量的不确定性是多少？<br>就是有条件的信息熵，在信息熵的基础上加上条件<br>P(y|x) = …..<br><img src="http://note.youdao.com/yws/res/1604/E2D8EBC6E15A416DB664B01C3E42B8DE" alt="image"><br>注意这里的x和y都是变量，所以有多个值<br>先把条件分解，再求每个条件下的H(x)，以及该条件的概率p(x)，然后对应乘起来再相加即可。<br>具体例子看 <a href="https://zhuanlan.zhihu.com/p/26551798" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26551798</a></p>
 <h2 id="3-信息增益"><a href="#3-信息增益" class="headerlink" title="3. 信息增益"></a>3. 信息增益</h2><p><strong>在决策树算法的学习过程中，信息增益是特征选择的一个重要指标，它定义为一个特征能够为分类系统带来多少信息，带来的信息越多，说明该特征越重要，相应的信息增益也就越大。</strong></p>
-<p><strong>信息增益 = 信息熵 - 条件熵</strong><br>得到的结果越大，说明信息增益越大</p>
+<p><strong>信息增益 = 信息熵 - 条件熵</strong><br>计算根节点的信息熵(也就是总体的分类)，然后再根据条件求条件熵，相减得到信息增益. (==具体参考参考资料信息熵==)<br>得到的结果越大，说明信息增益越<br>得到的结果越大，说明信息增益越大</p>
 <p>信息增益代表着在一个条件下，信息复杂度（不确定性）减少的程度。  </p>
 <p>那么对应到决策树结点上，怎么选择特征，就是选了这个特征后，信息增益最大(不确定性减少程度最大)，就是分支里的每一个都是一类(err rate最小)</p>
 <h1 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h1><p><a href="https://zhuanlan.zhihu.com/p/26486223" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26486223</a> ID3<br><a href="https://zhuanlan.zhihu.com/p/26760551" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26760551</a> 信息熵<br><a href="https://zhuanlan.zhihu.com/p/26551798" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26551798</a> 条件熵<br><a href="https://zhuanlan.zhihu.com/p/26596036" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26596036</a> 信息增益</p>
@@ -441,7 +441,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">文章</span>
                 </a>
               </div>
