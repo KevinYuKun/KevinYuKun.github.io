@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="由于逻辑回归是一个伯努利分布，所以逻辑回归本质是交叉熵(作为损失函数)逻辑回归和交叉熵对于MSE顾虑都一样，(y-a)^2，对于神经网络而言，会降低w,b的更新速度，而对于逻辑回归来说,MSE会导致代价函数非凸，存在很多局部最优解。先了解信息熵和相对熵   相对熵—KL散度相对熵又称KL散度,如果我们对于同一个随机变量 x 有两个单独的概率分布 P(x) 和 Q(x)，我们可以使用 KL 散度（K">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑回归与交叉熵">
+<meta property="og:url" content="http://yoursite.com/2019/09/27/逻辑回归与交叉熵/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="由于逻辑回归是一个伯努利分布，所以逻辑回归本质是交叉熵(作为损失函数)逻辑回归和交叉熵对于MSE顾虑都一样，(y-a)^2，对于神经网络而言，会降低w,b的更新速度，而对于逻辑回归来说,MSE会导致代价函数非凸，存在很多局部最优解。先了解信息熵和相对熵   相对熵—KL散度相对熵又称KL散度,如果我们对于同一个随机变量 x 有两个单独的概率分布 P(x) 和 Q(x)，我们可以使用 KL 散度（K">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926203552.png">
+<meta property="og:image" content="http://note.youdao.com/yws/res/2486/582A018D4B114D13A348B88ED0265146">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926204146.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926205202.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210444.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210004.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210101.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210132.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143810.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926211207.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926211217.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210814.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927141047.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927142526.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927142612.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210843.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143248.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143304.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143413.png">
+<meta property="og:updated_time" content="2019-09-27T04:41:20.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="逻辑回归与交叉熵">
+<meta name="twitter:description" content="由于逻辑回归是一个伯努利分布，所以逻辑回归本质是交叉熵(作为损失函数)逻辑回归和交叉熵对于MSE顾虑都一样，(y-a)^2，对于神经网络而言，会降低w,b的更新速度，而对于逻辑回归来说,MSE会导致代价函数非凸，存在很多局部最优解。先了解信息熵和相对熵   相对熵—KL散度相对熵又称KL散度,如果我们对于同一个随机变量 x 有两个单独的概率分布 P(x) 和 Q(x)，我们可以使用 KL 散度（K">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926203552.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/27/逻辑回归与交叉熵/">
+
+
+
+
+
+  <title>逻辑回归与交叉熵 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/逻辑回归与交叉熵/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">逻辑回归与交叉熵</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-09-27T14:41:00+10:00">
+                2019-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>由于逻辑回归是一个伯努利分布，所以逻辑回归本质是交叉熵(作为损失函数)<br>逻辑回归和交叉熵对于MSE顾虑都一样，(y-a)^2，对于神经网络而言，会降低w,b的更新速度，而对于逻辑回归来说,MSE会导致代价函数非凸，存在很多局部最优解。<br>先了解信息熵和相对熵  </p>
+<h1 id="相对熵—KL散度"><a href="#相对熵—KL散度" class="headerlink" title="相对熵—KL散度"></a>相对熵—KL散度</h1><p>相对熵又称KL散度,如果我们对于同一个随机变量 x 有两个单独的概率分布 P(x) 和 Q(x)，我们可以使用 KL 散度（Kullback-Leibler (KL) divergence）来衡量这两个分布的差异。<br>公式如下:<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926203552.png" alt><br>其中P表示真实分布，而Q表示估计分布。假如P=[1,0,0], Q = [0.7,0.2,0,1]，那么表示需要一些信息增量才能完全描述这个P分布</p>
+<h1 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h1><p>先摆上信息熵的公式：（信息熵在另一片文章）<br><img src="http://note.youdao.com/yws/res/2486/582A018D4B114D13A348B88ED0265146" alt="image"><br>交叉熵公式：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926204146.png" alt><br>相对熵=信息熵-交叉熵<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926205202.png" alt></p>
+<p>那么从上面可以看出，信息熵是不变的，变得只有交叉熵，而相对熵刚好可以帮我们评估label和prediction之间的差异，所以在优化过程中只用交叉熵即可。 </p>
+<h2 id="推导前"><a href="#推导前" class="headerlink" title="推导前"></a>推导前</h2><p>模型中有目标函数即h(x),激活函数g(x), h(x) = g(θX)<br>代入不同的目标函数和激活函数得到不同的模型，如g()为sigmoid，h()为线性，就是逻辑回归了。  <img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210444.png" alt></p>
+<h2 id="推导1"><a href="#推导1" class="headerlink" title="推导1"></a>推导1</h2><p>对于二分类问题，交叉熵满足伯努利分布。<br>二分类问题用到sigmoid(softmax)，即有推导：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210004.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210101.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210132.png" alt><br>一路推下来会有最下面那个。<br>然后，我们搞的是cost function越小越好，但在式子中我们希望的是F(w)越大越好，那么直接加负号(下面式子log跟ln是一样的没影响)：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143810.png" alt></p>
+<h2 id="推导2"><a href="#推导2" class="headerlink" title="推导2"></a>推导2</h2><p>其中a=σ(z)就是我们的目标函数，z=wx+b， σ代表我们的激活函数，一般是sigmoid<br>MSE下的代价函数：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926211207.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926211217.png" alt><br>以偏置b的梯度计算为例，推导出交叉熵代价函数：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210814.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927141047.png" alt><br>有二次代价函数:<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927142526.png" alt><br>对二次代价函数求偏导有：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927142612.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190926210843.png" alt>  </p>
+<h2 id="选取交叉熵作为cost-function"><a href="#选取交叉熵作为cost-function" class="headerlink" title="选取交叉熵作为cost function"></a>选取交叉熵作为cost function</h2><p>由上面的推导可以看出，若使用MSE作为cost function，即：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143248.png" alt><br>则会有推导(这里z=wx+b因为神经元之间关系就是线性的)<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143304.png" alt><br>那么根据sigmoid的图表来看，当接近极值时斜率会降低，更新的速度就会降低<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20190927143413.png" alt><br>所以不能用MSE作为cost function</p>
+<h1 id="逻辑回归推导"><a href="#逻辑回归推导" class="headerlink" title="逻辑回归推导"></a>逻辑回归推导</h1><p>逻辑回归也满足伯努利分布，所以他的本质就是交叉熵—–参见交叉熵推导1<br>h()作为目标函数，选取sigmoid函数作为激活函数g()，那么就有h(θ) = g(z), 那么这里面的z是线性关系，也就是linear function的结果作为z，最后输出一个[0,1]范围内的概率值，有h(θ) = g(wx+b)。<br>跟交叉熵类似。不选择MSE作为cost function的原因是我们需要找到一个值域在[0,1]且满足分类要求的函数，sigmoid正好合适。<br>而逻辑回归就是用线性回归预测的连续值通过sigmoid转换成0，1分类</p>
+<h1 id="别的"><a href="#别的" class="headerlink" title="别的"></a>别的</h1><p>sigmoid函数实质为softmax函数的特殊情况<br>sigmoid函数用于多分类且分类独立<br>softmax用于多分类且分类互斥   </p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/tsyccnh/article/details/79163834" target="_blank" rel="noopener">https://blog.csdn.net/tsyccnh/article/details/79163834</a><br><a href="https://zhuanlan.zhihu.com/p/44591359" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/44591359</a><br><a href="https://blog.csdn.net/u014313009/article/details/51043064" target="_blank" rel="noopener">https://blog.csdn.net/u014313009/article/details/51043064</a><br>sigmoid函数来源 论文<a href="http://www.win-vector.com/dfiles/LogisticRegressionMaxEnt.pdf" target="_blank" rel="noopener">http://www.win-vector.com/dfiles/LogisticRegressionMaxEnt.pdf</a><br><a href="https://blog.csdn.net/weixin_38275649/article/details/80340538" target="_blank" rel="noopener">https://blog.csdn.net/weixin_38275649/article/details/80340538</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/26/贝叶斯/" rel="next" title="贝叶斯">
+                <i class="fa fa-chevron-left"></i> 贝叶斯
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+  <div class="comments" id="comments">
+      <div id="gitalk-container"></div>
+  </div>  
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#相对熵—KL散度"><span class="nav-number">1.</span> <span class="nav-text">相对熵—KL散度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交叉熵"><span class="nav-number">2.</span> <span class="nav-text">交叉熵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#推导前"><span class="nav-number">2.1.</span> <span class="nav-text">推导前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导1"><span class="nav-number">2.2.</span> <span class="nav-text">推导1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导2"><span class="nav-number">2.3.</span> <span class="nav-text">推导2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选取交叉熵作为cost-function"><span class="nav-number">2.4.</span> <span class="nav-text">选取交叉熵作为cost function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑回归推导"><span class="nav-number">3.</span> <span class="nav-text">逻辑回归推导</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#别的"><span class="nav-number">4.</span> <span class="nav-text">别的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'c02798de6ad7f2189304',
+          clientSecret: '78f2b6ab3101697a03c15c0f329ac228d3489482',
+          repo: 'comments',
+          owner: 'KevinYuKun',
+          admin: ['KevinYuKun'],
+          id:'gitalk_20190927144100',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
