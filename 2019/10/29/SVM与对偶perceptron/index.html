@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SVM与对偶Perceptron最近上课讲到SVM，太久没回顾了有点蒙，之前笔记之记在纸上，甚是不便，今日便将其整理upload。 由perceptron引发的这篇文章普通perceptronloss function：梯度更新则有：   对偶perceptron我们可以相对原本的perceptron算法换个思路去思考，因为我们有梯度更新如下，即最终的w = 所有ηyx相加，b = 所有ηy相加，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVM与对偶perceptron">
+<meta property="og:url" content="http://yoursite.com/2019/10/29/SVM与对偶perceptron/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="SVM与对偶Perceptron最近上课讲到SVM，太久没回顾了有点蒙，之前笔记之记在纸上，甚是不便，今日便将其整理upload。 由perceptron引发的这篇文章普通perceptronloss function：梯度更新则有：   对偶perceptron我们可以相对原本的perceptron算法换个思路去思考，因为我们有梯度更新如下，即最终的w = 所有ηyx相加，b = 所有ηy相加，">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028205858.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028205935.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028210041.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028210701.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211038.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211245.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211433.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211457.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211522.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028212326.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028212512.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213457.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028214429.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028214446.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029120750.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029121819.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029124718.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130431.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130518.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130543.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130617.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130648.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130702.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029140347.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029140412.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029141820.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029141918.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142049.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142111.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142148.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142856.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142925.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142948.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143221.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143146.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143943.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029132555.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029134342.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029144606.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029145622.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029145714.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029150213.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029150457.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029151050.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029151229.png">
+<meta property="og:updated_time" content="2019-10-29T04:15:15.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVM与对偶perceptron">
+<meta name="twitter:description" content="SVM与对偶Perceptron最近上课讲到SVM，太久没回顾了有点蒙，之前笔记之记在纸上，甚是不便，今日便将其整理upload。 由perceptron引发的这篇文章普通perceptronloss function：梯度更新则有：   对偶perceptron我们可以相对原本的perceptron算法换个思路去思考，因为我们有梯度更新如下，即最终的w = 所有ηyx相加，b = 所有ηy相加，">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028205858.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/29/SVM与对偶perceptron/">
+
+
+
+
+
+  <title>SVM与对偶perceptron | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/SVM与对偶perceptron/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVM与对偶perceptron</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-10-29T15:14:50+11:00">
+                2019-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SVM与对偶Perceptron"><a href="#SVM与对偶Perceptron" class="headerlink" title="SVM与对偶Perceptron"></a>SVM与对偶Perceptron</h1><p>最近上课讲到SVM，太久没回顾了有点蒙，之前笔记之记在纸上，甚是不便，今日便将其整理upload。</p>
+<h2 id="由perceptron引发的这篇文章"><a href="#由perceptron引发的这篇文章" class="headerlink" title="由perceptron引发的这篇文章"></a>由perceptron引发的这篇文章</h2><h3 id="普通perceptron"><a href="#普通perceptron" class="headerlink" title="普通perceptron"></a>普通perceptron</h3><p>loss function：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028205858.png" alt><br>梯度更新则有：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028205935.png" alt>  </p>
+<h3 id="对偶perceptron"><a href="#对偶perceptron" class="headerlink" title="对偶perceptron"></a>对偶perceptron</h3><p>我们可以相对原本的perceptron算法换个思路去思考，因为我们有梯度更新如下，即最终的w = 所有ηyx相加，b = 所有ηy相加，那么我们是如何确定每次运算是否更新w，b，就是根据是否犯错(violate)，一旦犯错，就必须要更新。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028210041.png" alt><br>那么我们就可以用一个东西去记录犯错次数<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028210701.png" alt><br>如上图，我们用α = nη 来表示犯错次数，其中n是有下标的,n<sub>i</sub>表示的是第i个点的犯错次数。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211038.png" alt><br>如上截图，前面还有一些无关紧要的东西就不截了，这里可以看出每次更新α&lt;-α + ηx1,这里的乘1代表i点犯错次数加一。    </p>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211245.png" alt><br>另外，用对偶perceptron还有个好处就是，能用gram矩阵，能节省&lt;xi,xj&gt;之间的内积计算<br>根据《统计学习方法》,有例子更容易上头：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211433.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211457.jpeg" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028211522.png" alt><br>对照这最后一个迭代过程来看，就很容易理解整个dual perceptron了。  </p>
+<h2 id="SVM"><a href="#SVM" class="headerlink" title="SVM"></a>SVM</h2><p>SVM分为hard-margin SVM 和 soft-margin SVM  </p>
+<h3 id="hard-margin-SVM"><a href="#hard-margin-SVM" class="headerlink" title="hard-margin SVM"></a>hard-margin SVM</h3><p>由perceptron引发了一个问题，就是临近分界线的点往往会导致perceptron不断的update，因为存在多个线可以分割平面<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028212326.png" alt><br>SVM可以好好的解决这个问题，比较简单所以简略记录，具体可看参考资料第一个网址<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028212512.png" alt><br>我们可以看到wx+b = 0 这条就是我们margin里面的中线了，我们要做的就是最大化这个margin，而在最大化margin后，刚好在margin线上的点就是SV(support vector)<br>这里解释下为何margin = 2/||w||,根据平行线公式 |c1 - c2|/(sqrt(A^2 + B^2))就可以得到啦。然后根据江湖规矩，将最大化变为最小化，即max(2/w) —&gt; min(w/2)一样求极值，然后为了方便运算就编程min(w/2)<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213108.png" alt><br>就有我们的目标函数及其约束条件了，这里的约束条件就是要求这个点必须正确分类，只有正确分类这个约束条件才成立  </p>
+<h3 id="二次规划方程"><a href="#二次规划方程" class="headerlink" title="二次规划方程"></a>二次规划方程</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213457.png" alt>  </p>
+<ul>
+<li>QP问题可以用专用的QP solver来解决，很快，但必须是QP问题  </li>
+<li>如果目标函数是凹的（最大化问题）或凸（最小化问题）并且约束集是凸的，那么该程序称为凸，并且在大多数情况下可以使用来自凸优化的通用方法。  </li>
+<li>如果目标函数f是线性的并且约束空间是多面体，则问题是线性规划问题，其可以使用诸如单纯形法之类的众所周知的线性规划技术来解决。</li>
+<li>如果目标函数是二次的且约束是线性的(一次方关系)，则使用二次规划技术  </li>
+<li>如果目标函数是凹函数和凸函数的比率（在最大化情况下）并且约束是凸的，那么可以使用分数规划技术将问题转化为凸优化问题。  </li>
+<li>不是QP，kernel，dual都没法用<br>根据参考资料中的SVM<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028214429.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028214446.png" alt><br>我们的SVM需要满足KKT条件才能在对偶化后得到最优值(往下看)</li>
+</ul>
+<h3 id="拉格朗日乘子—-化约束为无约束"><a href="#拉格朗日乘子—-化约束为无约束" class="headerlink" title="拉格朗日乘子—-化约束为无约束"></a>拉格朗日乘子—-化约束为无约束</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191028213108.png" alt><br>回到上面这个最小化问题上面，因为有约束条件的存在，解方程显得不方便，我们可以用到拉格朗日乘子来将之转换为无约束。首先要做的就是将约护士条件乘上拉格朗日乘子(这里是α)加入到目标函数之中，如下图：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029120750.png" alt><br>这里α&gt;=0，这个式子叫拉格朗日函数。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029121819.png" alt><br>接下来我们要将SVM转换为无约束条件的式子。即我们把SVM转化掉，但求得东西和原来的要一毛一样。怎么做呢。看上图下面的claim：<br>先别纠结为什么要max，为什么要min，且听我说。<br>分两种情况，即满足约束条件和不满足约束条件的, 约束条件(y(wx+b) - 1 &gt;= 0),这图里是z代替x，是因为z代表的是特征转换(不是kernel,是feature transform)后的数据    </p>
+<ol>
+<li>如果满足约束条件，我们拉格朗日函数的后一项，即∑(α(1-y(wx+b))) 必然&lt;=0, 因为α是&gt;=0的，那么当max 拉格朗日函数时，最大的是什么，当然就只能是我们的w平方/2啦，即上图中的□，而此时在min，看看，是不是跟原来的问题一毛一样。对了，此时将得到最优解，而这个时候α(1-y(wx+b))=0,这个也是构成KKT条件的一部分。   </li>
+<li>那么如果不满足约束条件呢，图中所示，∑(α(1-y(wx+b)))中，α&gt;=0，而后面那一项也&gt;0，如果max，那就是+∞，这个时候我们min是无意义的。<br>基于上述两点，我们可以得到min(max 拉格朗日函数)就等于原函数(在约束条件下)，不满足约束条件(不在可行区域内的)冇意义。<br>至此，已经转化为无约束的函数。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029124718.png" alt></li>
+</ol>
+<h3 id="拉格朗日对偶化"><a href="#拉格朗日对偶化" class="headerlink" title="拉格朗日对偶化"></a>拉格朗日对偶化</h3><p>这里先丢点东西出来：  </p>
+<ul>
+<li>目标函数对原始问题是极大化,对对偶问题则是极小化</li>
+<li>原始问题目标函数中的收益系数（优化函数中变量前面的系数）是对偶问题约束不等式中的右端常数,而原始问题约束不等式中的右端常数则是对偶问题中目标函数的收益系数</li>
+<li>原始问题和对偶问题的约束不等式的符号方向相反</li>
+<li>原始问题约束不等式系数矩阵转置后即为对偶问题的约束不等式的系数矩阵</li>
+<li>原始问题的约束方程数对应于对偶问题的变量数,而原始问题的变量数对应于对偶问题的约束方程数</li>
+<li>对偶问题的对偶问题是原始问题<br>(视频link在参考资料中)<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130431.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130518.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130543.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130617.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130648.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029130702.png" alt>  </li>
+</ul>
+<hr>
+<p>我们先庸俗点讲如何对偶化：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029140347.png" alt><br>看看上图，左边的使我们的无约束拉格朗日函数，而右边的使我们的目标函数，那么我们如何得出来的&gt;=？？？<br>我们先看上图的第一幅图，我们先假设有一个固定的α’在右边式子，那么因为我们左边的式子是max α，所以说他是最大的没问题吧，那么max &gt;= any 大于任意一个α’也没问题吧，那么就有左边的 &gt;= 右边的。<br>现在有min(max L) &gt;= min(L),  那么我在这个基础上，往右边的再添加上max形成上图的第二幅图也是不是应该成立。(切记这里的系数要求) </p>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029140412.png" alt><br>我们刚刚推导的东西存在的&gt;=号，其实叫弱对偶性，那如果是强对偶性(=)就意味着我们可以用对偶问题来替代原问题来解答(强对偶性，最优解相等)<br>我们的问题是二次规划问题，做最佳化的人推导一下发现，对于二次规划问题来说，如果我们要解的问题是convex的凸的，原来问题有解的(原来条件下能找到最优值)，有线性的约束条件——&gt;就有强对偶关系。  </p>
+<ul>
+<li>原问题(SVM)为凸的  </li>
+<li>原问题有解  </li>
+<li>优先性约束<br>满足这三个条件的就有强对偶关系，我们也就可以用右边的对偶问题来代替原本的问题<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029141820.png" alt><br>然后，我们进一步求解，对b求导并=0：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029141918.png" alt><br>我们把得到的这个东西代回原式子中便会得到：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142049.png" alt><br>然后接着对w操作：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142111.png" alt><br>就会得到<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142148.png" alt><br>最后那个式子使我们目前的目标函数<br>然后我们要通过QP solver求出α，首先先把max转换为min：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142856.png" alt><br>求出α：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142925.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029142948.png" alt><br>这里的Qn,m经常是稠密的，不为0，所以经常要用special 的sovler来解决<br>那么接下来，求得α了，如何求w和b呢，使用KKT条件求出<br>这里先弄个关系图<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143221.png" alt><br>所有极值都肯定满足KKT条件,反之不一定<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143146.png" alt><br>其实上述4个KKT条件中，我们只用到第三个和第四个，第四个称为互补松弛性，怎么来的呢，记得上面推导为什么要min(max拉格朗日函数)，就是因为在可行域内，当第四个条件里的公式=0，我们才有最大的拉格朗日函数。由此，根据这个条件，当α&gt;0时，不就有1-y(wx+b) = 0吗，即b = y-wx, 这不就是我们的SV吗，所以我们就可以求得w和b，只需要保留SV，其他点都可以不要。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029143943.png" alt></li>
+</ul>
+<p>。对偶问题的存在是为了解决原问题中维度过大而导致的复杂度激增。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029132555.png" alt><br>(这里的对偶形式，是经过QP solver后的结果)如上图中原问题中，求解复杂度与w的维度有关即d~ + 1， d为什么有个<del>呢，是因为这里代表的是feature空间转换成更高维的空间后的结果(不是kernel)，而对偶问题就是跟样本数量有关，所以如果做线性分类，样本数量高于维度的话，完全可以用原问题直接求解。可如果做非线性分类，那么必然涉及到加kernel的操作，会提升到高纬度(kernel往下看),那就要用对偶问题来做了。<br>从物理意义上来讲，原来的问题做特殊的自由放缩，对偶问题是找到α&gt;0时是SV，并用其来重建Margin<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029134342.png" alt><br>然而，上述的对偶问题真的跟d</del>没关系了吗，不见得(只能说，基本无关系)，Q<sub>d</sub>里面还含有Z的内积<br>好了，事情来到这里，我们要通过加入kernel来使他彻底跟d~无关(kernel这一部分下一part讲)</p>
+<h3 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029144606.png" alt><br>由于对偶SVM经常解决的是non-linear问题，所以就是用 Φ(x)来代替fearture transform后的数据，x-&gt;Φ(x)，其实是两个步骤，先进行空间转换，再进行内积，现在问题就是我们这个Φ(x)要进行内积，那必然是比原来空间的数据进行内积还要复杂，那该怎么解决呢，我们能不能把这两个步骤联合起来呢。<br>kernel = feature transform + inner product<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029145622.png" alt><br>这里有一例子，<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029145714.png" alt><br>所以有了这个转换概念后，我们就可以用来解决我们刚才的问题了。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029150213.png" alt><br>这里zz我们用K(x,x)来代替，那么同理，我们不再用z空间的数据，那求b啊啥的都得用kernel代替。这样搞，我们就避免了要在z空间做内积的计算复杂了(我们之前所有的非线性东西，用的都是z空间的数据，z空间是将x空间的数据进行维度转换得来的，如加个平方啊，三次方啥的)<br>接下来我们还是可以用QP来解决kernel SVM：<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029150457.png" alt><br>polynomial kernel， 高斯kernel暂时不写，用到的时候再补充。  </p>
+<ul>
+<li>聚类，分类常用kernel</li>
+<li>kernel其实就是将低纬度映射到高纬度，从而能找出一个能够正确划分样本的超平面（西瓜书）原始空间有限维度，那么一定存在能被划分的高纬度空间</li>
+<li>高斯核函数也叫径向基核函数RBF kernel—-一个球 代表着一堆SV的高斯核函数的线性组合</li>
+<li>高斯核函数能映射到无限维度<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029151050.png" alt>  </li>
+<li>if your number of features is really large compared to the training sample, just use linear kernel; if your number of features is small, but the training sample is large, you may also need linear kernel but try to add more features; if your feature number is small (10^0 - 10^3), and the sample number is intermediate (10^1 - 10^4), use Gaussian kernel will be better.—-抄自stackflow  </li>
+<li>LogReg和SVM 均为线性， 加核函数可以变为非线性(普通改变特征也行，x+x1—&gt;x^2+x1^2之类的)  </li>
+<li>对SVM进行对偶是因为要改变算法的复杂度，维度有关—-&gt;样本数量有关。也就是说，如果做的线性回归，feature小于样本数量就不用对偶，要是做非线性回归，那么必然涉及到升维度，如高斯核函数，那么此时就要进行对偶，对偶后要完全消除维度的影响提高效率就得加入核函数。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191029151229.png" alt>  </li>
+<li>不是QP，kernel，dual都没法用 </li>
+<li>核函数和SVM没必然联系，对于核函数吴恩达解释一个样本点出现在landmark附近的概率(相似程度)</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/wuliytTaotao/p/10175888.html" target="_blank" rel="noopener">https://www.cnblogs.com/wuliytTaotao/p/10175888.html</a> SVM<br>《统计学习方法》李航<br><a href="https://www.zhihu.com/question/50433320" target="_blank" rel="noopener">https://www.zhihu.com/question/50433320</a> 二次规划<br><a href="https://www.youtube.com/watch?v=vNMERu3lZf4" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vNMERu3lZf4</a><br><a href="https://www.youtube.com/watch?v=PDD3RgW9S-M" target="_blank" rel="noopener">https://www.youtube.com/watch?v=PDD3RgW9S-M</a>   <a href="https://www.youtube.com/watch?v=5x4ABjZT2_g" target="_blank" rel="noopener">https://www.youtube.com/watch?v=5x4ABjZT2_g</a>  对偶视频<br><a href="https://shomy.top/2017/02/17/svm-02-dual/#%E5%90%8E%E7%BB%AD" target="_blank" rel="noopener">https://shomy.top/2017/02/17/svm-02-dual/#%E5%90%8E%E7%BB%AD</a><br><a href="https://zhuanlan.zhihu.com/p/36621652" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36621652</a> 强对偶和KKT条件<br><a href="https://www.zhihu.com/question/24627666" target="_blank" rel="noopener">https://www.zhihu.com/question/24627666</a> kernel</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/27/逻辑回归与交叉熵/" rel="next" title="逻辑回归与交叉熵">
+                <i class="fa fa-chevron-left"></i> 逻辑回归与交叉熵
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+  <div class="comments" id="comments">
+      <div id="gitalk-container"></div>
+  </div>  
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SVM与对偶Perceptron"><span class="nav-number">1.</span> <span class="nav-text">SVM与对偶Perceptron</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#由perceptron引发的这篇文章"><span class="nav-number">1.1.</span> <span class="nav-text">由perceptron引发的这篇文章</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通perceptron"><span class="nav-number">1.1.1.</span> <span class="nav-text">普通perceptron</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对偶perceptron"><span class="nav-number">1.1.2.</span> <span class="nav-text">对偶perceptron</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVM"><span class="nav-number">1.2.</span> <span class="nav-text">SVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hard-margin-SVM"><span class="nav-number">1.2.1.</span> <span class="nav-text">hard-margin SVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次规划方程"><span class="nav-number">1.2.2.</span> <span class="nav-text">二次规划方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日乘子—-化约束为无约束"><span class="nav-number">1.2.3.</span> <span class="nav-text">拉格朗日乘子—-化约束为无约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉格朗日对偶化"><span class="nav-number">1.2.4.</span> <span class="nav-text">拉格朗日对偶化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kernel"><span class="nav-number">1.2.5.</span> <span class="nav-text">kernel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'c02798de6ad7f2189304',
+          clientSecret: '78f2b6ab3101697a03c15c0f329ac228d3489482',
+          repo: 'comments',
+          owner: 'KevinYuKun',
+          admin: ['KevinYuKun'],
+          id:'gitalk_20191029151450',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
