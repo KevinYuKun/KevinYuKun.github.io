@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[toc] 模型融合和树模型 小笔记组合策略votingvoting策略是投票思想。1.一人一票，票多者得2.加权投票，一人可能有多张票3.直接选其中最牛逼那个人   average就是平均取值  模型融合种类先明确一下，模型融合是将多个弱模型融合成一个强模型(往往需要meta模型弱才好)  Boostrap有放回的均匀抽样(可以用来给不同的弱模型以不同之数据)  Baggingbagging需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模型融合和树模型">
+<meta property="og:url" content="http://yoursite.com/2020/03/28/模型融合和树模型/index.html">
+<meta property="og:site_name" content="我啊lkjflaj">
+<meta property="og:description" content="[toc] 模型融合和树模型 小笔记组合策略votingvoting策略是投票思想。1.一人一票，票多者得2.加权投票，一人可能有多张票3.直接选其中最牛逼那个人   average就是平均取值  模型融合种类先明确一下，模型融合是将多个弱模型融合成一个强模型(往往需要meta模型弱才好)  Boostrap有放回的均匀抽样(可以用来给不同的弱模型以不同之数据)  Baggingbagging需要">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324094812.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324094503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324141256.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200323211050.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200325184532.png">
+<meta property="og:updated_time" content="2020-03-28T02:43:51.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模型融合和树模型">
+<meta name="twitter:description" content="[toc] 模型融合和树模型 小笔记组合策略votingvoting策略是投票思想。1.一人一票，票多者得2.加权投票，一人可能有多张票3.直接选其中最牛逼那个人   average就是平均取值  模型融合种类先明确一下，模型融合是将多个弱模型融合成一个强模型(往往需要meta模型弱才好)  Boostrap有放回的均匀抽样(可以用来给不同的弱模型以不同之数据)  Baggingbagging需要">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324094812.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/28/模型融合和树模型/">
+
+
+
+
+
+  <title>模型融合和树模型 | 我啊lkjflaj</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我啊lkjflaj</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/模型融合和树模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我啊lkjflaj">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">模型融合和树模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2020-03-28T10:42:57+08:00">
+                2020-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<h1 id="模型融合和树模型-小笔记"><a href="#模型融合和树模型-小笔记" class="headerlink" title="模型融合和树模型 小笔记"></a>模型融合和树模型 小笔记</h1><h2 id="组合策略"><a href="#组合策略" class="headerlink" title="组合策略"></a>组合策略</h2><h3 id="voting"><a href="#voting" class="headerlink" title="voting"></a>voting</h3><p>voting策略是投票思想。<br>1.一人一票，票多者得<br>2.加权投票，一人可能有多张票<br>3.直接选其中最牛逼那个人  </p>
+<h3 id="average"><a href="#average" class="headerlink" title="average"></a>average</h3><p>就是平均取值 </p>
+<h2 id="模型融合种类"><a href="#模型融合种类" class="headerlink" title="模型融合种类"></a>模型融合种类</h2><p>先明确一下，模型融合是将多个弱模型融合成一个强模型(往往需要meta模型弱才好) </p>
+<h3 id="Boostrap"><a href="#Boostrap" class="headerlink" title="Boostrap"></a>Boostrap</h3><p>有放回的均匀抽样(可以用来给不同的弱模型以不同之数据) </p>
+<h3 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h3><p>bagging需要基分类器方差尽可能大。<br>bagging == boostrap aggregation，<br>每次boostrap得到的训练集给每个弱模型训练，然后融合结果(这里的基学习器权重是各自的，并行学习)<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324094812.png" alt><br>但是bagging也有局限，就是如果大部分基分类器都分类错误，那么会很麻烦，由此我们需要一个会对分类错误进行修正的方法boosting。<br>bagging一般使用强学习器，主要关注降低方差 </p>
+<h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h3><p>与bagging相比，boosting在于放大错误,比如说，在这一次基学习器分类错误，那么就把这个对应的权重放大，然后再替换掉下一次基学习器的权重。也就是说boosting是前一个基学习器进行分类，然后把权重转移给下一个基学习器，如此类推。。。。。最后将所有的结果进行汇总。<br>boosting一般使用弱学习器，主要关注降低偏差<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324094503.png" alt>  </p>
+<h4 id="boosting的两个权重"><a href="#boosting的两个权重" class="headerlink" title="boosting的两个权重"></a>boosting的两个权重</h4><ul>
+<li>第一个为弱分类器之间传递的权重，即参数权重<br>(我发现分为两种，一种是直接改变分错的权重，一种是把前N-1个模型都分错的数据添加到新的训练集里面再用来训练第N个模型)<br>  (改变权重相当于变相采样，改变了样本的分布)</li>
+<li>第二个权重就是弱分类器自身的权重，就是弱分类器之间谁说的话更有用(根据分类错误率来)</li>
+</ul>
+<h4 id="adaboost"><a href="#adaboost" class="headerlink" title="adaboost"></a>adaboost</h4><p>是一个加法模型+前向分布算法+指数损失函数<br>是boosting中的代表，第一个具有适应性的算法，适应弱学习器各自的训练误差率。  </p>
+<ul>
+<li>一般来说adaboost的弱学习器为一层的决策树</li>
+<li>自适应的参数权重改变(选用指数损失函数)，这里用林轩田老师的图(也可以根据分错的数据来进行数据的再采样)<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200324141256.png" alt>  </li>
+<li>弱分类器的投票机制变为加权的</li>
+</ul>
+<h4 id="Gradient-boosting"><a href="#Gradient-boosting" class="headerlink" title="Gradient boosting"></a>Gradient boosting</h4><p>adaboost采用的是指数损失函数，对异常点非常敏感，也就导致了在有噪音的情况下，影响比较大。于是就有了GB。GB不在乎用什么损失函数，它是将负梯度作为目标，通过不断拟合前一个模型损失函数的负梯度(也叫伪残差)而不断改进。<br><a href="https://blog.csdn.net/zpalyq110/article/details/79527653" target="_blank" rel="noopener">https://blog.csdn.net/zpalyq110/article/details/79527653</a>  </p>
+<h3 id="stacking"><a href="#stacking" class="headerlink" title="stacking"></a>stacking</h3><p>stacking是一种分层模型集成框架，以两层为例子。<br>数据组成： train + test + valid<br>使用5-fold交叉验证    </p>
+<ul>
+<li><p>level 0  用train训练第一个模型，然后预测test和valid，这样重复5次后，会得到5倍的valid pred以及5倍的test pred，然后将valid pred排好作为新的训练集。test pred 用加权平均(其他方法也行)把数目控制到和原有的test数目一致，然后作为新的test(这只是一个模型，其他模型还要重复上述动作)，这仅仅是一列特征        </p>
+</li>
+<li><p>level 1 将每个模型得到的valid pred 和 test valid分别凭借起来作为level 1 模型的训练集和测试集。这里level 1模型中训练集的label Y是真实数据(train+valid)的label Y，测试集同理。  </p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200323211050.png" alt><br>相比于blending，stacking两层都使用了所有的训练数据。<br>不同于boosting和bagging，stacking中基学习器一般允许不同的模型，如LR,SVM，LR等等, 属于对基学习器的非线性融合</p>
+<h3 id="blending"><a href="#blending" class="headerlink" title="blending"></a>blending</h3><p>和stacking类似，不过没用k-fold，是直接划分部分数据作为验证集</p>
+<h3 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h3><p>classification and regression tree   </p>
+<ul>
+<li>CART分类树 采用gini指数作为划分标准，gini表示不稳定性，选取gini最小的特征</li>
+<li>CART回归树 根据数据计算每个切分点的平均误差，选取最小的作为最优切分点进行切分。具体看 <a href="https://zhuanlan.zhihu.com/p/36108972" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36108972</a></li>
+</ul>
+<h3 id="random-forest"><a href="#random-forest" class="headerlink" title="random forest"></a>random forest</h3><p>rf = bagging + CART 是一个加法模型<br>bagging的基学习器要求强学习器并且方差要大，而DT恰好强而且方差大。bagging的随机性能够有效降低DT不同划分条件带来的方差问题。所以，先bagging随机取样</p>
+<h3 id="boosting-tree"><a href="#boosting-tree" class="headerlink" title="boosting tree"></a>boosting tree</h3><p>boosting tree(提升树) == adaboost + CART  </p>
+<ul>
+<li>分类提升树<br>用gini<br>这里有个想法，对于分类提升树，是不是可以通过将分类错误数据放到训练集里然后给下一个CART分类树用(这样就不用计较它的weight变化)  </li>
+<li>回归提升树(好像也叫残差树)：<br>损失函数为平方函数，加法模型，要设置损失函数的阈值<br>树的划分可以参考上面CART的网址，接下来残差的计算也差不多，详细可看下面网址<br><a href="https://www.jianshu.com/p/7902b2eb5f21" target="_blank" rel="noopener">https://www.jianshu.com/p/7902b2eb5f21</a><br><a href="https://blog.csdn.net/zpalyq110/article/details/79527653" target="_blank" rel="noopener">https://blog.csdn.net/zpalyq110/article/details/79527653</a>  </li>
+</ul>
+<h3 id="Gradient-Boosting-Decisioin-Tree"><a href="#Gradient-Boosting-Decisioin-Tree" class="headerlink" title="Gradient Boosting Decisioin Tree"></a>Gradient Boosting Decisioin Tree</h3><p>GBDT = gradient boosting + CART  梯度提升树<br>与boosting tree类似，不过不是用残差作为新的数据集，而是用损失函数的负梯度值作为新的训练数据的y值。(对于回归问题来说，负梯度就是残差)<br>其要求高偏差低方差的弱分类器<br><a href="https://blog.csdn.net/zpalyq110/article/details/79527653" target="_blank" rel="noopener">https://blog.csdn.net/zpalyq110/article/details/79527653</a><br>最后有实例</p>
+<h3 id="xgboost"><a href="#xgboost" class="headerlink" title="xgboost"></a>xgboost</h3><p>本质上是GBDT，但把速度和效率发挥到极致<br>可以用线性分类器作为基学习器<br>GBDT是机器学习算法，XGBoost是该算法的工程实现。<br>xgboost使用二阶导数分离了损失函数的选择和参数调优<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200325184532.png" alt><br><a href="https://stats.stackexchange.com/questions/202858/xgboost-loss-function-approximation-with-taylor-expansion" target="_blank" rel="noopener">https://stats.stackexchange.com/questions/202858/xgboost-loss-function-approximation-with-taylor-expansion</a><br>此处应有笔记连接。。。。  </p>
+<h3 id="lightGBM"><a href="#lightGBM" class="headerlink" title="lightGBM"></a>lightGBM</h3><ul>
+<li>Histogram算法:直方图算法。</li>
+<li>GOSS算法:基于梯度的单边采样算法。</li>
+<li>EFB算法:互斥特征捆绑算法。<br>LightGBM = XGBoost + Histogram + GOSS + EFB<br><a href="https://zhuanlan.zhihu.com/p/91167170" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/91167170</a><br>此处也应有笔记连接   </li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/wangqi880/article/details/49765673" target="_blank" rel="noopener">https://blog.csdn.net/wangqi880/article/details/49765673</a><br><a href="https://www.jianshu.com/p/a5b28cdfd438" target="_blank" rel="noopener">https://www.jianshu.com/p/a5b28cdfd438</a>  boosting, boostrap, bagging<br><a href="https://blog.csdn.net/FrankieHello/article/details/81664135" target="_blank" rel="noopener">https://blog.csdn.net/FrankieHello/article/details/81664135</a>  </p>
+<p><a href="https://blog.csdn.net/u010412858/article/details/80785429" target="_blank" rel="noopener">https://blog.csdn.net/u010412858/article/details/80785429</a><br><a href="https://zhuanlan.zhihu.com/p/91836593" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/91836593</a>  stacking和blending<br><a href="https://zhuanlan.zhihu.com/p/42229791" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/42229791</a>  stacking和blending<br><a href="https://zhuanlan.zhihu.com/p/91659366" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/91659366</a>  stacking和blending<br><a href="https://zhuanlan.zhihu.com/p/57689719" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/57689719</a>  bagging的局限与boosting的弥补<br><a href="https://zhuanlan.zhihu.com/p/37358517" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/37358517</a>  adaboost和gradient boost<br><a href="http://www.uml.org.cn/sjjmwj/2019030721.asp" target="_blank" rel="noopener">http://www.uml.org.cn/sjjmwj/2019030721.asp</a> adaboost<br><a href="https://www.zhihu.com/question/37683881" target="_blank" rel="noopener">https://www.zhihu.com/question/37683881</a>  boost and adaboost<br><a href="https://zhuanlan.zhihu.com/p/36108972" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36108972</a>  CART<br><a href="https://zhuanlan.zhihu.com/p/59751960" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/59751960</a>  一文弄懂boost，提升树，残差书，GBDT<br><a href="https://blog.csdn.net/ccblogger/article/details/81746257" target="_blank" rel="noopener">https://blog.csdn.net/ccblogger/article/details/81746257</a>  提升树和梯度提升树<br><a href="https://www.cnblogs.com/mantch/p/11164221.html" target="_blank" rel="noopener">https://www.cnblogs.com/mantch/p/11164221.html</a> xgboost<br><a href="https://blog.csdn.net/v_JULY_v/article/details/81410574" target="_blank" rel="noopener">https://blog.csdn.net/v_JULY_v/article/details/81410574</a> xgboost<br><a href="https://zhuanlan.zhihu.com/p/91167170" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/91167170</a>  lightGBM<br><a href="https://stats.stackexchange.com/questions/202858/xgboost-loss-function-approximation-with-taylor-expansion" target="_blank" rel="noopener">https://stats.stackexchange.com/questions/202858/xgboost-loss-function-approximation-with-taylor-expansion</a> </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/28/数据挖掘学习线路/" rel="next" title="数据挖掘学习线路">
+                <i class="fa fa-chevron-left"></i> 数据挖掘学习线路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/28/xgboost和lightGBM和GBDT和catboost/" rel="prev" title="xgboost和lightGBM和GBDT和catboost">
+                xgboost和lightGBM和GBDT和catboost <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+  <div class="comments" id="comments">
+      <div id="gitalk-container"></div>
+  </div>  
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模型融合和树模型-小笔记"><span class="nav-number">1.</span> <span class="nav-text">模型融合和树模型 小笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组合策略"><span class="nav-number">1.1.</span> <span class="nav-text">组合策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#voting"><span class="nav-number">1.1.1.</span> <span class="nav-text">voting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#average"><span class="nav-number">1.1.2.</span> <span class="nav-text">average</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型融合种类"><span class="nav-number">1.2.</span> <span class="nav-text">模型融合种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Boostrap"><span class="nav-number">1.2.1.</span> <span class="nav-text">Boostrap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bagging"><span class="nav-number">1.2.2.</span> <span class="nav-text">Bagging</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boosting"><span class="nav-number">1.2.3.</span> <span class="nav-text">Boosting</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#boosting的两个权重"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">boosting的两个权重</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#adaboost"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">adaboost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gradient-boosting"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">Gradient boosting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stacking"><span class="nav-number">1.2.4.</span> <span class="nav-text">stacking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blending"><span class="nav-number">1.2.5.</span> <span class="nav-text">blending</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CART"><span class="nav-number">1.2.6.</span> <span class="nav-text">CART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-forest"><span class="nav-number">1.2.7.</span> <span class="nav-text">random forest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boosting-tree"><span class="nav-number">1.2.8.</span> <span class="nav-text">boosting tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradient-Boosting-Decisioin-Tree"><span class="nav-number">1.2.9.</span> <span class="nav-text">Gradient Boosting Decisioin Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xgboost"><span class="nav-number">1.2.10.</span> <span class="nav-text">xgboost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lightGBM"><span class="nav-number">1.2.11.</span> <span class="nav-text">lightGBM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'c02798de6ad7f2189304',
+          clientSecret: '78f2b6ab3101697a03c15c0f329ac228d3489482',
+          repo: 'comments',
+          owner: 'KevinYuKun',
+          admin: ['KevinYuKun'],
+          id:'gitalk_20200328104257',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
