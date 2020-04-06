@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="有道云笔记 [TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Functi">
+<meta name="description" content="[TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Function—log">
 <meta property="og:type" content="article">
-<meta property="og:title" content="regularization">
-<meta property="og:url" content="http://yoursite.com/2019/09/21/regularization/index.html">
+<meta property="og:title" content="损失函数和正则化">
+<meta property="og:url" content="http://yoursite.com/2020/04/06/损失函数和正则化/index.html">
 <meta property="og:site_name" content="ICream的小肥柴">
-<meta property="og:description" content="有道云笔记 [TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Functi">
+<meta property="og:description" content="[TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Function—log">
 <meta property="og:locale" content="zh-hk">
-<meta property="og:image" content="http://note.youdao.com/yws/res/2108/27A3A2D61197414E8E0BC2EB6B5BF423">
-<meta property="og:image" content="http://note.youdao.com/yws/res/2363/D6174012D53849B1B618CFDD4C960353">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200405155202.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191026153801.png">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2364/537B3F654B1A4B0B9DB456F662A46322">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2361/118CCA3B701F43A0AE2DA95525EBF7FC">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2362/C8C821D96A8A48F68AFB70F08A004962">
@@ -99,15 +99,17 @@
 <meta property="og:image" content="http://note.youdao.com/yws/res/2356/4D778BDA73FE42299E98655AF132854D">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2367/3255EC1AB610400FBD5ED38A32EE82DA">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2371/D42867CDFB914B36BFF18CECBF5B3E84">
-<meta property="og:image" content="http://note.youdao.com/yws/res/2386/0073C349FB3746E481EDBA8923F44FBB">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2373/D016840DFB5C4CD0AF1BF41B107D176B">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2376/4B2D243241BE491EB74F3102E0D66C13">
+<meta property="og:image" content="http://note.youdao.com/yws/res/4384/2D381DD798C7417DAE64C13A450F900E">
+<meta property="og:image" content="http://note.youdao.com/yws/res/2386/0073C349FB3746E481EDBA8923F44FBB">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2399/B30DC76B9F0B47F0B7AA7B42C60237F6">
-<meta property="og:updated_time" content="2019-09-25T01:17:11.412Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200405154623.jpg">
+<meta property="og:updated_time" content="2020-04-06T13:48:53.403Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="regularization">
-<meta name="twitter:description" content="有道云笔记 [TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Functi">
-<meta name="twitter:image" content="http://note.youdao.com/yws/res/2108/27A3A2D61197414E8E0BC2EB6B5BF423">
+<meta name="twitter:title" content="损失函数和正则化">
+<meta name="twitter:description" content="[TOC] cost Function和regularization监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的  L1-norm和L2-norm均可以作为cost function 或 regularization  cost Functionlog对数cost Function—log">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200405155202.png">
 
 
 
@@ -137,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/21/regularization/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/06/损失函数和正则化/">
 
 
 
 
 
-  <title>regularization | ICream的小肥柴</title>
+  <title>损失函数和正则化 | ICream的小肥柴</title>
   
 
 
@@ -250,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/21/regularization/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/06/损失函数和正则化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ICream">
@@ -267,7 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">regularization</h1>
+          <h1 class="post-title" itemprop="name headline">损失函数和正则化</h1>
         
 
         <div class="post-meta">
@@ -279,8 +281,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-09-21T11:13:50+08:00">
-                2019-09-21
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2020-04-06T21:48:41+08:00">
+                2020-04-06
               </time>
             
 
@@ -317,12 +319,11 @@
       
 
       
-        <p><a href="http://note.youdao.com/noteshare?id=8b3017c38d0ce2a9b8255cc5256e31e6" target="_blank" rel="noopener">有道云笔记</a></p>
-<p>[TOC]</p>
+        <p>[TOC]</p>
 <h1 id="cost-Function和regularization"><a href="#cost-Function和regularization" class="headerlink" title="cost Function和regularization"></a>cost Function和regularization</h1><p>监督学习的目的就是要最小化cost Function. 但这个过程中往往会产生些错误，如overfit，而正则化的存在是通过调整正则化参数而达到想要的目的 </p>
 <p>L1-norm和L2-norm均可以作为cost function 或 regularization</p>
-<p><img src="http://note.youdao.com/yws/res/2108/27A3A2D61197414E8E0BC2EB6B5BF423" alt="image"></p>
-<h2 id="cost-Function"><a href="#cost-Function" class="headerlink" title="cost Function"></a>cost Function</h2><h3 id="log对数cost-Function—logstic-regression"><a href="#log对数cost-Function—logstic-regression" class="headerlink" title="log对数cost Function—logstic regression"></a>log对数cost Function—logstic regression</h3><p><img src="http://note.youdao.com/yws/res/2363/D6174012D53849B1B618CFDD4C960353" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200405155202.png" alt></p>
+<h2 id="cost-Function"><a href="#cost-Function" class="headerlink" title="cost Function"></a>cost Function</h2><h3 id="log对数cost-Function—logstic-regression"><a href="#log对数cost-Function—logstic-regression" class="headerlink" title="log对数cost Function—logstic regression"></a>log对数cost Function—logstic regression</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20191026153801.png" alt></p>
 <h3 id="square-loss-—–-最小二乘，OLS—-L2-norm"><a href="#square-loss-—–-最小二乘，OLS—-L2-norm" class="headerlink" title="square loss —– 最小二乘，OLS—-L2-norm"></a>square loss —– 最小二乘，OLS—-L2-norm</h3><p><img src="http://note.youdao.com/yws/res/2364/537B3F654B1A4B0B9DB456F662A46322" alt="image"></p>
 <h3 id="Hinge-Loss-—–-SVM"><a href="#Hinge-Loss-—–-SVM" class="headerlink" title="Hinge Loss  —– SVM"></a>Hinge Loss  —– SVM</h3><p><img src="http://note.youdao.com/yws/res/2361/118CCA3B701F43A0AE2DA95525EBF7FC" alt="image"></p>
 <h3 id="Exponential-Loss-—–-adaBoost"><a href="#Exponential-Loss-—–-adaBoost" class="headerlink" title="Exponential Loss —– adaBoost"></a>Exponential Loss —– adaBoost</h3><p><img src="http://note.youdao.com/yws/res/2362/C8C821D96A8A48F68AFB70F08A004962" alt="image"></p>
@@ -331,9 +332,20 @@
 <h3 id="对比图-—-机器学习基石中，林轩田老师讲过"><a href="#对比图-—-机器学习基石中，林轩田老师讲过" class="headerlink" title="对比图 —- 机器学习基石中，林轩田老师讲过"></a>对比图 —- 机器学习基石中，林轩田老师讲过</h3><p><img src="http://note.youdao.com/yws/res/2359/05286E94D41F4CE8877C114FDD50C63D" alt="image"> </p>
 <h2 id="regularization-函数"><a href="#regularization-函数" class="headerlink" title="regularization 函数"></a>regularization 函数</h2><p>将任意向量x 的l<sub>p</sub>-范数定义为:<br><img src="http://note.youdao.com/yws/res/2360/9D732BE9D5A342D2884C8B047DC7F311" alt="image">  </p>
 <h3 id="L0范数"><a href="#L0范数" class="headerlink" title="L0范数"></a>L0范数</h3><p>根据上图有<br><img src="http://note.youdao.com/yws/res/2355/85D97748E17C496EB1206CB495F723C4" alt="image"><br>等同于<br><img src="http://note.youdao.com/yws/res/2356/4D778BDA73FE42299E98655AF132854D" alt="image"><br>往往表示向量中不为0的个数，如果用L0范数来正规化，那么我们就希望矩阵大部分都为0，即稀疏。这个问题在数学上是一个NP-hard问题，即直接求解很复杂</p>
-<h3 id="L1范数"><a href="#L1范数" class="headerlink" title="L1范数"></a>L1范数</h3><p>L1范数<br><img src="http://note.youdao.com/yws/res/2367/3255EC1AB610400FBD5ED38A32EE82DA" alt="image"><br>代表向量中所有元素绝对值之和<br>L1-regularization作为正则项—–lasso回归<br><img src="http://note.youdao.com/yws/res/2371/D42867CDFB914B36BFF18CECBF5B3E84" alt="image"><br>对于L1来说，有如下图–几何解释<br><img src="http://note.youdao.com/yws/res/2386/0073C349FB3746E481EDBA8923F44FBB" alt="image"><br>假设有w1,w2两个参数，圆圈代表着cost Function，圆点就是cost Function的最小值，往外增大，每一圈上的数值相等。而图中正方形则是我们的L1正规化式子|x|,那么，当圆形和正方形相交的地方就是我们要求的cost Function+regularization的最小值。 而着这一数值往往存在于坐标轴上，即(w1,0)或(0,w2)，这时候就会产生稀疏。L1会倾向于产生少量特征，其他特征都为0，L1范数的最优解比L2少，但往往是最优解。L1会把不重要的参数直接置0</p>
-<h3 id="L2范数"><a href="#L2范数" class="headerlink" title="L2范数"></a>L2范数</h3><p>L2-norm<br><img src="http://note.youdao.com/yws/res/2373/D016840DFB5C4CD0AF1BF41B107D176B" alt="image"><br>同理，代表向量中所有元素的平方和<br>L2-norm作为正则项的代价函数—-岭回归(ridge)<br><img src="http://note.youdao.com/yws/res/2376/4B2D243241BE491EB74F3102E0D66C13" alt="image"> 类似的<br><img src="http://note.youdao.com/yws/res/2399/B30DC76B9F0B47F0B7AA7B42C60237F6" alt="image"><br>相交点往往不是在坐标轴上，所以ridge往往是平滑的，L2更多的是用于防止overfit，因为其交点往往不是稀疏，所以=参数变小，模型变简单。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/sinat_26917383/article/details/52092040" target="_blank" rel="noopener">https://blog.csdn.net/sinat_26917383/article/details/52092040</a><br><a href="https://zhuanlan.zhihu.com/p/58883095" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/58883095</a><br><a href="https://www.csuldw.com/2016/03/26/2016-03-26-loss-function/" target="_blank" rel="noopener">https://www.csuldw.com/2016/03/26/2016-03-26-loss-function/</a><br><a href="https://www.zhihu.com/question/20473040" target="_blank" rel="noopener">https://www.zhihu.com/question/20473040</a><br><a href="https://zhuanlan.zhihu.com/p/26884695" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26884695</a><br><a href="https://www.jianshu.com/p/de05e6745fb6" target="_blank" rel="noopener">https://www.jianshu.com/p/de05e6745fb6</a><br><a href="https://www.youtube.com/watch?v=t2E_3xsFmhA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=t2E_3xsFmhA</a><br><a href="https://www.zhihu.com/question/26485586/answer/616029832?hb_wx_block=1&amp;utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=676015484797849600" target="_blank" rel="noopener">https://www.zhihu.com/question/26485586/answer/616029832?hb_wx_block=1&amp;utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=676015484797849600</a></p>
+<h3 id="L1范数-与-L2范数"><a href="#L1范数-与-L2范数" class="headerlink" title="L1范数 与 L2范数"></a>L1范数 与 L2范数</h3><p>L1范数<br><img src="http://note.youdao.com/yws/res/2367/3255EC1AB610400FBD5ED38A32EE82DA" alt="image"><br>代表向量中所有元素绝对值之和<br>L1-regularization作为正则项—–lasso回归<br><img src="http://note.youdao.com/yws/res/2371/D42867CDFB914B36BFF18CECBF5B3E84" alt="image">   </p>
+<hr>
+<p>L2-norm<br><img src="http://note.youdao.com/yws/res/2373/D016840DFB5C4CD0AF1BF41B107D176B" alt="image"><br>同理，代表向量中所有元素的平方和<br>L2-norm作为正则项的代价函数—-岭回归(ridge)<br><img src="http://note.youdao.com/yws/res/2376/4B2D243241BE491EB74F3102E0D66C13" alt="image"> </p>
+<h3 id="L1与L2-图解"><a href="#L1与L2-图解" class="headerlink" title="L1与L2 图解"></a>L1与L2 图解</h3><p>首先先明确<br><img src="http://note.youdao.com/yws/res/4384/2D381DD798C7417DAE64C13A450F900E" alt="image"><br>这个两个东西是等价的，然后根据L1和L2把后面的换成绝对值和平方,就可以得到以下两个图:(这里损失函数为什么是圆呢，其实并不一定是圆)    </p>
+<p>对于L1来说，有如下图–几何解释<br><img src="http://note.youdao.com/yws/res/2386/0073C349FB3746E481EDBA8923F44FBB" alt="image"><br>假设有w1,w2两个参数，圆圈代表着cost Function，圆点就是cost Function的最小值，往外增大，每一圈上的数值相等。而图中正方形则是我们的L1正规化式子|x|,那么，当圆形和正方形相交的地方就是我们要求的cost Function+regularization的最小值。 而着这一数值往往存在于坐标轴上，即(w1,0)或(0,w2)，这时候就会产生稀疏。L1会倾向于产生少量特征，其他特征都为0，L1范数的最优解比L2少，但往往是最优解。L1会把不重要的参数直接置0</p>
+<hr>
+<p>类似的<br><img src="http://note.youdao.com/yws/res/2399/B30DC76B9F0B47F0B7AA7B42C60237F6" alt="image"><br>相交点往往不是在坐标轴上，所以ridge往往是平滑的，L2更多的是用于防止overfit，因为其交点往往不是稀疏，所以=参数变小，模型变简单。</p>
+<h3 id="L1-和L2-梯度下降层面"><a href="#L1-和L2-梯度下降层面" class="headerlink" title="L1 和L2 梯度下降层面"></a>L1 和L2 梯度下降层面</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200405154623.jpg" alt><br>如果学习率等其他参数不变，那么L1会减少固定值，慢慢变0，L2减少到一定程度时会放缓。于是L1会产生稀疏解，L2的特征系数会很靠近0</p>
+<h3 id="L1-L2-优缺点"><a href="#L1-L2-优缺点" class="headerlink" title="L1 L2 优缺点"></a>L1 L2 优缺点</h3><ul>
+<li>L1优点是能够获得sparse模型，对于large-scale的问题来说这一点很重要，因为可以减少存储空间。缺点是加入L1后目标函数在原点不可导，需要做特殊处理。</li>
+<li>L2优点是实现简单，能够起到正则化的作用。缺点就是L1的优点：无法获得sparse模型。</li>
+<li>实际上L1也是一种妥协的做h法，要获得真正sparse的模型，要用L0正则化。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/sinat_26917383/article/details/52092040" target="_blank" rel="noopener">https://blog.csdn.net/sinat_26917383/article/details/52092040</a><br><a href="https://zhuanlan.zhihu.com/p/58883095" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/58883095</a><br><a href="https://www.csuldw.com/2016/03/26/2016-03-26-loss-function/" target="_blank" rel="noopener">https://www.csuldw.com/2016/03/26/2016-03-26-loss-function/</a><br><a href="https://www.zhihu.com/question/20473040" target="_blank" rel="noopener">https://www.zhihu.com/question/20473040</a><br><a href="https://zhuanlan.zhihu.com/p/26884695" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26884695</a><br><a href="https://www.jianshu.com/p/de05e6745fb6" target="_blank" rel="noopener">https://www.jianshu.com/p/de05e6745fb6</a><br><a href="https://www.youtube.com/watch?v=t2E_3xsFmhA" target="_blank" rel="noopener">https://www.youtube.com/watch?v=t2E_3xsFmhA</a><br><a href="https://www.zhihu.com/question/26485586/answer/616029832?hb_wx_block=1&amp;utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=676015484797849600" target="_blank" rel="noopener">https://www.zhihu.com/question/26485586/answer/616029832?hb_wx_block=1&amp;utm_source=wechat_session&amp;utm_medium=social&amp;utm_oi=676015484797849600</a><br><a href="https://www.cnblogs.com/zingp/p/10375691.html" target="_blank" rel="noopener">https://www.cnblogs.com/zingp/p/10375691.html</a></p>
 
       
     </div>
@@ -358,8 +370,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/06/numpy可视化文档/" rel="next" title="numpy可视化文档">
-                <i class="fa fa-chevron-left"></i> numpy可视化文档
+              <a href="/2020/03/28/数据清洗和特征工程/" rel="next" title="数据清洗和特征工程">
+                <i class="fa fa-chevron-left"></i> 数据清洗和特征工程
               </a>
             
           </div>
@@ -367,10 +379,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/23/ML图/" rel="prev" title="ML图">
-                ML图 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -514,7 +522,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cost-Function和regularization"><span class="nav-number">1.</span> <span class="nav-text">cost Function和regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cost-Function"><span class="nav-number">1.1.</span> <span class="nav-text">cost Function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#log对数cost-Function—logstic-regression"><span class="nav-number">1.1.1.</span> <span class="nav-text">log对数cost Function—logstic regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#square-loss-—–-最小二乘，OLS—-L2-norm"><span class="nav-number">1.1.2.</span> <span class="nav-text">square loss —– 最小二乘，OLS—-L2-norm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hinge-Loss-—–-SVM"><span class="nav-number">1.1.3.</span> <span class="nav-text">Hinge Loss  —– SVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exponential-Loss-—–-adaBoost"><span class="nav-number">1.1.4.</span> <span class="nav-text">Exponential Loss —– adaBoost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0-1-Loss"><span class="nav-number">1.1.5.</span> <span class="nav-text">0-1 Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对值-Loss-—-L1-norm"><span class="nav-number">1.1.6.</span> <span class="nav-text">绝对值 Loss —- L1-norm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对比图-—-机器学习基石中，林轩田老师讲过"><span class="nav-number">1.1.7.</span> <span class="nav-text">对比图 —- 机器学习基石中，林轩田老师讲过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regularization-函数"><span class="nav-number">1.2.</span> <span class="nav-text">regularization 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L0范数"><span class="nav-number">1.2.1.</span> <span class="nav-text">L0范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L1范数"><span class="nav-number">1.2.2.</span> <span class="nav-text">L1范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L2范数"><span class="nav-number">1.2.3.</span> <span class="nav-text">L2范数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cost-Function和regularization"><span class="nav-number">1.</span> <span class="nav-text">cost Function和regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cost-Function"><span class="nav-number">1.1.</span> <span class="nav-text">cost Function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#log对数cost-Function—logstic-regression"><span class="nav-number">1.1.1.</span> <span class="nav-text">log对数cost Function—logstic regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#square-loss-—–-最小二乘，OLS—-L2-norm"><span class="nav-number">1.1.2.</span> <span class="nav-text">square loss —– 最小二乘，OLS—-L2-norm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hinge-Loss-—–-SVM"><span class="nav-number">1.1.3.</span> <span class="nav-text">Hinge Loss  —– SVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exponential-Loss-—–-adaBoost"><span class="nav-number">1.1.4.</span> <span class="nav-text">Exponential Loss —– adaBoost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0-1-Loss"><span class="nav-number">1.1.5.</span> <span class="nav-text">0-1 Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对值-Loss-—-L1-norm"><span class="nav-number">1.1.6.</span> <span class="nav-text">绝对值 Loss —- L1-norm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对比图-—-机器学习基石中，林轩田老师讲过"><span class="nav-number">1.1.7.</span> <span class="nav-text">对比图 —- 机器学习基石中，林轩田老师讲过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regularization-函数"><span class="nav-number">1.2.</span> <span class="nav-text">regularization 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L0范数"><span class="nav-number">1.2.1.</span> <span class="nav-text">L0范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L1范数-与-L2范数"><span class="nav-number">1.2.2.</span> <span class="nav-text">L1范数 与 L2范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L1与L2-图解"><span class="nav-number">1.2.3.</span> <span class="nav-text">L1与L2 图解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L1-和L2-梯度下降层面"><span class="nav-number">1.2.4.</span> <span class="nav-text">L1 和L2 梯度下降层面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#L1-L2-优缺点"><span class="nav-number">1.2.5.</span> <span class="nav-text">L1 L2 优缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
@@ -714,7 +722,7 @@
           repo: 'comments',
           owner: 'KevinYuKun',
           admin: ['KevinYuKun'],
-          id:'gitalk_20190921111350',
+          id:'gitalk_20200406214841',
           labels: 'gitalk'.split(',').filter(l => l),
           perPage: 10,
           pagerDirection: 'last',
