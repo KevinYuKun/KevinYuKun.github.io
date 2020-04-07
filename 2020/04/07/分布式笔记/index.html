@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-hk">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[toc] 分布式计算，管理，存储计算有spark， mapreduce，Flink，storm mapreduce一个mapreduce任务值能包含一次map和一次reduce，然后重写入分布式存储系统中，对于一些大量循环的运算，比如梯度下降，那么会多次对磁盘进行读写，这样的读写数据会引起大量的网络传输以及磁盘读写，极其耗时，而且它们都是没什么实际价值的废操作。因为上一次循环的结果会立马被下一次">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式笔记">
+<meta property="og:url" content="http://yoursite.com/2020/04/07/分布式笔记/index.html">
+<meta property="og:site_name" content="ICream的小肥柴">
+<meta property="og:description" content="[toc] 分布式计算，管理，存储计算有spark， mapreduce，Flink，storm mapreduce一个mapreduce任务值能包含一次map和一次reduce，然后重写入分布式存储系统中，对于一些大量循环的运算，比如梯度下降，那么会多次对磁盘进行读写，这样的读写数据会引起大量的网络传输以及磁盘读写，极其耗时，而且它们都是没什么实际价值的废操作。因为上一次循环的结果会立马被下一次">
+<meta property="og:locale" content="zh-hk">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141723.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141759.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141636.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141841.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134929.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407135143.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407135347.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407140307.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407140427.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134738.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134802.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407142712.png">
+<meta property="og:updated_time" content="2020-04-07T06:33:20.367Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式笔记">
+<meta name="twitter:description" content="[toc] 分布式计算，管理，存储计算有spark， mapreduce，Flink，storm mapreduce一个mapreduce任务值能包含一次map和一次reduce，然后重写入分布式存储系统中，对于一些大量循环的运算，比如梯度下降，那么会多次对磁盘进行读写，这样的读写数据会引起大量的网络传输以及磁盘读写，极其耗时，而且它们都是没什么实际价值的废操作。因为上一次循环的结果会立马被下一次">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141723.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/07/分布式笔记/">
+
+
+
+
+
+  <title>分布式笔记 | ICream的小肥柴</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ICream的小肥柴</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/07/分布式笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ICream">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ICream的小肥柴">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">分布式笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2020-04-07T14:33:03+08:00">
+                2020-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<h1 id="分布式计算，管理，存储"><a href="#分布式计算，管理，存储" class="headerlink" title="分布式计算，管理，存储"></a>分布式计算，管理，存储</h1><h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h2><p>有spark， mapreduce，Flink，storm</p>
+<h3 id="mapreduce"><a href="#mapreduce" class="headerlink" title="mapreduce"></a>mapreduce</h3><p>一个mapreduce任务值能包含一次map和一次reduce，然后重写入分布式存储系统中，对于一些大量循环的运算，比如梯度下降，那么会多次对磁盘进行读写，这样的读写数据会引起大量的网络传输以及磁盘读写，极其耗时，而且它们都是没什么实际价值的废操作。因为上一次循环的结果会立马被下一次使用，完全没必要将其写入磁盘。spark主要改进这一点<br>MR只有批处理</p>
+<h3 id="流式计算框架"><a href="#流式计算框架" class="headerlink" title="流式计算框架"></a>流式计算框架</h3><h4 id="spark-微批处理"><a href="#spark-微批处理" class="headerlink" title="spark(微批处理)"></a>spark(微批处理)</h4><p>一个spark任务包含一系列的map和reduce，计算的中间结果可以交给下一个<br>Spark本质上是一个基于内存的批处理程序<br>Spark在处理数据流之前，会按照时间间隔对数据流进行分段切分。Spark针对连续数据流的抽象，我们称为DStream（Discretized Stream）。DStream是小批处理的RDD（弹性分布式数据集），RDD则是分布式数据集，可以通过任意函数和滑动数据窗口（窗口计算）进行转换，实现并行操作。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141723.png" alt></p>
+<h4 id="Flink-流式"><a href="#Flink-流式" class="headerlink" title="Flink (流式)"></a>Flink (流式)</h4><p>针对流数据+批数据的计算框架。把批数据看作流数据的一种特例，延迟性较低(毫秒级)，且能够保证消息传输不丢失不重复。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141759.png" alt><br>Flink可以说是针对流数据和批数据处理而设计的，在Flink框架当中，将输入数据流是看作是无界的，而批处理被作为一种特殊的流处理，只是它的输入数据流被定义为有界的。  </p>
+<p>Flink程序由Stream和Transformation这两个基本构建块组成，其中Stream是一个中间结果数据，而Transformation是一个操作，它对一个或多个输入Stream进行计算处理，输出一个或多个结果Stream。</p>
+<h4 id="storm"><a href="#storm" class="headerlink" title="storm"></a>storm</h4><p>Storm框架也算是流式计算框架的一员。在Storm中，需要先设计一个实时计算结构，我们称之为拓扑（topology）。之后，这个拓扑结构会被提交给集群，其中主节点（master node）负责给工作节点（worker node）分配代码，工作节点负责执行代码。在一个拓扑结构中，包含spout和bolt两种角色。数据在spouts之间传递，这些spouts将数据流以tuple元组的形式发送；而bolt则负责转换数据流。<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141636.png" alt></p>
+<h4 id="三种框架的对比"><a href="#三种框架的对比" class="headerlink" title="三种框架的对比"></a>三种框架的对比</h4><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407141841.png" alt></p>
+<h3 id="键值对"><a href="#键值对" class="headerlink" title="键值对"></a>键值对</h3><ul>
+<li>key当做指南针，相同的key发送到同一个reduce中</li>
+<li>还有用做分组，如SQL的groupby</li>
+</ul>
+<h2 id="管理"><a href="#管理" class="headerlink" title="管理"></a>管理</h2><p>有HDFS 抽象文件系统<br>资源管理 YARN</p>
+<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134929.png" alt><br>没有yarn前,jobTracker既要管理资源又要任务调度    </p>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407135143.png" alt><br>jobTracker继续任务调度，而用yarn来管理资源  </p>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407135347.png" alt>  </p>
+<p>ResourceManager （RM）和 NodeManager（NM） 组成了整个数据计算框架，在整个系统中，所有的应用程序所需的资源都由RM说了算，RM在这拥有至高无上的权利。NM是每台机器分配资源的代理人，NM负责监听资源的使用个情况包括（CPU，内存，磁盘，网络），并实时向RM汇报。每个应用程序的ApplicationMaster（AM）实际上是一个特别的框架，AM的任务是负责向RM申请所需资源，获取资源后跟NM一起合作执行并监督任务的完成情况。我们来分别详细的介绍一下各个模块的功能作用：  </p>
+<ul>
+<li>ResourceManager：全局的资源管理者，整个集群只有唯一的一个负责集群的资源统一管理和分配调度   <ul>
+<li>处理客户端的请求  </li>
+<li>启动监控 ApplicationMaster  </li>
+<li>监控 NodeManager  </li>
+<li>资源分配调度  </li>
+</ul>
+</li>
+<li>NodeManager：整个集群中有多个，负责自己本身节点的资源管理使用(相当于代理人，管理这一集群的资源)    <ul>
+<li>定时向RM汇报本节点的资源情况</li>
+<li>单个节点上的资源任务管理</li>
+<li>执行 NodeManager 的命令：启动 Container</li>
+<li>协助 ApplicationMaster处理任务</li>
+<li>管理着抽象的资源容器，这些容器代表着一个应用程序针对每个节点上的资源</li>
+</ul>
+</li>
+<li>ApplicationMaster：管理应用程序在yarn上的每个实例<ul>
+<li>每个应用程序对应一个：MR、Spark，负责应用程序的管理</li>
+<li>为应用程序向RM申请资源（core、memory），分配给内部task</li>
+<li>需要与 NM 通信：启动/停止 task，task 是运行在 container 里面，AM 也是运行在 container 里面</li>
+</ul>
+</li>
+<li>Container：YARN中的资源抽象，封装了该节点上的多维度资源：<ul>
+<li>封装了 CPU、Memory 等资源的一个容器</li>
+<li>是一个任务运行环境的抽象，且该任务只能使用该 container 中描述的资源</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>RM实现资源调度，NN实现资源隔离。  </li>
+<li>老的框架中 JobTracker 很大的一个负担就是要监控 job 中 task 的运行情况，现在这部分有 ApplicationMaster来完成。  </li>
+<li>ResourceManager 有两个主要组件：Scheduler 和 ApplicationsManager。ApplicationsManager 用来监控 ApplicationMaster的运行情况，如果出问题会在其他机器上重启。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407140307.png" alt></p>
+<p>hadoop 2.x多了yarn后就可以结合Spark/MapReduce/Storm/Flink等不同计算框架了，共享一个hdfs集群上的数据  </p>
+<p>yarn执行流程<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407140427.png" alt>  </p>
+<ol>
+<li>客户端向yarn提交作业，首先找 RM 分配资源；</li>
+<li>RM 接收到作业以后，会与对应的 NM 建立通信；</li>
+<li>RM 要求 NM 创建一个 Container 来运行 ApplicationMaster 实例；</li>
+<li>ApplicationMaster 会向 RM 注册并申请所需资源，这样 Client 就可以通过 RM 获知作业运行情况；</li>
+<li>RM 分配给 ApplicationMaster 所需资源，ApplicationMaster 在对应的 NM 上启动 Container；</li>
+<li>Container 启动后开始执行任务，ApplicationMaster 监控各个任务的执行情况并反馈给 RM；<br>其中 ApplicationMaster 是可插拔的，可以替换为不同的应用程序。</li>
+</ol>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><p>HDFS将文件处理成数据块<br>所有数据——&gt;HDFS client—(读写请求)–&gt;NameNode<br>NameNode让HDFS —(具体数据传输)—&gt;  dataNode<br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134738.png" alt><br><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407134802.png" alt></p>
+<h2 id="分布式数据"><a href="#分布式数据" class="headerlink" title="分布式数据"></a>分布式数据</h2><p>Hbase和Hive在大数据架构中处在不同位置，Hbase主要解决实时数据查询问题，Hive主要解决数据处理和计算问题，一般是配合使用。</p>
+<h3 id="HIVE数据仓库"><a href="#HIVE数据仓库" class="headerlink" title="HIVE数据仓库"></a>HIVE数据仓库</h3><p><img src="https://raw.githubusercontent.com/KevinYuKun/Pic/master/img/20200407142712.png" alt></p>
+<h3 id="HBase数据库"><a href="#HBase数据库" class="headerlink" title="HBase数据库"></a>HBase数据库</h3><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://zhuanlan.zhihu.com/p/38576439" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/38576439</a><br><a href="https://zhuanlan.zhihu.com/p/82018078" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/82018078</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/06/损失函数和正则化/" rel="next" title="损失函数和正则化">
+                <i class="fa fa-chevron-left"></i> 损失函数和正则化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+  <div class="comments" id="comments">
+      <div id="gitalk-container"></div>
+  </div>  
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ICream</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分類</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/KevinYuKun" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/YzarrK" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式计算，管理，存储"><span class="nav-number">1.</span> <span class="nav-text">分布式计算，管理，存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算"><span class="nav-number">1.1.</span> <span class="nav-text">计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mapreduce"><span class="nav-number">1.1.1.</span> <span class="nav-text">mapreduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流式计算框架"><span class="nav-number">1.1.2.</span> <span class="nav-text">流式计算框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#spark-微批处理"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">spark(微批处理)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flink-流式"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Flink (流式)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#storm"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">storm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三种框架的对比"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">三种框架的对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键值对"><span class="nav-number">1.1.3.</span> <span class="nav-text">键值对</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理"><span class="nav-number">1.2.</span> <span class="nav-text">管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YARN"><span class="nav-number">1.2.1.</span> <span class="nav-text">YARN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储"><span class="nav-number">1.3.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS"><span class="nav-number">1.3.1.</span> <span class="nav-text">HDFS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式数据"><span class="nav-number">1.4.</span> <span class="nav-text">分布式数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HIVE数据仓库"><span class="nav-number">1.4.1.</span> <span class="nav-text">HIVE数据仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HBase数据库"><span class="nav-number">1.4.2.</span> <span class="nav-text">HBase数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ICream</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'c02798de6ad7f2189304',
+          clientSecret: '78f2b6ab3101697a03c15c0f329ac228d3489482',
+          repo: 'comments',
+          owner: 'KevinYuKun',
+          admin: ['KevinYuKun'],
+          id:'gitalk_20200407143303',
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
